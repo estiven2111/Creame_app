@@ -80,7 +80,7 @@ const Checklist = () => {
           <div key={index} className="">
             {pro.componentes.map((compo, index) => (
               <div key={index} className="">
-                {compo.actividades.some((item) => item.terminada) === false ? (
+                {compo.actividades.some((item) => item.terminada === false) ? (
                   <div className="mb-5 bg-azulCreame rounded-lg text-white border-turquesaCreame border-2 shadow-lg">
                     <>
                       <div className="flex items-center m-2">
