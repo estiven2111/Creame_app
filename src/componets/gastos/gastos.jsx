@@ -481,6 +481,12 @@ const Gastos = () => {
     conetionMicrosoft();
   };
 
+  const validaEnter = (e) =>{
+    if(e.key === "Enter"){
+     e.preventDefault();
+    }
+   }
+
   const handleOnChange = (e) => {
     let { name, value } = e.target;
     setResponsedata({
@@ -633,6 +639,7 @@ const Gastos = () => {
                 className="w-full border rounded-md p-2 border-azulCreame my-4"
                 value={responsedata.Descripcion}
                 onChange={handleOnChange}
+                onKeyDown={(e) => { validaEnter(e) }}
                 placeholder="Escribe aquí la descripción del envío del RUT"
               ></input>
             </>
@@ -735,6 +742,7 @@ const Gastos = () => {
                     value={responsedata.concepto}
                     name="concepto"
                     onChange={handleOnChange}
+                    onKeyDown={(e) => { validaEnter(e) }}
                     type="text"
                     className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
@@ -766,6 +774,7 @@ const Gastos = () => {
                     value={responsedata.nit}
                     name="nit"
                     onChange={handleOnChange}
+                    onKeyDown={(e) => { validaEnter(e) }}
                     type="text"
                     className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
@@ -799,6 +808,7 @@ const Gastos = () => {
                     value={responsedata.razon_social}
                     name="razon_social"
                     onChange={handleOnChange}
+                    onKeyDown={(e) => { validaEnter(e) }}
                     type="text"
                     className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
@@ -832,6 +842,7 @@ const Gastos = () => {
                     value={responsedata.total}
                     name="total"
                     onChange={handleOnChange}
+                    onKeyDown={(e) => { validaEnter(e) }}
                     type="number"
                     className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
@@ -877,6 +888,7 @@ const Gastos = () => {
                       name="iva"
                       readOnly
                       onChange={handleOnChange}
+                      onKeyDown={(e) => { validaEnter(e) }}
                       type="text"
                       className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
@@ -913,6 +925,7 @@ const Gastos = () => {
                       }
                       name="ivaPorc"
                       onChange={handleOnChange}
+                      onKeyDown={(e) => { validaEnter(e) }}
                       type="number"
                       className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
@@ -958,6 +971,7 @@ const Gastos = () => {
                       }
                       name="rete"
                       onChange={handleOnChange}
+                      onKeyDown={(e) => { validaEnter(e) }}
                       type="number"
                       className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
@@ -988,6 +1002,7 @@ const Gastos = () => {
                       value={responsedata.retePorc}
                       name="retePorc"
                       onChange={handleOnChange}
+                      onKeyDown={(e) => { validaEnter(e) }}
                       type="number"
                       className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
@@ -1022,6 +1037,7 @@ const Gastos = () => {
                     value={responsedata.fecha}
                     name="fecha"
                     onChange={handleOnChange}
+                    onKeyDown={(e) => { validaEnter(e) }}
                     type="text"
                     className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
@@ -1055,6 +1071,7 @@ const Gastos = () => {
                     value={responsedata.codepostal}
                     name="codepostal"
                     onChange={handleOnChange}
+                    onKeyDown={(e) => { validaEnter(e) }}
                     type="text"
                     className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
@@ -1088,6 +1105,7 @@ const Gastos = () => {
                     value={responsedata.municipio}
                     name="municipio"
                     onChange={handleOnChange}
+                    onKeyDown={(e) => { validaEnter(e) }}
                     type="text"
                     className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
@@ -1121,6 +1139,7 @@ const Gastos = () => {
                     value={responsedata.ipc}
                     name="ipc"
                     onChange={handleOnChange}
+                    onKeyDown={(e) => { validaEnter(e) }}
                     type="text"
                     className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
@@ -1154,6 +1173,7 @@ const Gastos = () => {
                     value={responsedata.totalSinIva}
                     name="totalSinIva"
                     onChange={handleOnChange}
+                    onKeyDown={(e) => { validaEnter(e) }}
                     type="number"
                     className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
@@ -1187,6 +1207,7 @@ const Gastos = () => {
                     value={responsedata.ica}
                     name="ica"
                     onChange={handleOnChange}
+                    onKeyDown={(e) => { validaEnter(e) }}
                     type="number"
                     className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
