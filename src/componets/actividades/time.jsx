@@ -269,114 +269,226 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
     //     </div>
     //   )}
     // </div>
-    <div className="flex items-center justify-center bg-naranjaCreame rounded p-1 font-Horatio">
-    <button
-      className={`btn btn-blue text-lg md:text-2xl ${entrega ? "" : "btn-disabled"}`}
-      onClick={openModal}
-    >
-      {!isNaN(totalTime) ? totalTime : "00:00"}
-    </button>
-    {modalVisible && (
-      <div className="fixed inset-0 bg-white bg-opacity-50 backdrop-blur-sm flex justify-center items-center">
-        <div className="bg-azulCreame rounded-xl p-6 shadow-turquesaCreame shadow-sm w-11/12 max-w-4xl lg:max-w-3xl">
-          <div className="flex justify-center flex-col items-center text-3xl">
-            <div className="text-black w-full text-center mb-4">
+
+    // todo *****************************
+  //   <div className="flex items-center justify-center bg-naranjaCreame rounded p-1 font-Horatio">
+  //   <button
+  //     className={`btn btn-blue text-lg md:text-2xl ${entrega ? "" : "btn-disabled"}`}
+  //     onClick={openModal}
+  //   >
+  //     {!isNaN(totalTime) ? totalTime : "00:00"}
+  //   </button>
+  //   {modalVisible && (
+  //     <div className="fixed inset-0 bg-white bg-opacity-50 backdrop-blur-sm flex justify-center items-center ">
+  //       <div className="bg-azulCreame rounded-xl p-6 shadow-turquesaCreame shadow-sm w-11/12 max-w-4xl lg:max-w-3xl ">
+  //         <div className="flex justify-center flex-col items-center text-3xl">
+  //           <div className="text-black w-full text-center mb-4">
+  //             <input
+  //               type="date"
+  //               value={fechaSeleccionada}
+  //               onChange={handleChange}
+  //               className="input input-bordered w-full md:w-4/5 p-4 text-3xl rounded"
+  //             />
+  //           </div>
+  //           <div className="flex items-center justify-between w-full md:w-9/12 my-4">
+  //             <label className="text-white w-1/2 text-3xl p-4">Hora inicio:</label>
+  //             <input
+  //               type="time"
+  //               className="input input-bordered w-full md:w-96 p-4 text-darkGrayCreame font-bold text-3xl rounded"
+  //               value={startTime}
+  //               onChange={(e) => setStartTime(e.target.value)}
+  //               placeholder="00:00"
+  //             />
+  //           </div>
+  //           <div className="flex items-center justify-between w-full md:w-9/12 my-4">
+  //             <label className="text-white w-1/2 text-3xl p-4">Hora final:</label>
+  //             <input
+  //               type="time"
+  //               className="input input-bordered w-full md:w-96 p-4 text-darkGrayCreame font-bold text-3xl rounded"
+  //               value={endTime}
+  //               onChange={(e) => setEndTime(e.target.value)}
+  //             />
+  //           </div>
+  //           {manualDuration ? (
+  //             <div className="flex items-center w-full md:w-60 my-4">
+  //               <label className="text-white w-1/2">Duración:</label>
+  //               <input
+  //                 type="text"
+  //                 className="input input-bordered w-full md:w-24 p-4 text-3xl rounded"
+  //                 maxLength="5"
+  //                 placeholder="00:00"
+  //                 value={newDuration}
+  //                 onChange={(e) => handleNewDuration(e.target.value)}
+  //               />
+  //               <button
+  //                 className="btn btn-primary btn-sm mx-2 text-3xl p-4"
+  //                 onClick={() => {
+  //                   setEditedTime(true);
+  //                   setManualDuration(false);
+  //                 }}
+  //               >
+  //                 <i className="fas fa-check"></i>
+  //               </button>
+  //             </div>
+  //           ) : (
+  //             <div className="flex items-center  my-4 ">
+  //               <label className="text-white w-1/2 text-3xl">Duración:</label>
+  //               {editedTime ? (
+  //                 <p className="text-white  text-3xl ml-2">{newDuration}</p>
+  //               ) : (
+  //                 <p className="text-white  text-3xl ml-2">
+  //                   {getDuration() !== "" ? getDuration() : "00:00"}
+  //                 </p>
+  //               )}
+  //               <button
+  //                 className="btn btn-primary btn-sm mx-2 text-3xl p-4"
+  //                 onClick={() => setManualDuration(true)}
+  //               >
+  //                 <i className="fas fa-pencil-alt"></i>
+  //               </button>
+  //             </div>
+  //           )}
+  //           <p className="text-white text-3xl">
+  //             Tiempo Total: {!isNaN(totalTime) ? totalTime : "00:00"}
+  //           </p>
+  //           <div className="flex justify-center mt-4">
+  //             <button
+  //               className={`btn btn-primary bg-naranjaCreame py-2 px-12 rounded-lg shadow-lg mx-2 text-3xl ${
+  //                 manualDuration ? "btn-disabled" : ""
+  //               }`}
+  //               onClick={closeModal}
+  //             >
+  //               Aceptar
+  //             </button>
+  //             <button
+  //               className="btn btn-primary bg-naranjaCreame py-2 px-12 rounded-lg shadow-lg mx-2 text-3xl"
+  //               onClick={cancelModal}
+  //             >
+  //               Cancelar
+  //             </button>
+  //           </div>
+  //           <div className={`modal ${errorModal ? "block" : "hidden"}`}>
+  //             <div className="modal-content">
+  //               <p className="text-white text-center font-bold text-3xl">
+  //                 Formato no válido
+  //               </p>
+  //             </div>
+  //           </div>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   )}
+  // </div>
+
+  <div className="flex items-center justify-center bg-naranjaCreame rounded p-1 font-Horatio ">
+  <button
+    className={`btn btn-blue text-lg md:text-2xl ${entrega ? "" : "btn-disabled"}`}
+    onClick={openModal}
+  >
+    {!isNaN(totalTime) ? totalTime : "00:00"}
+  </button>
+  {modalVisible && (
+    <div className="fixed inset-0 bg-white bg-opacity-50 backdrop-blur-sm flex justify-center items-center top-28">
+      <div className="bg-azulCreame rounded-xl p-4 shadow-turquesaCreame shadow-sm w-11/12 max-w-lg lg:max-w-3xl overflow-auto max-h-screen">
+        <div className="flex justify-center flex-col items-center text-lg sm:text-xl md:text-2xl">
+          <div className="text-black w-full text-center mb-2 sm:mb-4">
+            <input
+              type="date"
+              value={fechaSeleccionada}
+              onChange={handleChange}
+              className="input input-bordered w-full sm:w-4/5 p-2 sm:p-4 text-lg sm:text-xl rounded"
+            />
+          </div>
+          <div className="flex flex-col sm:flex-row items-center justify-between w-full sm:w-9/12 my-2 sm:my-4">
+            <label className="text-white w-full sm:w-1/2 text-lg sm:text-xl mb-2 sm:mb-0">Hora inicio:</label>
+            <input
+              type="time"
+              className="input input-bordered w-full sm:w-96 p-2 sm:p-4 text-darkGrayCreame font-bold text-lg sm:text-xl rounded"
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
+              placeholder="00:00"
+            />
+          </div>
+          <div className="flex flex-col sm:flex-row items-center justify-between w-full sm:w-9/12 my-2 sm:my-4">
+            <label className="text-white w-full sm:w-1/2 text-lg sm:text-xl mb-2 sm:mb-0">Hora final:</label>
+            <input
+              type="time"
+              className="input input-bordered w-full sm:w-96 p-2 sm:p-4 text-darkGrayCreame font-bold text-lg sm:text-xl rounded"
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
+            />
+          </div>
+          {manualDuration ? (
+            <div className="flex flex-col sm:flex-row items-center w-full sm:w-60 my-2 sm:my-4">
+              <label className="text-white w-full sm:w-1/2 text-lg sm:text-xl mb-2 sm:mb-0">Duración:</label>
               <input
-                type="date"
-                value={fechaSeleccionada}
-                onChange={handleChange}
-                className="input input-bordered w-full md:w-4/5 p-4 text-3xl rounded"
-              />
-            </div>
-            <div className="flex items-center justify-between w-full md:w-9/12 my-4">
-              <label className="text-white w-1/2 text-3xl p-4">Hora inicio:</label>
-              <input
-                type="time"
-                className="input input-bordered w-full md:w-96 p-4 text-darkGrayCreame font-bold text-3xl rounded"
-                value={startTime}
-                onChange={(e) => setStartTime(e.target.value)}
+                type="text"
+                className="input input-bordered w-full sm:w-24 p-2 sm:p-4 text-lg sm:text-xl rounded"
+                maxLength="5"
                 placeholder="00:00"
+                value={newDuration}
+                onChange={(e) => handleNewDuration(e.target.value)}
               />
-            </div>
-            <div className="flex items-center justify-between w-full md:w-9/12 my-4">
-              <label className="text-white w-1/2 text-3xl p-4">Hora final:</label>
-              <input
-                type="time"
-                className="input input-bordered w-full md:w-96 p-4 text-darkGrayCreame font-bold text-3xl rounded"
-                value={endTime}
-                onChange={(e) => setEndTime(e.target.value)}
-              />
-            </div>
-            {manualDuration ? (
-              <div className="flex items-center w-full md:w-60 my-4">
-                <label className="text-white w-1/2">Duración:</label>
-                <input
-                  type="text"
-                  className="input input-bordered w-full md:w-24 p-4 text-3xl rounded"
-                  maxLength="5"
-                  placeholder="00:00"
-                  value={newDuration}
-                  onChange={(e) => handleNewDuration(e.target.value)}
-                />
-                <button
-                  className="btn btn-primary btn-sm mx-2 text-3xl p-4"
-                  onClick={() => {
-                    setEditedTime(true);
-                    setManualDuration(false);
-                  }}
-                >
-                  <i className="fas fa-check"></i>
-                </button>
-              </div>
-            ) : (
-              <div className="flex items-center  my-4 ">
-                <label className="text-white w-1/2 text-3xl">Duración:</label>
-                {editedTime ? (
-                  <p className="text-white  text-3xl ml-2">{newDuration}</p>
-                ) : (
-                  <p className="text-white  text-3xl ml-2">
-                    {getDuration() !== "" ? getDuration() : "00:00"}
-                  </p>
-                )}
-                <button
-                  className="btn btn-primary btn-sm mx-2 text-3xl p-4"
-                  onClick={() => setManualDuration(true)}
-                >
-                  <i className="fas fa-pencil-alt"></i>
-                </button>
-              </div>
-            )}
-            <p className="text-white text-3xl">
-              Tiempo Total: {!isNaN(totalTime) ? totalTime : "00:00"}
-            </p>
-            <div className="flex justify-center mt-4">
               <button
-                className={`btn btn-primary bg-naranjaCreame py-2 px-12 rounded-lg shadow-lg mx-2 text-3xl ${
-                  manualDuration ? "btn-disabled" : ""
-                }`}
-                onClick={closeModal}
+                className="btn btn-primary btn-sm mx-2 text-lg sm:text-xl p-2 sm:p-4"
+                onClick={() => {
+                  setEditedTime(true);
+                  setManualDuration(false);
+                }}
               >
-                Aceptar
-              </button>
-              <button
-                className="btn btn-primary bg-naranjaCreame py-2 px-12 rounded-lg shadow-lg mx-2 text-3xl"
-                onClick={cancelModal}
-              >
-                Cancelar
+                <i className="fas fa-check"></i>
               </button>
             </div>
-            <div className={`modal ${errorModal ? "block" : "hidden"}`}>
-              <div className="modal-content">
-                <p className="text-white text-center font-bold text-3xl">
-                  Formato no válido
+          ) : (
+            <div className="flex items-center my-2 sm:my-4">
+              <label className="text-white w-1/2 text-lg sm:text-xl">Duración:</label>
+              {editedTime ? (
+                <p className="text-white text-lg sm:text-xl ml-2">{newDuration}</p>
+              ) : (
+                <p className="text-white text-lg sm:text-xl ml-2">
+                  {getDuration() !== "" ? getDuration() : "00:00"}
                 </p>
-              </div>
+              )}
+              <button
+                className="btn btn-primary btn-sm mx-2 text-lg sm:text-xl p-2 sm:p-4"
+                onClick={() => setManualDuration(true)}
+              >
+                <i className="fas fa-pencil-alt"></i>
+              </button>
+            </div>
+          )}
+          <p className="text-white text-lg sm:text-xl">
+            Tiempo Total: {!isNaN(totalTime) ? totalTime : "00:00"}
+          </p>
+          <div className="flex justify-center mt-2 sm:mt-4">
+            <button
+              className={`btn btn-primary bg-naranjaCreame py-1 sm:py-2 px-6 sm:px-12 rounded-lg shadow-lg mx-1 sm:mx-2 text-lg sm:text-xl ${
+                manualDuration ? "btn-disabled" : ""
+              }`}
+              onClick={closeModal}
+            >
+              Aceptar
+            </button>
+            <button
+              className="btn btn-primary bg-naranjaCreame py-1 sm:py-2 px-6 sm:px-12 rounded-lg shadow-lg mx-1 sm:mx-2 text-lg sm:text-xl"
+              onClick={cancelModal}
+            >
+              Cancelar
+            </button>
+          </div>
+          <div className={`modal ${errorModal ? "block" : "hidden"}`}>
+            <div className="modal-content">
+              <p className="text-white text-center font-bold text-lg sm:text-xl">
+                Formato no válido
+              </p>
             </div>
           </div>
         </div>
       </div>
-    )}
-  </div>
+    </div>
+  )}
+</div>
+
   
 
   );
