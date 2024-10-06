@@ -21,14 +21,14 @@ const Tarea = (props) => {
     setReadyTocheck(value);
   };
 
-  const handleCheckboxToggle = () => {
+  const handleCheckboxToggle = (isTotalTime) => {
       // setConfirmModal(true);
       try {
 
         swal({
-          title: "CONFIRMAR FINALIZACIÓN DE ACTIVIDAD",
+          title: `CONFIRMAR FINALIZACIÓN DE ACTIVIDAD`,
           text: `Despúes de confirmar, la actividad ya no estara disponible en su usuario. ¿Está seguro de haber enviado todos los elementos requeridos y horas realizadas? 
-          VALIDE LA CANTIDAD DE HORAS REALIZADAS ANTES DE FINALIZAR LA TAREA`,
+          EL TIEMPO TOTAL TRABAJADO EN LA ACTIVIDAD ES DE ${isTotalTime} HORAS `,
           icon: "warning",
           buttons: ["SI", "NO"],
         }).then(async (res) => {
@@ -93,12 +93,13 @@ const Tarea = (props) => {
         </p>
       </div>
       <div className="w-2/5 flex items-center justify-between">
+      
         <input
           type="checkbox"
           checked={checked}
           onChange={() => {
             if (!isNaN(isTotalTime)) {
-              handleCheckboxToggle();
+              handleCheckboxToggle(isTotalTime);
             }
           }}
         />
