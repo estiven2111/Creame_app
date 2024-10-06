@@ -27,7 +27,8 @@ const Tarea = (props) => {
 
         swal({
           title: "CONFIRMAR FINALIZACIÓN DE ACTIVIDAD",
-          text: `Despúes de confirmar, la actividad ya no estara disponible en su usuario. ¿Está seguro de haber enviado todos los elementos requeridos?`,
+          text: `Despúes de confirmar, la actividad ya no estara disponible en su usuario. ¿Está seguro de haber enviado todos los elementos requeridos y horas realizadas? 
+          VALIDE LA CANTIDAD DE HORAS REALIZADAS ANTES DE FINALIZAR LA TAREA`,
           icon: "warning",
           buttons: ["SI", "NO"],
         }).then(async (res) => {
