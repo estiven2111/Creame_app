@@ -172,7 +172,7 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
     //     <div className="fixed inset-0 bg-white bg-opacity-50 blackdrop-blur-sm flex justify-center items-center">
     //       <div className="bg-azulCreame rounded-xl p-6 shadow-turquesaCreame shadow-sm m-0.5">
     //         <div className="flex justify-center flex-col items-center">
-    //           {/* <p className="text-white pb-4 text-lg font-Horatio">Fecha: {normalDate}</p> */}
+    //           {/* <p className="text-white pb-4 text-2xl font-Horatio">Fecha: {normalDate}</p> */}
     //           <div className="text-black">
     //             <input
     //               type="date"
@@ -273,7 +273,7 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
     // todo *****************************
   //   <div className="flex items-center justify-center bg-naranjaCreame rounded p-1 font-Horatio">
   //   <button
-  //     className={`btn btn-blue text-lg md:text-2xl ${entrega ? "" : "btn-disabled"}`}
+  //     className={`btn btn-blue text-2xl md:text-2xl ${entrega ? "" : "btn-disabled"}`}
   //     onClick={openModal}
   //   >
   //     {!isNaN(totalTime) ? totalTime : "00:00"}
@@ -382,7 +382,7 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
 
   <div className="flex items-center justify-center bg-naranjaCreame rounded p-1 font-Horatio ">
   <button
-    className={`btn btn-blue text-lg md:text-2xl ${entrega ? "" : "btn-disabled"}`}
+    className={`btn btn-blue text-2xl md:text-2xl ${entrega ? "" : "btn-disabled"}`}
     onClick={openModal}
   >
     {!isNaN(totalTime) ? totalTime : "00:00"}
@@ -390,47 +390,47 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
   {modalVisible && (
     <div className="fixed inset-0 bg-white bg-opacity-50 backdrop-blur-sm flex justify-center items-center top-28">
       <div className="bg-azulCreame rounded-xl p-4 shadow-turquesaCreame shadow-sm w-11/12 max-w-lg lg:max-w-3xl overflow-auto max-h-screen">
-        <div className="flex justify-center flex-col items-center text-lg sm:text-xl md:text-2xl">
+        <div className="flex justify-center flex-col items-center text-2xl sm:text-3xl md:text-2xl">
           <div className="text-black w-full text-center mb-2 sm:mb-4">
             <input
               type="date"
               value={fechaSeleccionada}
               onChange={handleChange}
-              className="input input-bordered w-full sm:w-4/5 p-2 sm:p-4 text-lg sm:text-xl rounded"
+              className="input input-bordered w-full sm:w-4/5 p-2 sm:p-4 text-2xl sm:text-3xl rounded"
             />
           </div>
           <div className="flex flex-col sm:flex-row items-center justify-between w-full sm:w-9/12 my-2 sm:my-4">
-            <label className="text-white w-full sm:w-1/2 text-lg sm:text-xl mb-2 sm:mb-0">Hora inicio:</label>
+            <label className="text-white w-full sm:w-1/2 text-2xl sm:text-3xl mb-2 sm:mb-0">Hora inicio:</label>
             <input
               type="time"
-              className="input input-bordered w-full sm:w-96 p-2 sm:p-4 text-darkGrayCreame font-bold text-lg sm:text-xl rounded"
+              className="input input-bordered w-full sm:w-96 p-2 sm:p-4 text-darkGrayCreame font-bold text-2xl sm:text-3xl rounded"
               value={startTime}
               onChange={(e) => setStartTime(e.target.value)}
               placeholder="00:00"
             />
           </div>
           <div className="flex flex-col sm:flex-row items-center justify-between w-full sm:w-9/12 my-2 sm:my-4">
-            <label className="text-white w-full sm:w-1/2 text-lg sm:text-xl mb-2 sm:mb-0">Hora final:</label>
+            <label className="text-white w-full sm:w-1/2 text-2xl sm:text-3xl mb-2 sm:mb-0">Hora final:</label>
             <input
               type="time"
-              className="input input-bordered w-full sm:w-96 p-2 sm:p-4 text-darkGrayCreame font-bold text-lg sm:text-xl rounded"
+              className="input input-bordered w-full sm:w-96 p-2 sm:p-4 text-darkGrayCreame font-bold text-2xl sm:text-3xl rounded"
               value={endTime}
               onChange={(e) => setEndTime(e.target.value)}
             />
           </div>
           {manualDuration ? (
             <div className="flex flex-col sm:flex-row items-center w-full sm:w-60 my-2 sm:my-4">
-              <label className="text-white w-full sm:w-1/2 text-lg sm:text-xl mb-2 sm:mb-0">Duración:</label>
+              <label className="text-white w-full sm:w-1/2 text-2xl sm:text-3xl mb-2 sm:mb-0">Duración:</label>
               <input
                 type="text"
-                className="input input-bordered w-full sm:w-24 p-2 sm:p-4 text-lg sm:text-xl rounded"
+                className="input input-bordered w-full sm:w-24 p-2 sm:p-4 text-2xl sm:text-3xl rounded"
                 maxLength="5"
                 placeholder="00:00"
                 value={newDuration}
                 onChange={(e) => handleNewDuration(e.target.value)}
               />
               <button
-                className="btn btn-primary btn-sm mx-2 text-lg sm:text-xl p-2 sm:p-4"
+                className="btn btn-primary btn-sm mx-2 text-2xl sm:text-3xl p-2 sm:p-4"
                 onClick={() => {
                   setEditedTime(true);
                   setManualDuration(false);
@@ -441,28 +441,28 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
             </div>
           ) : (
             <div className="flex items-center my-2 sm:my-4">
-              <label className="text-white w-1/2 text-lg sm:text-xl">Duración:</label>
+              <label className="text-white w-1/2 text-2xl sm:text-3xl">Duración:</label>
               {editedTime ? (
-                <p className="text-white text-lg sm:text-xl ml-2">{newDuration}</p>
+                <p className="text-white text-2xl sm:text-3xl ml-2">{newDuration}</p>
               ) : (
-                <p className="text-white text-lg sm:text-xl ml-2">
+                <p className="text-white text-2xl sm:text-3xl ml-2">
                   {getDuration() !== "" ? getDuration() : "00:00"}
                 </p>
               )}
               <button
-                className="btn btn-primary btn-sm mx-2 text-lg sm:text-xl p-2 sm:p-4"
+                className="btn btn-primary btn-sm mx-2 text-2xl sm:text-3xl p-2 sm:p-4"
                 onClick={() => setManualDuration(true)}
               >
                 <i className="fas fa-pencil-alt"></i>
               </button>
             </div>
           )}
-          <p className="text-white text-lg sm:text-xl">
+          <p className="text-white text-2xl sm:text-3xl">
             Tiempo Total: {!isNaN(totalTime) ? totalTime : "00:00"}
           </p>
           <div className="flex justify-center mt-2 sm:mt-4">
             <button
-              className={`btn btn-primary bg-naranjaCreame py-1 sm:py-2 px-6 sm:px-12 rounded-lg shadow-lg mx-1 sm:mx-2 text-lg sm:text-xl ${
+              className={`btn btn-primary bg-naranjaCreame py-1 sm:py-2 px-6 sm:px-12 rounded-lg shadow-lg mx-1 sm:mx-2 text-2xl sm:text-3xl ${
                 manualDuration ? "btn-disabled" : ""
               }`}
               onClick={closeModal}
@@ -470,7 +470,7 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
               Aceptar
             </button>
             <button
-              className="btn btn-primary bg-naranjaCreame py-1 sm:py-2 px-6 sm:px-12 rounded-lg shadow-lg mx-1 sm:mx-2 text-lg sm:text-xl"
+              className="btn btn-primary bg-naranjaCreame py-1 sm:py-2 px-6 sm:px-12 rounded-lg shadow-lg mx-1 sm:mx-2 text-2xl sm:text-3xl"
               onClick={cancelModal}
             >
               Cancelar
@@ -478,7 +478,7 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
           </div>
           <div className={`modal ${errorModal ? "block" : "hidden"}`}>
             <div className="modal-content">
-              <p className="text-white text-center font-bold text-lg sm:text-xl">
+              <p className="text-white text-center font-bold text-2xl sm:text-3xl">
                 Formato no válido
               </p>
             </div>
