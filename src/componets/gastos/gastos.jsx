@@ -753,7 +753,7 @@ const Gastos = () => {
                   />
                   <label
                     htmlFor="Concepto"
-                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out 
+                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-950 transition-all duration-200 ease-out 
                     ${
                       responsedata.concepto
                         ? "-translate-y-[0.9rem] scale-75 text-black/100 "
@@ -786,7 +786,7 @@ const Gastos = () => {
                   />
                   <label
                     htmlFor="nit"
-                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out 
+                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-950 transition-all duration-200 ease-out 
                       ${
                         responsedata.nit
                           ? "-translate-y-[0.9rem] scale-75 text-black/100 "
@@ -820,7 +820,7 @@ const Gastos = () => {
                   />
                   <label
                     htmlFor="Nombre"
-                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out 
+                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-950 transition-all duration-200 ease-out 
                 ${
                   responsedata.razon_social
                     ? "-translate-y-[0.9rem] scale-75 text-black/100 "
@@ -854,7 +854,7 @@ const Gastos = () => {
                   />
                   <label
                     htmlFor="total"
-                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out 
+                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-950 transition-all duration-200 ease-out 
                       ${
                         responsedata.total
                           ? "-translate-y-[0.9rem] scale-75 text-black/100 "
@@ -900,7 +900,7 @@ const Gastos = () => {
                     />
                     <label
                       htmlFor="iva"
-                      className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out 
+                      className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-950 transition-all duration-200 ease-out 
                       ${
                         responsedata.totalSinIva
                           ? "-translate-y-[0.9rem] scale-75 text-black/100 "
@@ -937,7 +937,7 @@ const Gastos = () => {
                     />
                     <label
                       htmlFor="$ IVA"
-                      className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out 
+                      className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-950 transition-all duration-200 ease-out 
                       ${
                         responsedata.ivaPorc
                           ? "-translate-y-[0.9rem] scale-75 text-black/100 "
@@ -983,7 +983,7 @@ const Gastos = () => {
                     />
                     <label
                       htmlFor="Valor Rete"
-                      className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out 
+                      className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-950 transition-all duration-200 ease-out 
                       ${
                         responsedata.totalSinIva
                           ? "-translate-y-[0.9rem] scale-75 text-black/100 "
@@ -1014,7 +1014,7 @@ const Gastos = () => {
                     />
                     <label
                       htmlFor="% Rete"
-                      className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out 
+                      className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-950 transition-all duration-200 ease-out 
                       ${
                         responsedata.retePorc
                           ? "-translate-y-[0.9rem] scale-75 text-black/100"
@@ -1049,7 +1049,7 @@ const Gastos = () => {
                   />
                   <label
                     htmlFor="Fecha"
-                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out 
+                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-950 transition-all duration-200 ease-out 
                       ${
                         responsedata.fecha
                           ? "-translate-y-[0.9rem] scale-75 text-black/100 "
@@ -1083,7 +1083,7 @@ const Gastos = () => {
                   />
                   <label
                     htmlFor="codepostal"
-                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out 
+                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-950 transition-all duration-200 ease-out 
                       ${
                         responsedata.codepostal
                           ? "-translate-y-[0.9rem] scale-75 text-black/100 "
@@ -1117,7 +1117,7 @@ const Gastos = () => {
                   />
                   <label
                     htmlFor="municipio"
-                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out 
+                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-950 transition-all duration-200 ease-out 
                       ${
                         responsedata.municipio
                           ? "-translate-y-[0.9rem] scale-75 text-black/100 "
@@ -1151,7 +1151,7 @@ const Gastos = () => {
                   />
                   <label
                     htmlFor="ipc"
-                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out 
+                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-950 transition-all duration-200 ease-out 
                       ${
                         responsedata.ipc
                           ? "-translate-y-[0.9rem] scale-75 text-black/100 "
@@ -1185,7 +1185,7 @@ const Gastos = () => {
                   />
                   <label
                     htmlFor="subtotal"
-                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out 
+                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-950 transition-all duration-200 ease-out 
                       ${
                         responsedata.totalSinIva
                           ? "-translate-y-[0.9rem] scale-75 text-black/100 "
@@ -1219,7 +1219,7 @@ const Gastos = () => {
                   />
                   <label
                     htmlFor="ica"
-                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out 
+                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-950 transition-all duration-200 ease-out 
                       ${
                         responsedata.ica
                           ? "-translate-y-[0.9rem] scale-75 text-black/100 "
