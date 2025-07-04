@@ -635,7 +635,8 @@ const Gastos = () => {
             </p>
           </div>
           {isChecked ? (
-            <div className="grid lg:grid-cols-2 grid-cols-1 gap-4 mx-auto mb-10">
+            // <div className="grid lg:grid-cols-2 grid-cols-1 gap-4 mx-auto mb-10">
+            <div className="">
               <div className="">
                 <p className="text-sm">
                   * Para los proveedores obligados a expedir factura electrónica
@@ -654,15 +655,11 @@ const Gastos = () => {
                   placeholder="Escribe aquí la descripción del envío del RUT"
                 ></input>
 
-                <div className="flex items-center justify-center">
+                {/* <div className="flex items-center justify-center">
                 <div className="mt-4 w-48 h-48 bg-azulCreame hover:bg-lightBlueCreame flex items-center justify-center border-2 rounded-full border-gray-400 border-solid cursor-pointer shadow-xl">
                   <label className="flex items-center justify-center">
                     <div className="flex flex-col items-center justify-center pt-5 pb-6">
                       <p className="text-xs text-white">
-                        {/* <FontAwesomeIcon
-                          icon={faCloudArrowUp}
-                          className="h-12"
-                        /> */}
                         <IoDocumentsOutline size={60} className="text-white" />
                       </p>
                     </div>
@@ -671,18 +668,17 @@ const Gastos = () => {
                       type="file"
                       className="hidden"
                       onChange={handleFileChange}
-                      // ref={fileInputRef}
                       accept=".jpg, .jpeg, .png, .pdf"
                       onInput={handlerValidation}
                     />
                   </label>
                 </div>
-                </div>
+                </div> */}
 
               </div>
               
                 
-                  <div className="col-span-1 ">
+                  {/* <div className="col-span-1 ">
                 <p className="text-sm">
                   * Si vas a enviar un archivo diferente al RUT, por favor rdescribenos sobre que es el archivo que vas a enviar 
                 </p>
@@ -705,10 +701,6 @@ const Gastos = () => {
                   <label className="">
                     <div className="flex flex-col items-center justify-center pt-5 pb-6">
                       <p className="text-xs text-white">
-                        {/* <FontAwesomeIcon
-                          icon={faCloudArrowUp}
-                          className="h-12"
-                        /> */}
                         <GoArchive size={60} className="text-white" />
                       </p>
                     </div>
@@ -717,7 +709,6 @@ const Gastos = () => {
                       type="file"
                       className="hidden"
                       onChange={handleFileChange}
-                      // ref={fileInputRef}
                       accept=".jpg, .jpeg, .png, .pdf"
                       onInput={handlerValidation}
                     />
@@ -725,7 +716,7 @@ const Gastos = () => {
                 </div>
                 </div>
 
-              </div>
+              </div> */}
 
 
             </div>
