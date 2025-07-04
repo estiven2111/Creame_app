@@ -5,6 +5,8 @@ import Webcam from "react-webcam";
 import Modalcam from "./CameraGastos";
 import { AiFillCamera } from "react-icons/ai";
 import { GrGallery } from "react-icons/gr";
+import { GoArchive } from "react-icons/go";
+import { IoDocumentsOutline } from "react-icons/io5";
 import { GiCancel } from "react-icons/gi";
 import { BiScan } from "react-icons/bi";
 import axios from "axios";
@@ -128,6 +130,7 @@ const Gastos = () => {
     ipc: "",
     Descripcion: "",
     ica: "",
+    NumFactura: "",
   });
 
   const openCamera = () => {
@@ -275,8 +278,8 @@ const Gastos = () => {
           : `${(responsedata.totalSinIva * responsedata.retePorc) / 100}`;
       setResponsedata({
         ...responsedata,
-        retePorc: 4,
-        ivaPorc: 19,
+        retePorc: response.data.porcentaje_rete,
+        ivaPorc: response.data.porcentaje_iva ,
         nit: response.data.nit,
         numFact: response.data.numFact,
         doc: response.data.doc,
@@ -293,6 +296,7 @@ const Gastos = () => {
         codepostal,
         // Descripcion,
         ica: response.data.ica,
+        NumFactura: response.data.NumFactura,
       });
       // console.log(responsedata);
       setFillData(true);
@@ -351,6 +355,7 @@ const Gastos = () => {
         : 0,
       ica: responsedata.ica ? responsedata.ica : "",
       razon_social: responsedata.razon_social ? responsedata.razon_social : "",
+      NumFactura: responsedata.NumFactura ? responsedata.NumFactura : "",
     };
 
     formData.append(
@@ -359,7 +364,9 @@ const Gastos = () => {
         ...ActualizarEntregable,
       })
     );
+    
     formData.append("token", data.tokenSecret);
+    // formData.append("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRW1haWwiOiJjb20wMDJAY3JlYW1lLmNvbS5jbyIsImlhdCI6MTc1MTYwMDE2NSwiZXhwIjoxNzUxNjI4OTY1fQ.rxHkuG62yBcvgkwoYgwaZeVkbkVZq3skYWZOOFuS-EQ");
     formData.append("imagen", imagen);
     formData.append("user", user_name);
     formData.append("tipo", "OCR");
@@ -464,6 +471,7 @@ const Gastos = () => {
       ipc: "",
       Descripcion: "",
       ica: "",
+      NumFactura: "",
     });
     setFillData(false);
     setImageSrc(null);
@@ -481,11 +489,11 @@ const Gastos = () => {
     conetionMicrosoft();
   };
 
-  const validaEnter = (e) =>{
-    if(e.key === "Enter"){
-     e.preventDefault();
+  const validaEnter = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
     }
-   }
+  };
 
   const handleOnChange = (e) => {
     let { name, value } = e.target;
@@ -525,7 +533,7 @@ const Gastos = () => {
   function handleDrop(event) {
     event.preventDefault();
     const files = event.dataTransfer.files;
-    handlerValidation2(files)
+    handlerValidation2(files);
   }
 
   const handleFileChange2 = (files) => {
@@ -535,7 +543,7 @@ const Gastos = () => {
       imagen = file;
       console.log(file, "file changed");
       const reader = new FileReader();
-      console.log(reader.result,"eeeeeerrrrrrdsdsdf")
+      console.log(reader.result, "eeeeeerrrrrrdsdsdf");
       reader.readAsDataURL(file);
       reader.onload = () => {
         if (imagen.name.split(".")[1] === "pdf") {
@@ -623,26 +631,104 @@ const Gastos = () => {
               onChange={handleCheckboxChange}
             ></input>
             <p className="text-naranjaCreame text-xl font-Horatio">
-              Desea enviar un RUT
+              Desea enviar un RUT U OTRO Archivo seleccione esta opcion
             </p>
           </div>
           {isChecked ? (
-            <>
-              <p className="text-sm">
-                * Para los proveedores obligados a expedir factura electrónica y
-                los no responsables de IVA no obligados a facturar
-                electrónicamente es obligatorio adjuntar el RUT
-              </p>
-              <input
-                type="text"
-                name="Descripcion"
-                className="w-full border rounded-md p-2 border-azulCreame my-4"
-                value={responsedata.Descripcion}
-                onChange={handleOnChange}
-                onKeyDown={(e) => { validaEnter(e) }}
-                placeholder="Escribe aquí la descripción del envío del RUT"
-              ></input>
-            </>
+            <div className="grid lg:grid-cols-2 grid-cols-1 gap-4 mx-auto mb-10">
+              <div className="">
+                <p className="text-sm">
+                  * Para los proveedores obligados a expedir factura electrónica
+                  y los no responsables de IVA no obligados a facturar
+                  electrónicamente es obligatorio adjuntar el RUT
+                </p>
+                <input
+                  type="text"
+                  name="Descripcion"
+                  className="w-full border rounded-md p-2 border-azulCreame my-4"
+                  value={responsedata.Descripcion}
+                  onChange={handleOnChange}
+                  onKeyDown={(e) => {
+                    validaEnter(e);
+                  }}
+                  placeholder="Escribe aquí la descripción del envío del RUT"
+                ></input>
+
+                <div className="flex items-center justify-center">
+                <div className="mt-4 w-48 h-48 bg-azulCreame hover:bg-lightBlueCreame flex items-center justify-center border-2 rounded-full border-gray-400 border-solid cursor-pointer shadow-xl">
+                  <label className="flex items-center justify-center">
+                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                      <p className="text-xs text-white">
+                        {/* <FontAwesomeIcon
+                          icon={faCloudArrowUp}
+                          className="h-12"
+                        /> */}
+                        <IoDocumentsOutline size={60} className="text-white" />
+                      </p>
+                    </div>
+                    <input
+                      name="image"
+                      type="file"
+                      className="hidden"
+                      onChange={handleFileChange}
+                      // ref={fileInputRef}
+                      accept=".jpg, .jpeg, .png, .pdf"
+                      onInput={handlerValidation}
+                    />
+                  </label>
+                </div>
+                </div>
+
+              </div>
+              
+                
+                  <div className="col-span-1 ">
+                <p className="text-sm">
+                  * Si vas a enviar un archivo diferente al RUT, por favor rdescribenos sobre que es el archivo que vas a enviar 
+                </p>
+                <input
+                  type="text"
+                  name="Descripcion"
+                  className="w-full border rounded-md p-2 border-azulCreame my-4"
+                  value={responsedata.Descripcion}
+                  onChange={handleOnChange}
+                  onKeyDown={(e) => {
+                    validaEnter(e);
+                  }}
+                  placeholder="descripción del archivo que vas a enviar"
+                ></input>
+
+
+                <div className="flex items-center justify-center"> 
+                  
+                <div className="mt-4 w-48 h-48 bg-lightBlueCreame hover:bg-lightBlueCreame flex items-center justify-center border-2 rounded-full border-gray-400 border-solid cursor-pointer shadow-xl">
+                  <label className="">
+                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                      <p className="text-xs text-white">
+                        {/* <FontAwesomeIcon
+                          icon={faCloudArrowUp}
+                          className="h-12"
+                        /> */}
+                        <GoArchive size={60} className="text-white" />
+                      </p>
+                    </div>
+                    <input
+                      name="image"
+                      type="file"
+                      className="hidden"
+                      onChange={handleFileChange}
+                      // ref={fileInputRef}
+                      accept=".jpg, .jpeg, .png, .pdf"
+                      onInput={handlerValidation}
+                    />
+                  </label>
+                </div>
+                </div>
+
+              </div>
+
+
+            </div>
           ) : null}
         </div>
         <div className="">
@@ -742,7 +828,9 @@ const Gastos = () => {
                     value={responsedata.concepto}
                     name="concepto"
                     onChange={handleOnChange}
-                    onKeyDown={(e) => { validaEnter(e) }}
+                    onKeyDown={(e) => {
+                      validaEnter(e);
+                    }}
                     type="text"
                     className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
@@ -774,7 +862,9 @@ const Gastos = () => {
                     value={responsedata.nit}
                     name="nit"
                     onChange={handleOnChange}
-                    onKeyDown={(e) => { validaEnter(e) }}
+                    onKeyDown={(e) => {
+                      validaEnter(e);
+                    }}
                     type="text"
                     className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
@@ -808,7 +898,9 @@ const Gastos = () => {
                     value={responsedata.razon_social}
                     name="razon_social"
                     onChange={handleOnChange}
-                    onKeyDown={(e) => { validaEnter(e) }}
+                    onKeyDown={(e) => {
+                      validaEnter(e);
+                    }}
                     type="text"
                     className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
@@ -842,7 +934,9 @@ const Gastos = () => {
                     value={responsedata.total}
                     name="total"
                     onChange={handleOnChange}
-                    onKeyDown={(e) => { validaEnter(e) }}
+                    onKeyDown={(e) => {
+                      validaEnter(e);
+                    }}
                     type="number"
                     className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
@@ -888,7 +982,9 @@ const Gastos = () => {
                       name="iva"
                       readOnly
                       onChange={handleOnChange}
-                      onKeyDown={(e) => { validaEnter(e) }}
+                      onKeyDown={(e) => {
+                        validaEnter(e);
+                      }}
                       type="text"
                       className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
@@ -925,7 +1021,9 @@ const Gastos = () => {
                       }
                       name="ivaPorc"
                       onChange={handleOnChange}
-                      onKeyDown={(e) => { validaEnter(e) }}
+                      onKeyDown={(e) => {
+                        validaEnter(e);
+                      }}
                       type="number"
                       className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
@@ -971,7 +1069,9 @@ const Gastos = () => {
                       }
                       name="rete"
                       onChange={handleOnChange}
-                      onKeyDown={(e) => { validaEnter(e) }}
+                      onKeyDown={(e) => {
+                        validaEnter(e);
+                      }}
                       type="number"
                       className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
@@ -981,6 +1081,22 @@ const Gastos = () => {
                     }`}
                       id="Valor Rete"
                     />
+                    {/* <input
+                      value={responsedata.retePorc}
+                      name="rete"
+                      onChange={handleOnChange}
+                      onKeyDown={(e) => {
+                        validaEnter(e);
+                      }}
+                      type="number"
+                      className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                    ${
+                      responsedata.totalSinIva
+                        ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
+                        : ""
+                    }`}
+                      id="Valor Rete"
+                    /> */}
                     <label
                       htmlFor="Valor Rete"
                       className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-950 transition-all duration-200 ease-out 
@@ -1002,7 +1118,9 @@ const Gastos = () => {
                       value={responsedata.retePorc}
                       name="retePorc"
                       onChange={handleOnChange}
-                      onKeyDown={(e) => { validaEnter(e) }}
+                      onKeyDown={(e) => {
+                        validaEnter(e);
+                      }}
                       type="number"
                       className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
@@ -1037,7 +1155,9 @@ const Gastos = () => {
                     value={responsedata.fecha}
                     name="fecha"
                     onChange={handleOnChange}
-                    onKeyDown={(e) => { validaEnter(e) }}
+                    onKeyDown={(e) => {
+                      validaEnter(e);
+                    }}
                     type="text"
                     className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
@@ -1071,7 +1191,9 @@ const Gastos = () => {
                     value={responsedata.codepostal}
                     name="codepostal"
                     onChange={handleOnChange}
-                    onKeyDown={(e) => { validaEnter(e) }}
+                    onKeyDown={(e) => {
+                      validaEnter(e);
+                    }}
                     type="text"
                     className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
@@ -1105,7 +1227,9 @@ const Gastos = () => {
                     value={responsedata.municipio}
                     name="municipio"
                     onChange={handleOnChange}
-                    onKeyDown={(e) => { validaEnter(e) }}
+                    onKeyDown={(e) => {
+                      validaEnter(e);
+                    }}
                     type="text"
                     className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
@@ -1139,7 +1263,9 @@ const Gastos = () => {
                     value={responsedata.ipc}
                     name="ipc"
                     onChange={handleOnChange}
-                    onKeyDown={(e) => { validaEnter(e) }}
+                    onKeyDown={(e) => {
+                      validaEnter(e);
+                    }}
                     type="text"
                     className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
@@ -1173,7 +1299,9 @@ const Gastos = () => {
                     value={responsedata.totalSinIva}
                     name="totalSinIva"
                     onChange={handleOnChange}
-                    onKeyDown={(e) => { validaEnter(e) }}
+                    onKeyDown={(e) => {
+                      validaEnter(e);
+                    }}
                     type="number"
                     className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
@@ -1207,7 +1335,9 @@ const Gastos = () => {
                     value={responsedata.ica}
                     name="ica"
                     onChange={handleOnChange}
-                    onKeyDown={(e) => { validaEnter(e) }}
+                    onKeyDown={(e) => {
+                      validaEnter(e);
+                    }}
                     type="number"
                     className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
@@ -1230,6 +1360,46 @@ const Gastos = () => {
                   </label>
                 </div>
               </div>
+
+              {/* NUEMRO DE FACTURA*/} 
+              {/* *****************************************/} 
+              <div className="flex items-center justify-center col-span-1">
+                <div
+                  className="relative mb-3 w-full  "
+                  data-te-input-wrapper-init
+                >
+                  {console.log(responsedata.NumFactura)}
+                  <input
+                    value={responsedata.NumFactura}
+                    name="NumFactura"
+                    onChange={handleOnChange}
+                    onKeyDown={(e) => {
+                      validaEnter(e);
+                    }}
+                    type="text"
+                    className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                    ${
+                      responsedata.NumFactura
+                        ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100"
+                        : ""
+                    }`}
+                    id="NumFactura"
+                  />
+                  <label
+                    htmlFor="NumFactura"
+                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-950 transition-all duration-200 ease-out 
+                      ${
+                        responsedata.NumFactura
+                          ? "-translate-y-[0.9rem] scale-75 text-black/100 "
+                          : ""
+                      }`}
+                  >
+                    Numero de Factura
+                  </label>
+                </div>
+              </div>
+
+
             </div>
           </div>
         </div>
