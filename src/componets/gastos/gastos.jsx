@@ -76,7 +76,9 @@ const Gastos = () => {
         className="flex m-1 px-1 cursor-pointer bg-white rounded"
         key={index}
         onClick={() => {
-          handleOptionSelect(option.DetalleConcepto + option.NumeroComprobante);
+          handleOptionSelect(
+            option.DetalleTipo_Documento + option.NumeroComprobante
+          );
           setPrepayment(option);
         }}
       >
@@ -87,7 +89,7 @@ const Gastos = () => {
             textOverflow: "ellipsis",
           }}
         >
-          {option.NumeroComprobante + option.DetalleConcepto}
+          {option.NumeroComprobante + option.DetalleTipo_Documento}
         </span>
       </button>
     ));
@@ -124,7 +126,7 @@ const Gastos = () => {
     iva: "",
     ivaPorc: "",
     fecha: "",
-    concepto: "",
+    Tipo_Documento: "",
     municipio: "",
     codepostal: "",
     ipc: "",
@@ -134,7 +136,7 @@ const Gastos = () => {
     OrdenCompra: "",
     Direccion: "",
     icui: "",
-    detalles_compra: "",
+    concepto: "",
   });
 
   const openCamera = () => {
@@ -294,7 +296,7 @@ const Gastos = () => {
         iva: response.data.iva,
         rete: response.data.rete,
         fecha: response.data.fecha,
-        concepto: response.data.concepto,
+        Tipo_Documento: response.data.Tipo_Documento,
         ipc: response.data.ipc,
         municipio,
         codepostal,
@@ -304,7 +306,7 @@ const Gastos = () => {
         Direccion: response.data.Direccion,
         OrdenCompra: response.data.OrdenCompra,
         icui: response.data.icui,
-        detalles_compra: response.data.detalles_compra,
+        concepto: response.data.concepto,
       });
       // console.log(responsedata);
       setFillData(true);
@@ -343,7 +345,7 @@ const Gastos = () => {
         : "", //
       ValorComprobante: responsedata.total ? parseInt(responsedata.total) : 0, //
       NitComprobante: responsedata.nit ? responsedata.nit : "", //
-      NombreComprobante: responsedata.detalles_compra ? responsedata.detalles_compra : "", //
+      NombreComprobante: responsedata.concepto ? responsedata.concepto : "", //
       CiudadComprobante: responsedata.municipio ? responsedata.municipio : "", //
       DireccionComprobante: responsedata.codepostal
         ? responsedata.codepostal.toString()
@@ -363,7 +365,7 @@ const Gastos = () => {
       Direccion: responsedata.Direccion ? responsedata.Direccion : "",
       icui: responsedata.icui ? responsedata.icui : "",
       OrdenCompra: responsedata.OrdenCompra ? responsedata.OrdenCompra : "",
-      detalles_compra: responsedata.detalles_compra ? responsedata.detalles_compra : "",
+      concepto: responsedata.concepto ? responsedata.concepto : "",
       CodigoPostal: responsedata.codepostal ? responsedata.codepostal : "",
     };
 
@@ -374,7 +376,7 @@ const Gastos = () => {
       })
     );
 
-    // formData.append("token", data.tokenSecret);
+    formData.append("token", data.tokenSecret);
     formData.append("imagen", imagen);
     formData.append("user", user_name);
     formData.append("tipo", "OCR");
@@ -439,7 +441,7 @@ const Gastos = () => {
       iva: "",
       ivaPorc: "",
       fecha: "",
-      concepto: "",
+      Tipo_Documento: "",
       municipio: "",
       codepostal: "",
       ipc: "",
@@ -449,7 +451,7 @@ const Gastos = () => {
       Direccion: "",
       OrdenCompra: "",
       icui: "",
-      detalles_compra: "",
+      concepto: "",
     });
     setFillData(false);
     setImageSrc(null);
@@ -696,15 +698,15 @@ const Gastos = () => {
                   : "pointer-events-none opacity-50 bg-darkGrayCreame"
               }`}
             >
-              {/* CONCEPTO */}
+              {/* Tipo_Documento */}
               <div className="col-span-1 flex items-center justify-center">
                 <div
                   className="relative mb-3 w-full"
                   data-te-input-wrapper-init
                 >
                   <input
-                    value={responsedata.concepto}
-                    name="concepto"
+                    value={responsedata.Tipo_Documento}
+                    name="Tipo_Documento"
                     onChange={handleOnChange}
                     onKeyDown={(e) => {
                       validaEnter(e);
@@ -712,16 +714,16 @@ const Gastos = () => {
                     type="text"
                     className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
-                      responsedata.concepto
+                      responsedata.Tipo_Documento
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
                         : ""
                     }`}
                   />
                   <label
-                    htmlFor="Concepto"
+                    htmlFor="Tipo_Documento"
                     className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6]  transition-all duration-200 ease-out 
                     ${
-                      responsedata.concepto
+                      responsedata.Tipo_Documento
                         ? "-translate-y-6 scale-75  text-white"
                         : "text-neutral-950"
                     }`}
@@ -1272,7 +1274,7 @@ const Gastos = () => {
                 </div>
               </div>
 
-              {/** DETALLES DE LA COMPRA CONCEPTO */}
+              {/** DETALLES DE LA COMPRA Tipo_Documento */}
               {/* *****************************************/}
               <div className="col-span-2 flex items-center justify-center">
                 <div
@@ -1280,8 +1282,8 @@ const Gastos = () => {
                   data-te-input-wrapper-init
                 >
                   <textarea
-                    value={responsedata.detalles_compra}
-                    name="detalles_compra"
+                    value={responsedata.concepto}
+                    name="concepto"
                     onChange={handleOnChange}
                     onKeyDown={(e) => {
                       validaEnter(e);
@@ -1289,22 +1291,22 @@ const Gastos = () => {
                     type=""
                     className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
-                      responsedata.detalles_compra
+                      responsedata.concepto
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100"
                         : ""
                     }`}
-                    id="detalles_compra"
+                    id="concepto"
                   />
                   <label
-                    htmlFor="detalles_compra"
+                    htmlFor="concepto"
                     className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6]  transition-all duration-200 ease-out 
                       ${
-                        responsedata.detalles_compra
+                        responsedata.concepto
                           ? "-translate-y-6 scale-75  text-white"
                           : "text-neutral-950"
                       }`}
                   >
-                    Concepto
+                    Tipo_Documento
                   </label>
                 </div>
               </div>
