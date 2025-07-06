@@ -347,7 +347,7 @@ const Gastos = () => {
       NitComprobante: responsedata.nit ? responsedata.nit : "", //
       NombreComprobante: responsedata.concepto ? responsedata.concepto : "", //
       CiudadComprobante: responsedata.municipio ? responsedata.municipio : "", //
-      DireccionComprobante: responsedata.codepostal
+      DireccionComprobante: responsedata.Direccion
         ? responsedata.codepostal.toString()
         : "", //
       CCostos: prepayment ? prepayment.IdCentroCostos.toString() : "", //
