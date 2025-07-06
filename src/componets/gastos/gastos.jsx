@@ -569,7 +569,7 @@ const Gastos = () => {
       </div>
 
       {/**<form className="" onSubmit={handlerSend}>*/}
-      <form className="" onSubmit={sendData}>
+      <form className="" onSubmit={handlerSend}>
         <div>
           <div className="flex">
             <input
