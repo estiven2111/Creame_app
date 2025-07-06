@@ -131,6 +131,10 @@ const Gastos = () => {
     Descripcion: "",
     ica: "",
     NumFactura: "",
+    OrdenCompra: "",
+    Direccion: "",
+    icui: "",
+    detalles_compra: "",
   });
 
   const openCamera = () => {
@@ -279,7 +283,7 @@ const Gastos = () => {
       setResponsedata({
         ...responsedata,
         retePorc: response.data.porcentaje_rete,
-        ivaPorc: response.data.porcentaje_iva ,
+        ivaPorc: response.data.porcentaje_iva,
         nit: response.data.nit,
         numFact: response.data.numFact,
         doc: response.data.doc,
@@ -287,8 +291,8 @@ const Gastos = () => {
         totalSinIva: response.data.totalSinIva,
         nombre: user_name.normalize("NFD").replace(/[\u0300-\u036f]/g, ""),
         razon_social: response.data.razon_social, //todo revisar y poner en razon social
-        iva: iva,
-        rete: rete,
+        iva: response.data.iva,
+        rete: response.data.rete,
         fecha: response.data.fecha,
         concepto: response.data.concepto,
         ipc: response.data.ipc,
@@ -297,6 +301,10 @@ const Gastos = () => {
         // Descripcion,
         ica: response.data.ica,
         NumFactura: response.data.NumFactura,
+        Direccion: response.data.Direccion,
+        OrdenCompra: response.data.OrdenCompra,
+        icui: response.data.icui,
+        detalles_compra: response.data.detalles_compra,
       });
       // console.log(responsedata);
       setFillData(true);
@@ -335,7 +343,7 @@ const Gastos = () => {
         : "", //
       ValorComprobante: responsedata.total ? parseInt(responsedata.total) : 0, //
       NitComprobante: responsedata.nit ? responsedata.nit : "", //
-      NombreComprobante: responsedata.concepto ? responsedata.concepto : "", //
+      NombreComprobante: responsedata.detalles_compra ? responsedata.detalles_compra : "", //
       CiudadComprobante: responsedata.municipio ? responsedata.municipio : "", //
       DireccionComprobante: responsedata.codepostal
         ? responsedata.codepostal.toString()
@@ -347,15 +355,16 @@ const Gastos = () => {
         ? parseInt(responsedata.totalSinIva)
         : 0, //
       Descripcion: responsedata.Descripcion ? responsedata.Descripcion : "",
-      iva: responsedata.totalSinIva
-        ? (responsedata.totalSinIva * responsedata.ivaPorc) / 100
-        : 0,
-      reteFuente: responsedata.totalSinIva
-        ? (responsedata.totalSinIva * responsedata.retePorc) / 100
-        : 0,
+      iva: responsedata.iva ? responsedata.iva : 0,
+      reteFuente: responsedata.rete ? responsedata.rete : 0,
       ica: responsedata.ica ? responsedata.ica : "",
       razon_social: responsedata.razon_social ? responsedata.razon_social : "",
       NumFactura: responsedata.NumFactura ? responsedata.NumFactura : "",
+      Direccion: responsedata.Direccion ? responsedata.Direccion : "",
+      icui: responsedata.icui ? responsedata.icui : "",
+      OrdenCompra: responsedata.OrdenCompra ? responsedata.OrdenCompra : "",
+      detalles_compra: responsedata.detalles_compra ? responsedata.detalles_compra : "",
+      CodigoPostal: responsedata.codepostal ? responsedata.codepostal : "",
     };
 
     formData.append(
@@ -364,9 +373,8 @@ const Gastos = () => {
         ...ActualizarEntregable,
       })
     );
-    
-    formData.append("token", data.tokenSecret);
-    // formData.append("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRW1haWwiOiJjb20wMDJAY3JlYW1lLmNvbS5jbyIsImlhdCI6MTc1MTYwMDE2NSwiZXhwIjoxNzUxNjI4OTY1fQ.rxHkuG62yBcvgkwoYgwaZeVkbkVZq3skYWZOOFuS-EQ");
+
+    // formData.append("token", data.tokenSecret);
     formData.append("imagen", imagen);
     formData.append("user", user_name);
     formData.append("tipo", "OCR");
@@ -410,40 +418,6 @@ const Gastos = () => {
   const handlerScan = async (e) => {
     try {
       locations();
-
-      // // Solicitar permiso para acceder a la ubicación del dispositivo
-      // const { status } = await Location.requestForegroundPermissionsAsync();
-      // if (status !== "granted") {
-      //   console.log("Permiso de ubicación denegado");
-
-      //   Swal({
-      //     title: "PERMISO DE UBICACION",
-      //     text: `Debes dar permiso para acceder a tu ubicacion`,
-      //     icon: "warning",
-      //     buttons: ["No", "Si"],
-      //   }).then((res) => {
-      //     if (res) {
-      //      alert("permiso otorgado")
-      //     //  setIsLoading(true);
-      //     //       realizarPeticion(0,0);
-      //     }else{
-      //       alert("permiso no otrogado")
-      //     }
-      //   });
-      //   return;
-      // }
-
-      // // Obtener la ubicación actual del dispositivo
-
-      // console.log("loadingggggg");
-      // const location = await Location.getCurrentPositionAsync({});
-      // console.log("loadin111");
-      // // Extraer las coordenadas (latitud y longitud) de la ubicación
-      // const { latitude, longitude } = location.coords;
-      // console.log("loadin2222");
-      // //   setFillData(true)
-      // setIsLoading(true);
-      // realizarPeticion(latitude,longitude)
     } catch (error) {
       console.log("error", error);
     }
@@ -472,19 +446,16 @@ const Gastos = () => {
       Descripcion: "",
       ica: "",
       NumFactura: "",
+      Direccion: "",
+      OrdenCompra: "",
+      icui: "",
+      detalles_compra: "",
     });
     setFillData(false);
     setImageSrc(null);
   };
 
   const handlerSend = (e) => {
-    // console.log(
-    //   responsedata.iva,
-    //   responsedata.rete,
-    //   "******************************",
-    //   responsedata
-    // );
-    // console.log(isChecked, imageLoaded);
     e.preventDefault();
     conetionMicrosoft();
   };
@@ -501,32 +472,6 @@ const Gastos = () => {
       ...responsedata,
       [name]: value,
     });
-    // if (name === "ivaPorc" || name === "totalSinIva") {
-
-    //   value = (!responsedata.ivaPorc || !responsedata.totalSinIva) ? "" : `${responsedata.totalSinIva*responsedata.ivaPorc/100}`
-    //   console.log(value,"despues",responsedata.ivaPorc)
-    //   setResponsedata({
-    //     ...responsedata,
-    //     [name]: value,
-    //   });
-    // }else if (name === "rete"|| name === "totalSinIva") {
-    //   value =  !responsedata.retePorc || !responsedata.totalSinIva ? "" : `${responsedata.totalSinIva*responsedata.retePorc/100}`
-    //   setResponsedata({
-    //     ...responsedata,
-    //     [name]: value,
-    //   });
-    // }else{
-    //   setResponsedata({
-    //     ...responsedata,
-    //     [name]: value,
-    //   });
-    // }
-
-    // setResponsedata({
-    //   ...responsedata,
-    //   [name]: value,
-    // });
-    // console.log("on change", responsedata);
   };
   const handlerAnticipo = () => {};
 
@@ -621,7 +566,8 @@ const Gastos = () => {
         </div>
       </div>
 
-      <form className="" onSubmit={handlerSend}>
+      {/**<form className="" onSubmit={handlerSend}>*/}
+      <form className="" onSubmit={sendData}>
         <div>
           <div className="flex">
             <input
@@ -654,119 +600,60 @@ const Gastos = () => {
                   }}
                   placeholder="Escribe aquí la descripción del envío del RUT"
                 ></input>
-
-                {/* <div className="flex items-center justify-center">
-                <div className="mt-4 w-48 h-48 bg-azulCreame hover:bg-lightBlueCreame flex items-center justify-center border-2 rounded-full border-gray-400 border-solid cursor-pointer shadow-xl">
-                  <label className="flex items-center justify-center">
-                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                      <p className="text-xs text-white">
-                        <IoDocumentsOutline size={60} className="text-white" />
-                      </p>
-                    </div>
-                    <input
-                      name="image"
-                      type="file"
-                      className="hidden"
-                      onChange={handleFileChange}
-                      accept=".jpg, .jpeg, .png, .pdf"
-                      onInput={handlerValidation}
-                    />
-                  </label>
-                </div>
-                </div> */}
-
               </div>
-              
-                
-                  {/* <div className="col-span-1 ">
-                <p className="text-sm">
-                  * Si vas a enviar un archivo diferente al RUT, por favor rdescribenos sobre que es el archivo que vas a enviar 
-                </p>
-                <input
-                  type="text"
-                  name="Descripcion"
-                  className="w-full border rounded-md p-2 border-azulCreame my-4"
-                  value={responsedata.Descripcion}
-                  onChange={handleOnChange}
-                  onKeyDown={(e) => {
-                    validaEnter(e);
-                  }}
-                  placeholder="descripción del archivo que vas a enviar"
-                ></input>
-
-
-                <div className="flex items-center justify-center"> 
-                  
-                <div className="mt-4 w-48 h-48 bg-lightBlueCreame hover:bg-lightBlueCreame flex items-center justify-center border-2 rounded-full border-gray-400 border-solid cursor-pointer shadow-xl">
-                  <label className="">
-                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                      <p className="text-xs text-white">
-                        <GoArchive size={60} className="text-white" />
-                      </p>
-                    </div>
-                    <input
-                      name="image"
-                      type="file"
-                      className="hidden"
-                      onChange={handleFileChange}
-                      accept=".jpg, .jpeg, .png, .pdf"
-                      onInput={handlerValidation}
-                    />
-                  </label>
-                </div>
-                </div>
-
-              </div> */}
-
-
             </div>
           ) : null}
         </div>
         <div className="">
-          <div className="grid lg:grid-cols-2 grid-cols-1 gap-4 mx-auto">
+          <div className="grid lg:grid-cols-2 grid-cols-1 gap-4 mx-auto ">
             {imageSrc ? (
-              <>
-                <div className="mx-auto text-center h-90 rounded-lg ">
-                  <div className="rounded-lg grid grid-cols-1 bg-azulCreame ">
-                    <div className=" col-span-1  flex items-center justify-center mb-5">
+              <div className="  flex justify-center items-center  ">
+                <div className=" text-center rounded-lg  overflow-hidden bg-slate-200">
+                  <div className="rounded-lg grid grid-rows-1  bg-azulCreame p-4 h-full">
+                    {/* Imagen */}
+                    <div className="flex justify-center items-center overflow-hidden">
                       <img
-                        className="w-72 h-72 rounded-t-lg"
+                        className="w-full max-h-[60vh] object-contain rounded-lg"
                         src={imageSrc}
                         alt=""
                       />
                     </div>
 
-                    <div className="col-span-1 flex items-center justify-center mb-5">
-                      <div className="hover:bg-slate-300 w-28 h-16 flex items-center justify-center border-2 rounded-full border-gray-300 border-solid cursor-pointer bg-gray-50 shadow-lg px-16">
+                    {/* Botones */}
+                    <div className="flex flex-wrap justify-center items-center gap-4 mt-2">
+                      {/* Botón Cancelar */}
+                      <div className="hover:bg-slate-300 w-32 h-14 flex items-center justify-center border-2 rounded-full border-gray-300 bg-gray-50 shadow-lg transition">
                         <button
-                          className="flex items-center justify-center w-28 h-16 rounded-full"
+                          className="flex flex-col items-center justify-center w-full h-full"
                           type="button"
                           onClick={handlerCancel}
                         >
-                          <GiCancel size={40} />
-                          <p>Cancelar</p>
+                          <GiCancel size={24} />
+                          <p className="text-xs sm:text-sm">Cancelar</p>
                         </button>
                       </div>
-                      {isChecked ? null : (
-                        <div className=" ml-5 hover:bg-slate-300 w-28 h-16 flex items-center justify-center border-2 rounded-full border-gray-300 border-solid cursor-pointer bg-gray-50 shadow-lg px-16">
+
+                      {/* Botón Escanear */}
+                      {!isChecked && (
+                        <div className="hover:bg-slate-300 w-32 h-14 flex items-center justify-center border-2 rounded-full border-gray-300 bg-gray-50 shadow-lg transition">
                           <button
-                            className="flex items-center justify-center w-28 h-16 rounded-full"
+                            className="flex flex-col items-center justify-center w-full h-full"
                             type="button"
                             onClick={handlerScan}
                           >
-                            <BiScan size={40} />
-                            <p>Escanear</p>
+                            <BiScan size={24} />
+                            <p className="text-xs sm:text-sm">Escanear</p>
                           </button>
                         </div>
                       )}
                     </div>
                   </div>
                 </div>
-              </>
+              </div>
             ) : (
-              <>
+              <div className="flex justify-center items-center w-full ">
                 <div
-                  className="flex flex-col items-center justify-center border-2 border-gray-300 rounded-lg lg:m-0 h-96"
+                  className="flex flex-col items-center justify-center border-2 border-gray-300 rounded-lg lg:m-0 w-full h-[40vh] lg:h-[70vh] md:h-[40vh] sm:h-[90vh]"
                   onDragOver={(e) => e.preventDefault()}
                   onDrop={(e) => handleDrop(e)}
                 >
@@ -799,18 +686,18 @@ const Gastos = () => {
                     <p>ARRASTRA O SELECCIONA UN ARCHIVO</p>
                   </div>
                 </div>
-              </>
+              </div>
             )}
 
             <div
-              className={`grid grid-cols-2 gap-4 rounded-lg mx-auto  border-2 border-gray-300 p-6 bg-azulCreame ${
+              className={`grid grid-cols-2 gap-4 rounded-lg mx-auto w-full border-2 border-gray-300 p-6 bg-azulCreame   ${
                 imageLoaded && !isChecked
                   ? null
                   : "pointer-events-none opacity-50 bg-darkGrayCreame"
               }`}
             >
               {/* CONCEPTO */}
-              <div className="col-span-2 flex items-center justify-center">
+              <div className="col-span-1 flex items-center justify-center">
                 <div
                   className="relative mb-3 w-full"
                   data-te-input-wrapper-init
@@ -839,10 +726,83 @@ const Gastos = () => {
                         : "text-neutral-950"
                     }`}
                   >
-                    Concepto
+                    Tipo Documento
                   </label>
                 </div>
               </div>
+
+              {/* NUMERO FACTURA */}
+              <div className="col-span-1 flex items-center justify-center">
+                <div
+                  className="relative mb-3 w-full"
+                  data-te-input-wrapper-init
+                >
+                  <input
+                    value={responsedata.NumFactura}
+                    name="NumFactura"
+                    onChange={handleOnChange}
+                    onKeyDown={(e) => {
+                      validaEnter(e);
+                    }}
+                    type="text"
+                    className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                    ${
+                      responsedata.NumFactura
+                        ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
+                        : ""
+                    }`}
+                  />
+                  <label
+                    htmlFor="NumFactura"
+                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6]  transition-all duration-200 ease-out 
+                    ${
+                      responsedata.NumFactura
+                        ? "-translate-y-6 scale-75  text-white"
+                        : "text-neutral-950"
+                    }`}
+                  >
+                    Numero Factura
+                  </label>
+                </div>
+              </div>
+
+              {/** Orden de compra */}
+              {/* *****************************************/}
+              <div className="flex items-center justify-center col-span-1">
+                <div
+                  className="relative mb-3 w-full  "
+                  data-te-input-wrapper-init
+                >
+                  <input
+                    value={responsedata.OrdenCompra}
+                    name="OrdenCompra"
+                    onChange={handleOnChange}
+                    onKeyDown={(e) => {
+                      validaEnter(e);
+                    }}
+                    type="text"
+                    className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                    ${
+                      responsedata.OrdenCompra
+                        ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100"
+                        : ""
+                    }`}
+                    id="OrdenCompra"
+                  />
+                  <label
+                    htmlFor="OrdenCompra"
+                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6]  transition-all duration-200 ease-out 
+                      ${
+                        responsedata.OrdenCompra
+                          ? "-translate-y-6 scale-75  text-white"
+                          : "text-neutral-950"
+                      }`}
+                  >
+                    Orden de compra
+                  </label>
+                </div>
+              </div>
+
               {/* NIT */}
               <div className="flex items-center justify-center col-span-1  ">
                 <div
@@ -870,8 +830,8 @@ const Gastos = () => {
                     className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6]  transition-all duration-200 ease-out 
                       ${
                         responsedata.nit
-                         ? "-translate-y-6 scale-75  text-white"
-                        : "text-neutral-950"
+                          ? "-translate-y-6 scale-75  text-white"
+                          : "text-neutral-950"
                       }`}
                   >
                     NIT/CC
@@ -906,304 +866,11 @@ const Gastos = () => {
                     className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6]  transition-all duration-200 ease-out 
                 ${
                   responsedata.razon_social
-                     ? "-translate-y-6 scale-75  text-white"
-                        : "text-neutral-950"
+                    ? "-translate-y-6 scale-75  text-white"
+                    : "text-neutral-950"
                 }`}
                   >
                     Razon social
-                  </label>
-                </div>
-              </div>
-
-              {/* VALOR PAGADO */}
-              <div className="flex items-center justify-center col-span-1 ">
-                <div
-                  className="relative mb-3 w-full  "
-                  data-te-input-wrapper-init
-                >
-                  <input
-                    value={responsedata.total}
-                    name="total"
-                    onChange={handleOnChange}
-                    onKeyDown={(e) => {
-                      validaEnter(e);
-                    }}
-                    type="number"
-                    className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
-                    ${
-                      responsedata.total
-                        ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
-                        : ""
-                    }`}
-                    id="Valor pagado"
-                  />
-                  <label
-                    htmlFor="total"
-                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6]  transition-all duration-200 ease-out 
-                      ${
-                        responsedata.total
-                         ? "-translate-y-6 scale-75  text-white"
-                        : "text-neutral-950"
-                      }`}
-                  >
-                    $ Valor pagado
-                  </label>
-                </div>
-              </div>
-
-              {/* IVA */}
-              <div className="flex items-center justify-center col-span-1 ">
-                <div className="grid grid-cols-3">
-                  <div
-                    className="relative mb-3 col-span-2 "
-                    data-te-input-wrapper-init
-                  >
-                    <input
-                      value={
-                        fillData
-                          ? !responsedata.ivaPorc || !responsedata.totalSinIva
-                            ? ""
-                            : `${
-                                (responsedata.totalSinIva *
-                                  responsedata.ivaPorc) /
-                                100
-                              }`
-                          : ""
-                      }
-                      name="iva"
-                      readOnly
-                      onChange={handleOnChange}
-                      onKeyDown={(e) => {
-                        validaEnter(e);
-                      }}
-                      type="text"
-                      className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
-                    ${
-                      responsedata.totalSinIva
-                        ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
-                        : ""
-                    }`}
-                      id="Valor Iva"
-                    />
-                    <label
-                      htmlFor="iva"
-                      className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6]  transition-all duration-200 ease-out 
-                      ${
-                        responsedata.totalSinIva
-                           ? "-translate-y-6 scale-75  text-white"
-                        : "text-neutral-950"
-                      }`}
-                    >
-                      Valor Iva
-                    </label>
-                  </div>
-
-                  <div
-                    className="relative  mb-3 col-span-1 "
-                    data-te-input-wrapper-init
-                  >
-                    <input
-                      value={
-                        fillData
-                          ? !responsedata.ivaPorc
-                            ? ""
-                            : `${responsedata.ivaPorc}`
-                          : ""
-                      }
-                      name="ivaPorc"
-                      onChange={handleOnChange}
-                      onKeyDown={(e) => {
-                        validaEnter(e);
-                      }}
-                      type="number"
-                      className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
-                    ${
-                      responsedata.ivaPorc
-                        ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
-                        : ""
-                    }`}
-                      id="$ IVA"
-                    />
-                    <label
-                      htmlFor="$ IVA"
-                      className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6]  transition-all duration-200 ease-out 
-                      ${
-                        responsedata.ivaPorc
-                           ? "-translate-y-6 scale-75  text-white"
-                        : "text-neutral-950"
-                      }`}
-                    >
-                      %
-                    </label>
-                  </div>
-                </div>
-              </div>
-
-              {/* RETEFUENTE */}
-              <div className="flex items-center justify-center col-span-1">
-                <div className="grid grid-cols-3">
-                  <div
-                    className="relative mb-3 col-span-2 "
-                    data-te-input-wrapper-init
-                  >
-                    <input
-                      value={
-                        fillData
-                          ? !responsedata.retePorc || !responsedata.totalSinIva
-                            ? ""
-                            : `${
-                                (responsedata.totalSinIva *
-                                  responsedata.retePorc) /
-                                100
-                              }`
-                          : ""
-                      }
-                      name="rete"
-                      onChange={handleOnChange}
-                      onKeyDown={(e) => {
-                        validaEnter(e);
-                      }}
-                      type="number"
-                      className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
-                    ${
-                      responsedata.totalSinIva
-                        ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
-                        : ""
-                    }`}
-                      id="Valor Rete"
-                    />
-                    {/* <input
-                      value={responsedata.retePorc}
-                      name="rete"
-                      onChange={handleOnChange}
-                      onKeyDown={(e) => {
-                        validaEnter(e);
-                      }}
-                      type="number"
-                      className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
-                    ${
-                      responsedata.totalSinIva
-                        ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
-                        : ""
-                    }`}
-                      id="Valor Rete"
-                    /> */}
-                    <label
-                      htmlFor="Valor Rete"
-                      className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6]  transition-all duration-200 ease-out 
-                      ${
-                        responsedata.totalSinIva
-                           ? "-translate-y-6 scale-75  text-white"
-                        : "text-neutral-950"
-                      }`}
-                    >
-                      Valor Rete
-                    </label>
-                  </div>
-
-                  <div
-                    className="relative mb-3 col-span-1 "
-                    data-te-input-wrapper-init
-                  >
-                    <input
-                      value={responsedata.retePorc}
-                      name="retePorc"
-                      onChange={handleOnChange}
-                      onKeyDown={(e) => {
-                        validaEnter(e);
-                      }}
-                      type="number"
-                      className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
-                    ${
-                      responsedata.retePorc
-                        ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
-                        : ""
-                    }`}
-                      id="% Rete"
-                    />
-                    <label
-                      htmlFor="% Rete"
-                      className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6]  transition-all duration-200 ease-out 
-                      ${
-                        responsedata.retePorc
-                          ? "-translate-y-6 scale-75  text-white"
-                        : "text-neutral-950"
-                      }`}
-                    >
-                      %
-                    </label>
-                  </div>
-                </div>
-              </div>
-
-              {/* FECHA */}
-              <div className="flex items-center justify-center col-span-1">
-                <div
-                  className="relative mb-3 w-full  "
-                  data-te-input-wrapper-init
-                >
-                  <input
-                    value={responsedata.fecha}
-                    name="fecha"
-                    onChange={handleOnChange}
-                    onKeyDown={(e) => {
-                      validaEnter(e);
-                    }}
-                    type="text"
-                    className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
-                    ${
-                      responsedata.fecha
-                        ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
-                        : ""
-                    }`}
-                    id="Fecha"
-                  />
-                  <label
-                    htmlFor="Fecha"
-                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6]  transition-all duration-200 ease-out 
-                      ${
-                        responsedata.fecha
-                          ? "-translate-y-6 scale-75  text-white"
-                        : "text-neutral-950"
-                      }`}
-                  >
-                    Fecha
-                  </label>
-                </div>
-              </div>
-
-              {/* CODIGO POSTAL */}
-              <div className="flex items-center justify-center col-span-1">
-                <div
-                  className="relative mb-3 w-full  "
-                  data-te-input-wrapper-init
-                >
-                  <input
-                    value={responsedata.codepostal}
-                    name="codepostal"
-                    onChange={handleOnChange}
-                    onKeyDown={(e) => {
-                      validaEnter(e);
-                    }}
-                    type="text"
-                    className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
-                    ${
-                      responsedata.codepostal
-                        ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
-                        : ""
-                    }`}
-                    id="codepostal"
-                  />
-                  <label
-                    htmlFor="codepostal"
-                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6]  transition-all duration-200 ease-out 
-                      ${
-                        responsedata.codepostal
-                           ? "-translate-y-6 scale-75  text-white"
-                        : "text-neutral-950"
-                      }`}
-                  >
-                    Cod postal
                   </label>
                 </div>
               </div>
@@ -1236,23 +903,23 @@ const Gastos = () => {
                       ${
                         responsedata.municipio
                           ? "-translate-y-6 scale-75  text-white"
-                        : "text-neutral-950"
+                          : "text-neutral-950"
                       }`}
                   >
-                    Municipio
+                    Municipio / Ciudad
                   </label>
                 </div>
               </div>
 
-              {/* IPC */}
+              {/* Direccion */}
               <div className="flex items-center justify-center col-span-1">
                 <div
                   className="relative mb-3 w-full  "
                   data-te-input-wrapper-init
                 >
                   <input
-                    value={responsedata.ipc}
-                    name="ipc"
+                    value={responsedata.Direccion}
+                    name="Direccion"
                     onChange={handleOnChange}
                     onKeyDown={(e) => {
                       validaEnter(e);
@@ -1260,22 +927,94 @@ const Gastos = () => {
                     type="text"
                     className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
-                      responsedata.ipc
+                      responsedata.Direccion
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
                         : ""
                     }`}
-                    id="ipc"
+                    id="Direccion"
                   />
                   <label
-                    htmlFor="ipc"
+                    htmlFor="Direccion"
                     className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6]  transition-all duration-200 ease-out 
                       ${
-                        responsedata.ipc
+                        responsedata.Direccion
                           ? "-translate-y-6 scale-75  text-white"
-                        : "text-neutral-950"
+                          : "text-neutral-950"
                       }`}
                   >
-                    Ipc
+                    Dirección
+                  </label>
+                </div>
+              </div>
+
+              {/* CODIGO POSTAL */}
+              <div className="flex items-center justify-center col-span-1">
+                <div
+                  className="relative mb-3 w-full  "
+                  data-te-input-wrapper-init
+                >
+                  <input
+                    value={responsedata.codepostal}
+                    name="codepostal"
+                    onChange={handleOnChange}
+                    onKeyDown={(e) => {
+                      validaEnter(e);
+                    }}
+                    type="text"
+                    className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                    ${
+                      responsedata.codepostal
+                        ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
+                        : ""
+                    }`}
+                    id="codepostal"
+                  />
+                  <label
+                    htmlFor="codepostal"
+                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6]  transition-all duration-200 ease-out 
+                      ${
+                        responsedata.codepostal
+                          ? "-translate-y-6 scale-75  text-white"
+                          : "text-neutral-950"
+                      }`}
+                  >
+                    Cod postal
+                  </label>
+                </div>
+              </div>
+
+              {/* VALOR PAGADO */}
+              <div className="flex items-center justify-center col-span-1 ">
+                <div
+                  className="relative mb-3 w-full  "
+                  data-te-input-wrapper-init
+                >
+                  <input
+                    value={responsedata.total}
+                    name="total"
+                    onChange={handleOnChange}
+                    onKeyDown={(e) => {
+                      validaEnter(e);
+                    }}
+                    type="number"
+                    className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                    ${
+                      responsedata.total
+                        ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
+                        : ""
+                    }`}
+                    id="Valor pagado"
+                  />
+                  <label
+                    htmlFor="total"
+                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6]  transition-all duration-200 ease-out 
+                      ${
+                        responsedata.total
+                          ? "-translate-y-6 scale-75  text-white"
+                          : "text-neutral-950"
+                      }`}
+                  >
+                    Total
                   </label>
                 </div>
               </div>
@@ -1307,11 +1046,119 @@ const Gastos = () => {
                     className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6]  transition-all duration-200 ease-out 
                       ${
                         responsedata.totalSinIva
-                           ? "-translate-y-6 scale-75  text-white"
-                        : "text-neutral-950"
+                          ? "-translate-y-6 scale-75  text-white"
+                          : "text-neutral-950"
                       }`}
                   >
                     Sub total
+                  </label>
+                </div>
+              </div>
+
+              {/* IVA */}
+              <div className="flex items-center justify-center col-span-1">
+                <div
+                  className="relative mb-3 w-full  "
+                  data-te-input-wrapper-init
+                >
+                  <input
+                    value={responsedata.iva}
+                    name="iva"
+                    onChange={handleOnChange}
+                    onKeyDown={(e) => {
+                      validaEnter(e);
+                    }}
+                    type="number"
+                    className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                    ${
+                      responsedata.iva
+                        ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
+                        : ""
+                    }`}
+                    id="Valor Iva"
+                  />
+                  <label
+                    htmlFor="iva"
+                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6]  transition-all duration-200 ease-out 
+                      ${
+                        responsedata.iva
+                          ? "-translate-y-6 scale-75  text-white"
+                          : "text-neutral-950"
+                      }`}
+                  >
+                    IVA
+                  </label>
+                </div>
+              </div>
+
+              {/* IVA */}
+              <div className="flex items-center justify-center col-span-1">
+                <div
+                  className="relative mb-3 w-full  "
+                  data-te-input-wrapper-init
+                >
+                  <input
+                    value={responsedata.rete}
+                    name="rete"
+                    onChange={handleOnChange}
+                    onKeyDown={(e) => {
+                      validaEnter(e);
+                    }}
+                    type="number"
+                    className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                    ${
+                      responsedata.rete
+                        ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
+                        : ""
+                    }`}
+                    id="Valor Rete"
+                  />
+                  <label
+                    htmlFor="Valor Rete"
+                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6]  transition-all duration-200 ease-out 
+                      ${
+                        responsedata.rete
+                          ? "-translate-y-6 scale-75  text-white"
+                          : "text-neutral-950"
+                      }`}
+                  >
+                    Retefuente
+                  </label>
+                </div>
+              </div>
+
+              {/* IPC || INC */}
+              <div className="flex items-center justify-center col-span-1">
+                <div
+                  className="relative mb-3 w-full  "
+                  data-te-input-wrapper-init
+                >
+                  <input
+                    value={responsedata.ipc}
+                    name="ipc"
+                    onChange={handleOnChange}
+                    onKeyDown={(e) => {
+                      validaEnter(e);
+                    }}
+                    type="text"
+                    className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                    ${
+                      responsedata.ipc
+                        ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
+                        : ""
+                    }`}
+                    id="ipc"
+                  />
+                  <label
+                    htmlFor="ipc"
+                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6]  transition-all duration-200 ease-out 
+                      ${
+                        responsedata.ipc
+                          ? "-translate-y-6 scale-75  text-white"
+                          : "text-neutral-950"
+                      }`}
+                  >
+                    INC{" "}
                   </label>
                 </div>
               </div>
@@ -1344,7 +1191,7 @@ const Gastos = () => {
                       ${
                         responsedata.ica
                           ? "-translate-y-6 scale-75  text-white"
-                        : "text-neutral-950"
+                          : "text-neutral-950"
                       }`}
                   >
                     ICA
@@ -1352,17 +1199,16 @@ const Gastos = () => {
                 </div>
               </div>
 
-              {/* NUEMRO DE FACTURA*/} 
-              {/* *****************************************/} 
+              {/** ICUI Impuestos Ultra Procesados */}
+              {/* *****************************************/}
               <div className="flex items-center justify-center col-span-1">
                 <div
                   className="relative mb-3 w-full  "
                   data-te-input-wrapper-init
                 >
-                  {console.log(responsedata.NumFactura)}
                   <input
-                    value={responsedata.NumFactura}
-                    name="NumFactura"
+                    value={responsedata.icui}
+                    name="icui"
                     onChange={handleOnChange}
                     onKeyDown={(e) => {
                       validaEnter(e);
@@ -1370,27 +1216,98 @@ const Gastos = () => {
                     type="text"
                     className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
-                      responsedata.NumFactura
+                      responsedata.icui
                         ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100"
                         : ""
                     }`}
-                    id="NumFactura"
+                    id="icui"
                   />
                   <label
-                    htmlFor="NumFactura"
+                    htmlFor="icui"
                     className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6]  transition-all duration-200 ease-out 
                       ${
-                        responsedata.NumFactura
+                        responsedata.icui
                           ? "-translate-y-6 scale-75  text-white"
-                        : "text-neutral-950"
+                          : "text-neutral-950"
                       }`}
                   >
-                    Orden de compra
+                    ICUI
                   </label>
                 </div>
               </div>
 
+              {/* FECHA */}
+              <div className="flex items-center justify-center col-span-1">
+                <div
+                  className="relative mb-3 w-full  "
+                  data-te-input-wrapper-init
+                >
+                  <input
+                    value={responsedata.fecha}
+                    name="fecha"
+                    onChange={handleOnChange}
+                    onKeyDown={(e) => {
+                      validaEnter(e);
+                    }}
+                    type="text"
+                    className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                    ${
+                      responsedata.fecha
+                        ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
+                        : ""
+                    }`}
+                    id="Fecha"
+                  />
+                  <label
+                    htmlFor="Fecha"
+                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6]  transition-all duration-200 ease-out 
+                      ${
+                        responsedata.fecha
+                          ? "-translate-y-6 scale-75  text-white"
+                          : "text-neutral-950"
+                      }`}
+                  >
+                    Fecha
+                  </label>
+                </div>
+              </div>
 
+              {/** DETALLES DE LA COMPRA CONCEPTO */}
+              {/* *****************************************/}
+              <div className="col-span-2 flex items-center justify-center">
+                <div
+                  className="relative mb-3 w-full  "
+                  data-te-input-wrapper-init
+                >
+                  <textarea
+                    value={responsedata.detalles_compra}
+                    name="detalles_compra"
+                    onChange={handleOnChange}
+                    onKeyDown={(e) => {
+                      validaEnter(e);
+                    }}
+                    type=""
+                    className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
+                    ${
+                      responsedata.detalles_compra
+                        ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100"
+                        : ""
+                    }`}
+                    id="detalles_compra"
+                  />
+                  <label
+                    htmlFor="detalles_compra"
+                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6]  transition-all duration-200 ease-out 
+                      ${
+                        responsedata.detalles_compra
+                          ? "-translate-y-6 scale-75  text-white"
+                          : "text-neutral-950"
+                      }`}
+                  >
+                    Concepto
+                  </label>
+                </div>
+              </div>
             </div>
           </div>
         </div>
