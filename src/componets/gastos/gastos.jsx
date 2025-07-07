@@ -347,7 +347,9 @@ const Gastos = () => {
       NitComprobante: responsedata.nit ? responsedata.nit : "", //
       NombreComprobante: responsedata.concepto ? responsedata.concepto : "", //
       CiudadComprobante: responsedata.municipio ? responsedata.municipio : "", //
-      DireccionComprobante: responsedata.Direccion ? responsedata.Direccion : "", //
+      DireccionComprobante: responsedata.Direccion
+        ? responsedata.Direccion
+        : "", //
       CCostos: prepayment ? prepayment.IdCentroCostos.toString() : "", //
       idAnticipo: prepayment ? parseInt(prepayment.IdResponsable) : "", //
       ipc: responsedata.ipc ? parseInt(responsedata.ipc) : 0, //
@@ -1304,7 +1306,7 @@ const Gastos = () => {
                           : "text-neutral-950"
                       }`}
                   >
-                    Tipo_Documento
+                    Concepto
                   </label>
                 </div>
               </div>
@@ -1326,7 +1328,10 @@ const Gastos = () => {
         </div>
       </form>
       {isLoading ? (
-        <div className="absolute inset-0 flex justify-center items-center bg-white bg-opacity-50">
+        // <div className="absolute inset-0 flex justify-center items-center bg-white bg-opacity-50">
+        //   <div className="loader"></div>
+        // </div>
+        <div className="fixed inset-0 z-50 flex justify-center items-center bg-white bg-opacity-50">
           <div className="loader"></div>
         </div>
       ) : null}
