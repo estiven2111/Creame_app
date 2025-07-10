@@ -21,6 +21,8 @@ import { useLocation } from "react-router-dom";
 import logoPDF from "../../assets/img/logoPDF.png";
 // <input type="file" capture="camera" />
 let imagen = null;
+let imagenRUT = null;
+let imagenOTRO = null;
 let latitude = 0;
 let longitude = 0;
 let hasLogicExecuted = false;
@@ -110,6 +112,8 @@ const Gastos = () => {
   });
   const [opencam, setOpencam] = useState(false);
   const [imageSrc, setImageSrc] = useState(null);
+  const [imageSrcRUT, setImageSrcRUT] = useState(null);
+  const [imageSrcOTRO, setImageSrcOTRO] = useState(null);
   // const fileInputRef = useRef(null);
   const [fillData, setFillData] = useState(false);
   const [data, setData] = useState({});
@@ -144,6 +148,8 @@ const Gastos = () => {
   };
   const imageData = (uri) => {
     setImageSrc(uri);
+    setImageSrcRUT(uri);
+    setImageSrcOTRO(uri);
   };
 
   const handleFileChange = (e) => {
@@ -163,7 +169,50 @@ const Gastos = () => {
         }
       };
     }
+    setIsLoading(false);
   };
+
+  const handleFileChange1 = (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      imagenRUT = file;
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        if (imagenRUT.name.split(".")[1] === "pdf") {
+          setImageSrcRUT(logoPDF);
+        } else {
+          setImageSrcRUT(reader.result);
+        }
+      };
+    }
+    setIsLoading(false);
+  };
+
+    const handleFileChange2 = (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      imagenOTRO = file;
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        if (imagenOTRO.name.split(".")[1] === "pdf") {
+          setImageSrcOTRO(logoPDF);
+        } else {
+          setImageSrcOTRO(reader.result);
+        }
+      };
+    }
+    setIsLoading(false);
+  };
+
+ 
 
   const handlerValidation = (event) => {
     const input = event.target;
@@ -186,6 +235,7 @@ const Gastos = () => {
   };
   const locations = () => {
     try {
+       setIsLoading(true);
       if ("geolocation" in navigator) {
         // El navegador soporta la geolocalización
         navigator.geolocation.getCurrentPosition(
@@ -239,13 +289,14 @@ const Gastos = () => {
           buttons: "Aceptar",
         });
       }
+       setIsLoading(false);
     } catch (error) {}
   };
 
   const peticionOcr = async () => {
     try {
-      const user_name = localStorage.getItem("name");
       setIsLoading(true);
+      const user_name = localStorage.getItem("name");
       const formData = new FormData();
       formData.append("imagen", imagen);
 
@@ -317,6 +368,7 @@ const Gastos = () => {
   };
 
   const sendData = async (data) => {
+     setIsLoading(true);
     const formData = new FormData();
 
     const user_name = localStorage.getItem("name");
@@ -377,7 +429,9 @@ const Gastos = () => {
     );
 
     formData.append("token", data.tokenSecret);
-    formData.append("imagen", imagen);
+    formData.append("imagenOCR", imagen);
+    formData.append("imagenRUT", imagenRUT);
+    formData.append("imagenOTRO", imagenOTRO);
     formData.append("user", user_name);
     formData.append("tipo", "OCR");
     const send = await axios.post("/creame-dashboard", formData, {
@@ -385,6 +439,7 @@ const Gastos = () => {
         "Content-Type": "multipart/form-data",
       },
     });
+    setIsLoading(false);
     if (send.data === "archivos enviados correctamente") {
       Swal({
         title: "ENVIO CORRECTO",
@@ -393,6 +448,8 @@ const Gastos = () => {
         buttons: "Aceptar",
       });
       handlerCancel();
+      handlerCancel1();
+      handlerCancel2();
     }
   };
 
@@ -453,8 +510,18 @@ const Gastos = () => {
       icui: "",
       concepto: "",
     });
+    imagen = ""
     setFillData(false);
     setImageSrc(null);
+  };
+
+  const handlerCancel1 = () => {
+    imagenRUT = ""
+    setImageSrcRUT(null);
+  };
+   const handlerCancel2 = () => {
+    imagenOTRO = ""
+    setImageSrcOTRO(null);
   };
 
   const handlerSend = (e) => {
@@ -483,24 +550,6 @@ const Gastos = () => {
     handlerValidation2(files);
   }
 
-  const handleFileChange2 = (files) => {
-    setImageLoaded(true);
-    if (files && files.length > 0) {
-      const file = files[0];
-      imagen = file;
-      console.log(file, "file changed");
-      const reader = new FileReader();
-      console.log(reader.result, "eeeeeerrrrrrdsdsdf");
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        if (imagen.name.split(".")[1] === "pdf") {
-          setImageSrc(logoPDF);
-        } else {
-          setImageSrc(reader.result);
-        }
-      };
-    }
-  };
 
   const handlerValidation2 = (event) => {
     const input = event;
@@ -526,6 +575,8 @@ const Gastos = () => {
 
   const handleCheckboxChange = () => {
     setImageSrc(null);
+    setImageSrcRUT(null);
+    setImageSrcOTRO(null);
     setIsChecked(!isChecked);
     if (!isChecked) {
       //
@@ -568,8 +619,8 @@ const Gastos = () => {
         </div>
       </div>
 
-      {/**<form className="" onSubmit={handlerSend}>*/}
       <form className="" onSubmit={handlerSend}>
+      {/* <form className="" onSubmit={sendData}> */}
         <div>
           <div className="flex">
             <input
@@ -583,25 +634,142 @@ const Gastos = () => {
             </p>
           </div>
           {isChecked ? (
-            // <div className="grid lg:grid-cols-2 grid-cols-1 gap-4 mx-auto mb-10">
-            <div className="">
+            <div className="grid lg:grid-cols-2 grid-cols-1 gap-4 mx-auto mb-10">
               <div className="">
-                <p className="text-sm">
-                  * Para los proveedores obligados a expedir factura electrónica
-                  y los no responsables de IVA no obligados a facturar
-                  electrónicamente es obligatorio adjuntar el RUT
-                </p>
-                <input
-                  type="text"
-                  name="Descripcion"
-                  className="w-full border rounded-md p-2 border-azulCreame my-4"
-                  value={responsedata.Descripcion}
-                  onChange={handleOnChange}
-                  onKeyDown={(e) => {
-                    validaEnter(e);
-                  }}
-                  placeholder="Escribe aquí la descripción del envío del RUT"
-                ></input>
+                <div className="">
+                  <p className="text-sm">
+                    * Para los proveedores obligados a expedir factura
+                    electrónica y los no responsables de IVA no obligados a
+                    facturar electrónicamente es obligatorio adjuntar el RUT
+                  </p>
+                  <input
+                    type="text"
+                    name="Descripcion"
+                    className="w-full border rounded-md p-2 border-azulCreame my-4"
+                    value={responsedata.Descripcion}
+                    onChange={handleOnChange}
+                    onKeyDown={(e) => {
+                      validaEnter(e);
+                    }}
+                    placeholder="Escribe aquí la descripción del envío del RUT"
+                  ></input>
+                </div>
+
+
+                {/** AGREGAR IMAGEN O ARCHIVO DE RUT  */}
+                {imageSrcRUT ? (
+                  <div className="flex flex-col items-center justify-center gap-4">
+                    <img
+                      className="w-full max-h-[30vh] object-contain rounded-lg"
+                      src={imageSrcRUT}
+                      alt="Vista previa del RUT"
+                    />
+
+                    <div className="hover:bg-slate-300 w-32 h-14 flex items-center justify-center border-2 rounded-full border-gray-300 bg-gray-50 shadow-lg transition">
+                      <button
+                        className="flex flex-col items-center justify-center w-full h-full"
+                        type="button"
+                        onClick={handlerCancel1}
+                      >
+                        <GiCancel size={24} />
+                        <p className="text-xs sm:text-sm">Cancelar</p>
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex justify-center items-center w-full">
+                    <div
+                      className="flex flex-col items-center justify-center border-2 border-gray-300 rounded-lg lg:m-0 w-full h-[20vh] lg:h-[30vh] md:h-[20vh] sm:h-[50vh]"
+                      onDragOver={(e) => e.preventDefault()}
+                      onDrop={(e) => handleDrop(e)}
+                    >
+                      <div className="w-36 h-36 bg-darkGrayCreame hover:bg-lightBlueCreame flex items-center justify-center border-2 rounded-full border-gray-400 border-solid cursor-pointer shadow-xl">
+                        <label>
+                          <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                            <p className="text-xs text-white">
+                              <GoArchive size={40} />
+                            </p>
+                          </div>
+                          <input
+                            name="imageRUT"
+                            type="file"
+                            className="hidden"
+                            onChange={handleFileChange1}
+                            accept=".jpg, .jpeg, .png, .pdf"
+                            onInput={handlerValidation}
+                          />
+                        </label>
+                      </div>
+                      <div className="flex flex-col items-center justify-center mt-4">
+                        <p>ARRASTRA O SELECCIONA UN ARCHIVO</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+
+              {/** AGREGAR IMAGEN DE OTRO ARCHIVO  */}
+              <div>
+                <div className="">
+                  <p className="text-sm">
+                    Seleccione en esta opcion cualquier otro archivo que desees enviar debes tener encuenta que tiene que tener extencion ya
+                    sea PNG, JPG, JPEG, PDF
+                  </p>
+                  
+                </div>
+                <div className="pt-16"></div>
+                <div className="pt-2">
+                  {imageSrcOTRO ? (
+                    <div className="flex flex-col items-center justify-center gap-4">
+                      <img
+                        className="w-full max-h-[30vh] object-contain rounded-lg"
+                        src={imageSrcOTRO}
+                        alt="Vista previa del RUT"
+                      />
+
+                      <div className="hover:bg-slate-300 w-32 h-14 flex items-center justify-center border-2 rounded-full border-gray-300 bg-gray-50 shadow-lg transition">
+                        <button
+                          className="flex flex-col items-center justify-center w-full h-full"
+                          type="button"
+                          onClick={handlerCancel2}
+                        >
+                          <GiCancel size={24} />
+                          <p className="text-xs sm:text-sm">Cancelar</p>
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex justify-center items-center w-full ">
+                      <div
+                        className="flex flex-col items-center justify-center border-2 border-gray-300 rounded-lg lg:m-0 w-full h-[20vh] lg:h-[30vh] md:h-[20vh] sm:h-[50vh]"
+                        onDragOver={(e) => e.preventDefault()}
+                        onDrop={(e) => handleDrop(e)}
+                      >
+                        <div className="w-36 h-36 bg-grayCreame hover:bg-lightBlueCreame flex items-center justify-center border-2 rounded-full border-gray-400 border-solid cursor-pointer shadow-xl">
+                          <label>
+                            <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                              <p className="text-xs text-white">
+                                <IoDocumentsOutline size={40} />
+                              </p>
+                            </div>
+                            <input
+                              name="imageRUT"
+                              type="file"
+                              className="hidden"
+                              onChange={handleFileChange2}
+                              accept=".jpg, .jpeg, .png, .pdf"
+                              onInput={handlerValidation}
+                            />
+                          </label>
+                        </div>
+                        <div className="flex flex-col items-center justify-center mt-4">
+                          <p>ARRASTRA O SELECCIONA UN ARCHIVO</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           ) : null}
@@ -620,7 +788,6 @@ const Gastos = () => {
                         alt=""
                       />
                     </div>
-
                     {/* Botones */}
                     <div className="flex flex-wrap justify-center items-center gap-4 mt-2">
                       {/* Botón Cancelar */}
@@ -636,7 +803,7 @@ const Gastos = () => {
                       </div>
 
                       {/* Botón Escanear */}
-                      {!isChecked && (
+                      {/* {!isChecked && (
                         <div className="hover:bg-slate-300 w-32 h-14 flex items-center justify-center border-2 rounded-full border-gray-300 bg-gray-50 shadow-lg transition">
                           <button
                             className="flex flex-col items-center justify-center w-full h-full"
@@ -647,7 +814,18 @@ const Gastos = () => {
                             <p className="text-xs sm:text-sm">Escanear</p>
                           </button>
                         </div>
-                      )}
+                      )} */}
+
+                      <div className="hover:bg-slate-300 w-32 h-14 flex items-center justify-center border-2 rounded-full border-gray-300 bg-gray-50 shadow-lg transition">
+                        <button
+                          className="flex flex-col items-center justify-center w-full h-full"
+                          type="button"
+                          onClick={handlerScan}
+                        >
+                          <BiScan size={24} />
+                          <p className="text-xs sm:text-sm">Escanear</p>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -691,9 +869,16 @@ const Gastos = () => {
               </div>
             )}
 
-            <div
+            {/* <div
               className={`grid grid-cols-2 gap-4 rounded-lg mx-auto w-full border-2 border-gray-300 p-6 bg-azulCreame   ${
                 imageLoaded && !isChecked
+                  ? null
+                  : "pointer-events-none opacity-50 bg-darkGrayCreame"
+              }`}
+            > */}
+            <div
+              className={`grid grid-cols-2 gap-4 rounded-lg mx-auto w-full border-2 border-gray-300 p-6 bg-azulCreame   ${
+                imageLoaded
                   ? null
                   : "pointer-events-none opacity-50 bg-darkGrayCreame"
               }`}
