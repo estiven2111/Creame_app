@@ -152,15 +152,36 @@ const Gastos = () => {
     setImageSrcOTRO(uri);
   };
 
+  // const handleFileChange = (e) => {
+  //   e.preventDefault();
+  //   setImageLoaded(true);
+  //   const files = e.target.files;
+  //   if (files && files.length > 0) {
+  //     const file = files[0];
+  //     imagen = file;
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(file);
+  //     reader.onload = () => {
+  //       if (imagen.name.split(".")[1] === "pdf") {
+  //         setImageSrc(logoPDF);
+  //       } else {
+  //         setImageSrc(reader.result);
+  //       }
+  //     };
+  //   }
+  //   setIsLoading(false);
+  // };
+
   const handleFileChange = (e) => {
-    e.preventDefault();
-    setImageLoaded(true);
     const files = e.target.files;
+    setImageLoaded(true);
     if (files && files.length > 0) {
       const file = files[0];
       imagen = file;
+
       const reader = new FileReader();
       reader.readAsDataURL(file);
+
       reader.onload = () => {
         if (imagen.name.split(".")[1] === "pdf") {
           setImageSrc(logoPDF);
@@ -169,18 +190,53 @@ const Gastos = () => {
         }
       };
     }
-    setIsLoading(false);
+  };
+
+  // const handleFileChange1 = (e) => {
+  //   e.preventDefault();
+  //   setIsLoading(true);
+  //   const files = e.target.files;
+  //   if (files && files.length > 0) {
+  //     const file = files[0];
+  //     imagenRUT = file;
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(file);
+  //     reader.onload = () => {
+  //       if (imagenRUT.name.split(".")[1] === "pdf") {
+  //         setImageSrcRUT(logoPDF);
+  //       } else {
+  //         setImageSrcRUT(reader.result);
+  //       }
+  //     };
+  //   }
+  //   setIsLoading(false);
+  // };
+
+  const inputRUTRef = useRef(null); // input oculto
+
+  const handleAlertAndOpenInput = () => {
+    Swal({
+      title: "SELECCIÓN DE RUT",
+      text: "Recuerde que debe ser un Documento RUT, en formato .JPG, .JPEG, .PNG o .PDF",
+      icon: "warning",
+      buttons: "Aceptar",
+    }).then(() => {
+      // Después del Aceptar, abrimos el input oculto
+      inputRUTRef.current?.click();
+      handleFileChange1();
+    });
   };
 
   const handleFileChange1 = (e) => {
-    e.preventDefault();
-    setIsLoading(true);
     const files = e.target.files;
+    setImageLoaded(true);
     if (files && files.length > 0) {
       const file = files[0];
       imagenRUT = file;
+
       const reader = new FileReader();
       reader.readAsDataURL(file);
+
       reader.onload = () => {
         if (imagenRUT.name.split(".")[1] === "pdf") {
           setImageSrcRUT(logoPDF);
@@ -189,18 +245,38 @@ const Gastos = () => {
         }
       };
     }
-    setIsLoading(false);
   };
 
-    const handleFileChange2 = (e) => {
-    e.preventDefault();
-    setIsLoading(true);
+  //   const handleFileChange2 = (e) => {
+  //   e.preventDefault();
+  //   setIsLoading(true);
+  //   const files = e.target.files;
+  //   if (files && files.length > 0) {
+  //     const file = files[0];
+  //     imagenOTRO = file;
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(file);
+  //     reader.onload = () => {
+  //       if (imagenOTRO.name.split(".")[1] === "pdf") {
+  //         setImageSrcOTRO(logoPDF);
+  //       } else {
+  //         setImageSrcOTRO(reader.result);
+  //       }
+  //     };
+  //   }
+  //   setIsLoading(false);
+  // };
+
+  const handleFileChange2 = (e) => {
     const files = e.target.files;
+    setImageLoaded(true);
     if (files && files.length > 0) {
       const file = files[0];
       imagenOTRO = file;
+
       const reader = new FileReader();
       reader.readAsDataURL(file);
+
       reader.onload = () => {
         if (imagenOTRO.name.split(".")[1] === "pdf") {
           setImageSrcOTRO(logoPDF);
@@ -209,10 +285,7 @@ const Gastos = () => {
         }
       };
     }
-    setIsLoading(false);
   };
-
- 
 
   const handlerValidation = (event) => {
     const input = event.target;
@@ -235,7 +308,7 @@ const Gastos = () => {
   };
   const locations = () => {
     try {
-       setIsLoading(true);
+      setIsLoading(true);
       if ("geolocation" in navigator) {
         // El navegador soporta la geolocalización
         navigator.geolocation.getCurrentPosition(
@@ -289,7 +362,7 @@ const Gastos = () => {
           buttons: "Aceptar",
         });
       }
-       setIsLoading(false);
+      setIsLoading(false);
     } catch (error) {}
   };
 
@@ -368,7 +441,7 @@ const Gastos = () => {
   };
 
   const sendData = async (data) => {
-     setIsLoading(true);
+    setIsLoading(true);
     const formData = new FormData();
 
     const user_name = localStorage.getItem("name");
@@ -454,7 +527,7 @@ const Gastos = () => {
   };
 
   const conetionMicrosoft = async () => {
-    if (imagen) {
+    if (imagen || imagenRUT || imagenOTRO) {
       LoginMicrosoft()
         .then((data) => {
           if (data) {
@@ -510,17 +583,17 @@ const Gastos = () => {
       icui: "",
       concepto: "",
     });
-    imagen = ""
+    imagen = "";
     setFillData(false);
     setImageSrc(null);
   };
 
   const handlerCancel1 = () => {
-    imagenRUT = ""
+    imagenRUT = "";
     setImageSrcRUT(null);
   };
-   const handlerCancel2 = () => {
-    imagenOTRO = ""
+  const handlerCancel2 = () => {
+    imagenOTRO = "";
     setImageSrcOTRO(null);
   };
 
@@ -549,7 +622,6 @@ const Gastos = () => {
     const files = event.dataTransfer.files;
     handlerValidation2(files);
   }
-
 
   const handlerValidation2 = (event) => {
     const input = event;
@@ -620,7 +692,7 @@ const Gastos = () => {
       </div>
 
       <form className="" onSubmit={handlerSend}>
-      {/* <form className="" onSubmit={sendData}> */}
+        {/* <form className="" onSubmit={sendData}> */}
         <div>
           <div className="flex">
             <input
@@ -640,7 +712,10 @@ const Gastos = () => {
                   <p className="text-sm">
                     * Para los proveedores obligados a expedir factura
                     electrónica y los no responsables de IVA no obligados a
-                    facturar electrónicamente es obligatorio adjuntar el RUT
+                    facturar electrónicamente es obligatorio adjuntar el{" "}
+                    <span className="font-bold text-naranjaCreame text-xl">
+                      RUT
+                    </span>
                   </p>
                   <input
                     type="text"
@@ -654,7 +729,6 @@ const Gastos = () => {
                     placeholder="Escribe aquí la descripción del envío del RUT"
                   ></input>
                 </div>
-
 
                 {/** AGREGAR IMAGEN O ARCHIVO DE RUT  */}
                 {imageSrcRUT ? (
@@ -681,42 +755,57 @@ const Gastos = () => {
                     <div
                       className="flex flex-col items-center justify-center border-2 border-gray-300 rounded-lg lg:m-0 w-full h-[20vh] lg:h-[30vh] md:h-[20vh] sm:h-[50vh]"
                       onDragOver={(e) => e.preventDefault()}
-                      onDrop={(e) => handleDrop(e)}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        const file = e.dataTransfer.files[0];
+                        if (file) {
+                          handleFileChange1({ target: { files: [file] } });
+                        }
+                      }}
                     >
-                      <div className="w-36 h-36 bg-darkGrayCreame hover:bg-lightBlueCreame flex items-center justify-center border-2 rounded-full border-gray-400 border-solid cursor-pointer shadow-xl">
-                        <label>
-                          <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                            <p className="text-xs text-white">
-                              <GoArchive size={40} />
-                            </p>
-                          </div>
-                          <input
-                            name="imageRUT"
-                            type="file"
-                            className="hidden"
-                            onChange={handleFileChange1}
-                            accept=".jpg, .jpeg, .png, .pdf"
-                            onInput={handlerValidation}
-                          />
-                        </label>
+                      <div
+                        className="w-36 h-36 bg-darkGrayCreame hover:bg-lightBlueCreame flex items-center justify-center border-2 rounded-full border-gray-400 border-solid cursor-pointer shadow-xl"
+                        onClick={handleAlertAndOpenInput}
+                      >
+                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                          <p className="text-xs text-white">
+                            <GoArchive size={40} />
+                          </p>
+                        </div>
                       </div>
+
+                      <input
+                        name="imageRUT"
+                        type="file"
+                        className="hidden"
+                        ref={inputRUTRef}
+                        onChange={handleFileChange1}
+                        accept=".jpg, .jpeg, .png, .pdf"
+                        onInput={handlerValidation}
+                      />
                       <div className="flex flex-col items-center justify-center mt-4">
-                        <p>ARRASTRA O SELECCIONA UN ARCHIVO</p>
+                        <p className="font-bold text-naranjaCreame text-xl">
+                          RUT
+                        </p>
+                        <p>ARRASTRA O SELECCIONA EL RUT</p>
                       </div>
                     </div>
                   </div>
                 )}
               </div>
 
-
               {/** AGREGAR IMAGEN DE OTRO ARCHIVO  */}
               <div>
                 <div className="">
                   <p className="text-sm">
-                    Seleccione en esta opcion cualquier otro archivo que desees enviar debes tener encuenta que tiene que tener extencion ya
-                    sea PNG, JPG, JPEG, PDF
+                    Seleccione en esta opcion cualquier{" "}
+                    <span className="font-bold text-naranjaCreame">OTRO</span>{" "}
+                    archivo que desees enviar debes tener encuenta que tiene que
+                    tener extencion ya sea PNG, JPG, JPEG, PDF{" "}
+                    <span className="font-bold text-naranjaCreame text-xl">
+                      OTRO DOCUMENTO
+                    </span>
                   </p>
-                  
                 </div>
                 <div className="pt-16"></div>
                 <div className="pt-2">
@@ -744,7 +833,13 @@ const Gastos = () => {
                       <div
                         className="flex flex-col items-center justify-center border-2 border-gray-300 rounded-lg lg:m-0 w-full h-[20vh] lg:h-[30vh] md:h-[20vh] sm:h-[50vh]"
                         onDragOver={(e) => e.preventDefault()}
-                        onDrop={(e) => handleDrop(e)}
+                        onDrop={(e) => {
+                          e.preventDefault();
+                          const file = e.dataTransfer.files[0];
+                          if (file) {
+                            handleFileChange2({ target: { files: [file] } });
+                          }
+                        }}
                       >
                         <div className="w-36 h-36 bg-grayCreame hover:bg-lightBlueCreame flex items-center justify-center border-2 rounded-full border-gray-400 border-solid cursor-pointer shadow-xl">
                           <label>
@@ -764,6 +859,9 @@ const Gastos = () => {
                           </label>
                         </div>
                         <div className="flex flex-col items-center justify-center mt-4">
+                          <p className="font-bold text-naranjaCreame text-xl">
+                            OTRO DOCUMENTO
+                          </p>
                           <p>ARRASTRA O SELECCIONA UN ARCHIVO</p>
                         </div>
                       </div>
@@ -835,7 +933,13 @@ const Gastos = () => {
                 <div
                   className="flex flex-col items-center justify-center border-2 border-gray-300 rounded-lg lg:m-0 w-full h-[40vh] lg:h-[70vh] md:h-[40vh] sm:h-[90vh]"
                   onDragOver={(e) => e.preventDefault()}
-                  onDrop={(e) => handleDrop(e)}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    const file = e.dataTransfer.files[0];
+                    if (file) {
+                      handleFileChange({ target: { files: [file] } });
+                    }
+                  }}
                 >
                   <div className=" w-48 h-48 bg-naranjaCreame hover:bg-lightBlueCreame flex items-center justify-center border-2 rounded-full border-gray-400 border-solid cursor-pointer shadow-xl">
                     <label className="">
@@ -863,7 +967,10 @@ const Gastos = () => {
                     </label>
                   </div>
                   <div className="flex flex-col items-center justify-center mt-4">
-                    <p>ARRASTRA O SELECCIONA UN ARCHIVO</p>
+                    <p className="font-bold text-naranjaCreame text-xl">
+                      FACTURA
+                    </p>
+                    <p>ARRASTRA O SELECCIONA UNA FACTURA</p>
                   </div>
                 </div>
               </div>
@@ -1327,7 +1434,7 @@ const Gastos = () => {
                     onKeyDown={(e) => {
                       validaEnter(e);
                     }}
-                    type="text"
+                    type="number"
                     className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.ipc
@@ -1400,7 +1507,7 @@ const Gastos = () => {
                     onKeyDown={(e) => {
                       validaEnter(e);
                     }}
-                    type="text"
+                    type="number"
                     className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
                     ${
                       responsedata.icui
@@ -1502,11 +1609,11 @@ const Gastos = () => {
           <button
             type="submit"
             className={`mt-10 w-full inline-block rounded ${
-              (imageLoaded && isChecked) || (imageLoaded && fillData)
+              (imageLoaded) || (imageLoaded && fillData)
                 ? "bg-naranjaCreame hover:bg-azulCreame hover:border-turquesaCreame hover:border  hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:bg-turquesaCreame focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:outline-none focus:ring-0 active:bg-info-700 active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)]"
                 : "opacity-50 bg-darkGrayCreame"
             } px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#54b4d3] transition duration-150 ease-in-out   md:w-1/2`}
-            disabled={!imageLoaded && !isChecked}
+            disabled={!imageLoaded}
           >
             Enviar
           </button>
