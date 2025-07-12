@@ -449,17 +449,27 @@ const Gastos = () => {
     const docEmpleado = localStorage.getItem("doc_empleado");
 
     const currentDate = new Date();
-    const day = String(currentDate.getDate()).padStart(2, "0"); // Día del mes con dos dígitos
-    const month = String(currentDate.getMonth() + 1).padStart(2, "0"); // Mes (0 - 11) con dos dígitos
-    const year = String(currentDate.getFullYear()).slice(2); // Año con dos dígitos
-    const hours = String(currentDate.getHours()).padStart(2, "0"); // Hora con dos dígitos
-    const minutes = String(currentDate.getMinutes()).padStart(2, "0"); // Minutos con dos dígitos
-    const formatDate = new Date().toISOString().split("T")[0];
+    // const day = String(currentDate.getDate()).padStart(2, "0"); // Día del mes con dos dígitos
+    // const month = String(currentDate.getMonth() + 1).padStart(2, "0"); // Mes (0 - 11) con dos dígitos
+    // const year = String(currentDate.getFullYear()).slice(2); // Año con dos dígitos
+    // const hours = String(currentDate.getHours()).padStart(2, "0"); // Hora con dos dígitos
+    // const minutes = String(currentDate.getMinutes()).padStart(2, "0"); // Minutos con dos dígitos
+    // const formatDate = new Date().toISOString().split("T")[0];
+
+    const year = currentDate.getFullYear(); // Año con 4 dígitos
+const month = String(currentDate.getMonth() + 1).padStart(2, "0"); // Mes con 2 dígitos
+const day = String(currentDate.getDate()).padStart(2, "0"); // Día con 2 dígitos
+const hours = String(currentDate.getHours()).padStart(2, "0"); // Hora con 2 dígitos
+const minutes = String(currentDate.getMinutes()).padStart(2, "0"); // Minutos con 2 dígitos
+const seconds = String(currentDate.getSeconds()).padStart(2, "0"); // Segundos con 2 dígitos
+
+const formatDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     const nom_img = `${user_name}_${day}${month}${year}_${hours}${minutes}.jpg`;
 
     const ActualizarEntregable = {
       ...infoProject.input,
       N_DocumentoEmpleado: docEmpleado,
+      // Nombre_Empleado: "ESTIVEN"
       Nombre_Empleado: user_name
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, ""),
@@ -691,8 +701,8 @@ const Gastos = () => {
         </div>
       </div>
 
-      <form className="" onSubmit={handlerSend}>
-        {/* <form className="" onSubmit={sendData}> */}
+      {/* <form className="" onSubmit={handlerSend}> */}
+        <form className="" onSubmit={sendData}>
         <div>
           <div className="flex">
             <input
