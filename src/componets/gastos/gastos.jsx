@@ -701,8 +701,8 @@ const formatDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
         </div>
       </div>
 
-      {/* <form className="" onSubmit={handlerSend}> */}
-        <form className="" onSubmit={sendData}>
+      <form className="" onSubmit={handlerSend}>
+        {/* <form className="" onSubmit={sendData}> */}
         <div>
           <div className="flex">
             <input
