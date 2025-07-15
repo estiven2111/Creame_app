@@ -13,6 +13,7 @@ import Login from "./componets/authentication/Login";
 import Gastos from "./componets/gastos/gastos";
 import Actividades from "./componets/actividades/actividades";
 import Indicadores from "./componets/indicadores/indicadores";
+import Usuarios from "./componets/Usuarios/Usuarios"
 
 import Footer from "../src/componets/navigation/footer"
 import { ThemeContext } from './componets/context/themeContext';
@@ -34,6 +35,9 @@ function App() {
              />
             <Route path='/indicadores' element= {isAuthenticated 
               ? (<Indicadores />) : (<Navigate to="/" replace={true} />)} 
+            />
+            <Route path='/usuarios' element= {isAuthenticated 
+              ? (<Usuarios />) : (<Navigate to="/" replace={true} />)} 
             />
           </Routes>
           <Footer/>

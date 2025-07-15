@@ -13,6 +13,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlassDollar } from '@fortawesome/free-solid-svg-icons';
 import { faListCheck } from '@fortawesome/free-solid-svg-icons';
 import { faChartLine } from '@fortawesome/free-solid-svg-icons';
+import { faUserPlus } from '@fortawesome/free-solid-svg-icons';
+
 import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 
 function NavBar() {
@@ -23,6 +25,7 @@ function NavBar() {
     borderBottom: "2px solid ",
   };
   const [showMenu, setShowMenu] = useState(false);
+  const [admin, SetAdmin] = useState(false)
   const toggleMenu = () => {
     setShowMenu(!showMenu);
   };
@@ -49,6 +52,15 @@ function NavBar() {
               </div>
 
               <div className="hidden gap-5 md:flex md:col-span-2">
+
+                 {admin && (
+                  <NavLink to="/Usuarios" style={({ isActive }) => (isActive ? activeStyle : undefined)}>
+                  <div className="cursor-pointer  hover:scale-105 duration-200 px-5">
+                  Usuarios
+                  </div>
+                </NavLink>
+                )}
+
                 <NavLink to="/actividades" style={({ isActive }) => (isActive ? activeStyle : undefined)}>
                   <div className="cursor-pointer  hover:scale-105 duration-200 px-5">
                     Actividades
@@ -64,6 +76,7 @@ function NavBar() {
                   Gráficas
                   </div>
                 </NavLink>
+               
               </div>
             </div>
             
@@ -76,7 +89,17 @@ function NavBar() {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 text-gray-500 px-5 py-3 bg-azulCreame">
+      <div className={` ${admin ? "grid grid-cols-4":"grid grid-cols-3"}   text-gray-500 px-5 py-3 bg-azulCreame`}>
+         
+
+           {admin && (
+                  <NavLink to="/usuarios" style={({ isActive }) => (isActive ? activeStyle : undefined)}>
+             <div className="flex flex-col gap-1 items-center mb-2 hover:text-lightblueone cursor-pointer">
+               <FontAwesomeIcon icon={faUserPlus} />
+               USUARIOS
+             </div>
+           </NavLink>
+                )}
           <NavLink to="/actividades" style={({ isActive }) => (isActive ? activeStyle : undefined)}>
              <div className="flex flex-col gap-1 items-center mb-2 hover:text-lightblueone cursor-pointer">
              <FontAwesomeIcon icon={faListCheck}/>
@@ -95,6 +118,8 @@ function NavBar() {
                Indicadores
              </div>
            </NavLink>
+           
+           
         </div>
       <div className="flex justify-center">
         <SearchBar/>

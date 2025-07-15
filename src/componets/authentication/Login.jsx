@@ -58,6 +58,7 @@ const Login = () => {
 
   return (
     <div className="w-full">
+      {console.log(date_login)}
       {isLoading 
       ?
         <div className="absolute inset-0 flex justify-center items-center bg-white bg-opacity-50">

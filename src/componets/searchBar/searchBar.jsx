@@ -42,8 +42,10 @@
 //           const docEmpleado = localStorage.getItem('doc_empleado');
 //           setDocument(docEmpleado.toString());
 //           const email = localStorage.getItem('email');
+//           console.log(inputValue,inputValue)
 //           const response = await axios.get(`/proyect?search=${inputValue}&email=${email}`);
 //           const anticipo = await axios.post(`/proyect/anticipo`, { sku: response?.data[0]?.skuP, doc: docEmpleado });
+//           console.log(anticipo.data,response?.data[0]?.skuP,docEmpleado)
 //           const indicadores = await axios.get(`/indicadores/fechas?docId=${docEmpleado}`);
 //           setindexProject(false)
 //           todosAnticipos(anticipo.data);
@@ -225,11 +227,11 @@ const SearchBar = () => {
           setDocument(docEmpleado.toString());
 
           const response = await axios.get(`/proyect?search=${inputValue}&email=${email}`);
-          const anticipo = await axios.post(`/proyect/anticipo`, {
-            sku: response?.data[0]?.skuP,
-            doc: docEmpleado,
-          });
-
+          // const anticipo = await axios.post(`/proyect/anticipo`, {
+          //   sku: response?.data[0]?.skuP,
+          //   doc: docEmpleado,
+          // });
+          const anticipo = await axios.post(`/proyect/anticipo`, { sku: response?.data[0]?.skuP, doc: docEmpleado });
           const indicadores = await axios.get(`/indicadores/fechas?docId=${docEmpleado}`);
 
           setindexProject(false);

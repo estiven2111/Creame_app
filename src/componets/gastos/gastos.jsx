@@ -27,7 +27,7 @@ let latitude = 0;
 let longitude = 0;
 let hasLogicExecuted = false;
 const Gastos = () => {
-  const { infoProject, anticipos, inputValue, topSecret } =
+  const { infoProject, anticipos, inputValue, topSecret,searchText } =
     useContext(ThemeContext);
   const [prepayment, setPrepayment] = useState("");
   const [justSelected, SetJustSelected] = useState(false);
@@ -38,7 +38,7 @@ const Gastos = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
-
+ const [nomProyect,setNomproyect ]= useState() 
   const location = useLocation();
   localStorage.setItem("ruta", location.pathname);
 
@@ -55,34 +55,124 @@ const Gastos = () => {
     const ActulizarOptions = () => {
       if (anticipos) {
         setTotalAnt(anticipos);
+        setNomproyect(searchText)
       }
     };
     ActulizarOptions();
   }, [anticipos]);
 
+  // const toggleDropdown = () => {
+  //   SetJustSelected(false);
+  //   setIsOpen(!isOpen);
+  // };
+  // const handleOptionSelect = (option) => {
+  //   if (!selectedOptions.includes(option)) {
+  //     setSelectedOptions([option]);
+  //   }
+  //   setIsOpen(false);
+  //   SetJustSelected(true);
+  // };
+
+  // const renderOptions = () => {
+  //   return totalAnt.map((option, index) => (
+  //     <button
+  //       className="flex m-1 px-1 cursor-pointer bg-white rounded"
+  //       key={index}
+  //       onClick={() => {
+  //         handleOptionSelect(
+  //           option.sku + option.DetalleConcepto + option.NumeroComprobante
+  //         );
+  //         setPrepayment(option);
+  //       }}
+  //     >
+  //       <span
+  //         style={{
+  //           overflow: "hidden",
+  //           whiteSpace: "nowrap",
+  //           textOverflow: "ellipsis",
+  //         }}
+  //       >
+  //         {option.sku +
+  //           " " +
+  //           option.DetalleConcepto +
+  //           " " +
+  //           option.NumeroComprobante}
+  //       </span>
+  //     </button>
+  //   ));
+  // };
+
   const toggleDropdown = () => {
     SetJustSelected(false);
-    setIsOpen(!isOpen);
+    setIsOpen((prev) => !prev);
   };
-  const handleOptionSelect = (option) => {
-    if (!selectedOptions.includes(option)) {
-      setSelectedOptions([option]);
+
+  const handleOptionSelect = (optionObj) => {
+    const value = `${optionObj.sku} ${optionObj.DetalleConcepto} ${nomProyect} ${optionObj.NumeroComprobante}`;
+
+    if (!selectedOptions.includes(value)) {
+      setSelectedOptions([value]);
+
+    } else {
+      setSelectedOptions([]);
     }
+
+    setPrepayment(optionObj);
     setIsOpen(false);
     SetJustSelected(true);
   };
 
   const renderOptions = () => {
-    return totalAnt.map((option, index) => (
-      <button
-        className="flex m-1 px-1 cursor-pointer bg-white rounded"
-        key={index}
-        onClick={() => {
-          handleOptionSelect(
-            option.DetalleTipo_Documento + option.NumeroComprobante
+    return (
+      <>
+        {/* Opción de limpiar selección */}
+        <button
+          className="flex m-1 px-1 cursor-pointer bg-white rounded hover:bg-gray-100"
+          onClick={() => {
+            setSelectedOptions([]);
+            setPrepayment(null);
+            SetJustSelected(false);
+            setIsOpen(false);
+          }}
+        >
+          <span className="truncate">Seleccionar opciones</span>
+        </button>
+
+        {/* Opciones reales */}
+        {/* {totalAnt.map((option, index) => {
+          const label = `${option.sku} ${option.DetalleConcepto} ${searchText} ${option.NumeroComprobante}`;
+          return (
+            <button
+              className="flex m-1 px-1 cursor-pointer bg-white rounded hover:bg-gray-100"
+              key={index}
+              onClick={() => handleOptionSelect(option)}
+            >
+              <span
+                style={{
+                  overflow: "hidden",
+                  whiteSpace: "nowrap",
+                  textOverflow: "ellipsis",
+                }}
+              >
+               
+              </span>
+            </button>
           );
-          setPrepayment(option);
-        }}
+        })} */}
+        
+       {
+  totalAnt.map((option, index) => {
+    const nonp = nomProyect; // <-- asegúrate que esto tiene valor
+    const label = `${option.sku} ${option.DetalleConcepto} ${nonp} ${option.NumeroComprobante}`;
+
+    // Verificamos en consola, fuera del JSX
+    console.log("label:", infoProject.nombre);
+
+    return (
+      <button
+        className="flex m-1 px-1 cursor-pointer bg-white rounded hover:bg-gray-100"
+        key={index}
+        onClick={() => handleOptionSelect(option)}
       >
         <span
           style={{
@@ -91,21 +181,31 @@ const Gastos = () => {
             textOverflow: "ellipsis",
           }}
         >
-          {option.NumeroComprobante + option.DetalleTipo_Documento}
+          {label}
         </span>
       </button>
-    ));
+    );
+  })
+}
+      </>
+    );
   };
 
   const renderSelectedOptions = () => {
-    return (
-      <div>
-        {selectedOptions.map((option, index) => {
-          return <p key={index}>{option}</p>;
-        })}
-      </div>
-    );
+    return selectedOptions.length > 0
+      ? selectedOptions[0]
+      : "Seleccionar opciones";
   };
+
+  // const renderSelectedOptions = () => {
+  //   return (
+  //     <div>
+  //       {selectedOptions.map((option, index) => {
+  //         return <p key={index}>{option}</p>;
+  //       })}
+  //     </div>
+  //   );
+  // };
 
   useEffect(() => {
     initTE({ Input });
@@ -457,13 +557,13 @@ const Gastos = () => {
     // const formatDate = new Date().toISOString().split("T")[0];
 
     const year = currentDate.getFullYear(); // Año con 4 dígitos
-const month = String(currentDate.getMonth() + 1).padStart(2, "0"); // Mes con 2 dígitos
-const day = String(currentDate.getDate()).padStart(2, "0"); // Día con 2 dígitos
-const hours = String(currentDate.getHours()).padStart(2, "0"); // Hora con 2 dígitos
-const minutes = String(currentDate.getMinutes()).padStart(2, "0"); // Minutos con 2 dígitos
-const seconds = String(currentDate.getSeconds()).padStart(2, "0"); // Segundos con 2 dígitos
+    const month = String(currentDate.getMonth() + 1).padStart(2, "0"); // Mes con 2 dígitos
+    const day = String(currentDate.getDate()).padStart(2, "0"); // Día con 2 dígitos
+    const hours = String(currentDate.getHours()).padStart(2, "0"); // Hora con 2 dígitos
+    const minutes = String(currentDate.getMinutes()).padStart(2, "0"); // Minutos con 2 dígitos
+    const seconds = String(currentDate.getSeconds()).padStart(2, "0"); // Segundos con 2 dígitos
 
-const formatDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    const formatDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     const nom_img = `${user_name}_${day}${month}${year}_${hours}${minutes}.jpg`;
 
     const ActualizarEntregable = {
@@ -473,7 +573,7 @@ const formatDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
       Nombre_Empleado: user_name
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, ""),
-      NumeroComprobante: prepayment ? prepayment.NumeroComprobante : "", //
+
       Fecha: formatDate, //
       FechaComprobante: responsedata.fecha
         ? responsedata.fecha.split("/").join("-")
@@ -485,6 +585,7 @@ const formatDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
       DireccionComprobante: responsedata.Direccion
         ? responsedata.Direccion
         : "", //
+      NumeroComprobante: prepayment ? prepayment.NumeroComprobante : "", //
       CCostos: prepayment ? prepayment.IdCentroCostos.toString() : "", //
       idAnticipo: prepayment ? parseInt(prepayment.IdResponsable) : "", //
       ipc: responsedata.ipc ? parseInt(responsedata.ipc) : 0, //
@@ -668,10 +769,11 @@ const formatDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   };
   return (
     <div className="mx-auto md:px-24 p-2 xl:px-40 w-full ">
+      
       <div className="bg-azulCreame peer block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none mb-5">
         <div className="w-full flex flex-row">
           <div className="w-full flex flex-row justify-between">
-            <div className="inputIntLeftDrop">
+            {/* <div className="inputIntLeftDrop">
               {justSelected ? (
                 <div className="block text-white">
                   <button onClick={toggleDropdown}>
@@ -690,7 +792,44 @@ const formatDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
                   {renderOptions()}
                 </div>
               )}
+            </div> */}
+            <div className="inputIntLeftDrop relative">
+              {/* Botón principal */}
+              <div
+                className={
+                  justSelected
+                    ? "block text-white"
+                    : "blockNoSelected text-white"
+                }
+              >
+                <button onClick={toggleDropdown} className="flex items-center">
+                  {/* Flecha (opcional) */}
+                  <svg
+                    className="w-4 h-4 mr-2 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+
+                  <span>{renderSelectedOptions()}</span>
+                </button>
+              </div>
+
+              {/* Opciones desplegadas */}
+              {isOpen && (
+                <div className="options bg-grayCreame absolute rounded z-10 shadow-md mt-1 max-h-60 overflow-y-auto">
+                  {renderOptions()}
+                </div>
+              )}
             </div>
+
             <input
               className="w-3/6"
               placeholder="$000.000.00"
@@ -1619,7 +1758,7 @@ const formatDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
           <button
             type="submit"
             className={`mt-10 w-full inline-block rounded ${
-              (imageLoaded) || (imageLoaded && fillData)
+              imageLoaded || (imageLoaded && fillData)
                 ? "bg-naranjaCreame hover:bg-azulCreame hover:border-turquesaCreame hover:border  hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:bg-turquesaCreame focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:outline-none focus:ring-0 active:bg-info-700 active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)]"
                 : "opacity-50 bg-darkGrayCreame"
             } px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#54b4d3] transition duration-150 ease-in-out   md:w-1/2`}
