@@ -57,7 +57,7 @@ const Usuarios = () => {
       setErrors(validationErrors);
     } else {
       setErrors({});
-      console.log("Formulario válido. Enviando datos:", formData);
+      
       // Aquí puedes hacer el POST con Axios
 
 

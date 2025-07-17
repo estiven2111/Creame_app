@@ -55,6 +55,7 @@ const Gastos = () => {
     const ActulizarOptions = () => {
       if (anticipos) {
         setTotalAnt(anticipos);
+        
         setNomproyect(searchText)
       }
     };
@@ -108,7 +109,7 @@ const Gastos = () => {
   };
 
   const handleOptionSelect = (optionObj) => {
-    const value = `${optionObj.sku} ${optionObj.DetalleConcepto} ${nomProyect} ${optionObj.NumeroComprobante}`;
+    const value = `${totalAnt[0].IdCentroCostos}-${optionObj.sku} ${optionObj.DetalleConcepto} ${nomProyect} ${optionObj.NumeroComprobante}`;
 
     if (!selectedOptions.includes(value)) {
       setSelectedOptions([value]);
@@ -163,10 +164,9 @@ const Gastos = () => {
        {
   totalAnt.map((option, index) => {
     const nonp = nomProyect; // <-- asegúrate que esto tiene valor
-    const label = `${option.sku} ${option.DetalleConcepto} ${nonp} ${option.NumeroComprobante}`;
+    const label = `${totalAnt[0].IdCentroCostos}-${option.sku} ${option.DetalleConcepto} ${nonp} ${option.NumeroComprobante}`;
 
-    // Verificamos en consola, fuera del JSX
-    console.log("label:", infoProject.nombre);
+    
 
     return (
       <button
@@ -542,6 +542,8 @@ const Gastos = () => {
 
   const sendData = async (data) => {
     setIsLoading(true);
+   
+    
     const formData = new FormData();
 
     const user_name = localStorage.getItem("name");
@@ -575,7 +577,7 @@ const Gastos = () => {
         .replace(/[\u0300-\u036f]/g, ""),
 
       Fecha: formatDate, //
-      FechaComprobante: responsedata.fecha
+      FechaComprobante: responsedata.fecha? responsedata.fecha + "00:00:00.000" : formatDate
         ? responsedata.fecha.split("/").join("-")
         : "", //
       ValorComprobante: responsedata.total ? parseInt(responsedata.total) : 0, //
@@ -586,7 +588,7 @@ const Gastos = () => {
         ? responsedata.Direccion
         : "", //
       NumeroComprobante: prepayment ? prepayment.NumeroComprobante : "", //
-      CCostos: prepayment ? prepayment.IdCentroCostos.toString() : "", //
+      // CCostos: prepayment ? prepayment.IdCentroCostos.toString() : "", //
       idAnticipo: prepayment ? parseInt(prepayment.IdResponsable) : "", //
       ipc: responsedata.ipc ? parseInt(responsedata.ipc) : 0, //
       Sub_Total: responsedata.totalSinIva
