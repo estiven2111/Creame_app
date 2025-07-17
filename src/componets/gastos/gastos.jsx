@@ -577,7 +577,7 @@ const Gastos = () => {
         .replace(/[\u0300-\u036f]/g, ""),
 
       Fecha: formatDate, //
-      FechaComprobante: responsedata.fecha? responsedata.fecha + "00:00:00.000" : formatDate
+      FechaComprobante: responsedata.fecha? responsedata.fecha + " 00:00:00.000" : formatDate
         ? responsedata.fecha.split("/").join("-")
         : "", //
       ValorComprobante: responsedata.total ? parseInt(responsedata.total) : 0, //
