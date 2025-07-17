@@ -75,7 +75,7 @@ const Entregables = (props) => {
     const normalizedStr = str.replace(/[áéíóúÁÉÍÓÚñÑ]/g, match => map[match]);
 
     // Elimina caracteres especiales (manteniendo guiones y subrayados si es necesario)
-    return normalizedStr.replace(/[^a-zA-Z0-9-_]/g, '');
+    return normalizedStr.replace(/[^a-zA-Z0-9-_.]/g, '');
 }
 
   const sendData = async (data) => {
