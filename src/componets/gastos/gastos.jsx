@@ -109,7 +109,8 @@ const Gastos = () => {
   };
 
   const handleOptionSelect = (optionObj) => {
-    const value = `${totalAnt[0].IdCentroCostos}-${optionObj.sku} ${optionObj.DetalleConcepto} ${nomProyect} ${optionObj.NumeroComprobante}`;
+    const value = ` ${optionObj.Observaciones}`;
+    // const value = `${totalAnt[0].IdCentroCostos}-${optionObj.sku} ${optionObj.DetalleConcepto} ${nomProyect} ${optionObj.NumeroComprobante}`;
 
     if (!selectedOptions.includes(value)) {
       setSelectedOptions([value]);
@@ -164,7 +165,8 @@ const Gastos = () => {
        {
   totalAnt.map((option, index) => {
     const nonp = nomProyect; // <-- asegúrate que esto tiene valor
-    const label = `${totalAnt[0].IdCentroCostos}-${option.sku} ${option.DetalleConcepto} ${nonp} ${option.NumeroComprobante}`;
+    const label = ` ${option.Observaciones}`;
+    // const label = `${totalAnt[0].IdCentroCostos}-${option.sku} ${option.DetalleConcepto} ${nonp} ${option.NumeroComprobante}`;
 
     
 
@@ -467,19 +469,26 @@ const Gastos = () => {
   };
 
   const peticionOcr = async () => {
-    try {
-      setIsLoading(true);
+
+try {
+ 
+   setIsLoading(true);
       const user_name = localStorage.getItem("name");
       const formData = new FormData();
       formData.append("imagen", imagen);
 
       formData.append("latitud", latitude);
       formData.append("longitud", longitude);
+     
       const response = await axios.post(`/proyect/ocr`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
-      });
+      }
+    );
+
+  if (response.status === 200) {
+   
       let municipio = "";
       let codepostal = "";
       if (
@@ -535,9 +544,61 @@ const Gastos = () => {
       // console.log(responsedata);
       setFillData(true);
       setIsLoading(false);
-    } catch (error) {
-      console.error(error, "Error");
+
+  }
+
+  if (response.data === "Error al procesar con IA") {
+    Swal({
+      title: "NO SE PUDO ANALIZAR LA INFORMACIÓN",
+      text: "Por favor, vuelva a escanear el documento.",
+      icon: "warning",
+      buttons: "Aceptar",
+    }).then((confirmed) => {
+      if (confirmed) {
+        setFillData(false);
+        setIsLoading(false);
+        handlerCancel();
+        handlerCancel1();
+        handlerCancel2();
+      }})
+    
     }
+
+} catch (error) {
+  // console.error(error); // imprime el error completo para depuración
+
+  // puedes leer el status con seguridad así:
+  const status = error.response?.status;
+
+  if (status === 500) {
+    Swal({
+      title: "NO SE PUDO ANALIZAR LA INFORMACIÓN",
+      text: "Porfavor, vuelva a escanear el documento.",
+      icon: "warning",
+      buttons: "Aceptar",
+    });
+    setFillData(true);
+setIsLoading(false);
+handlerCancel()
+handlerCancel1()
+handlerCancel2()
+  } else {
+    Swal({
+      title: "NO SE PUDO ANALIZAR LA INFORMACIÓN",
+      text: "Por favor, vuelva a escanear el documento.",
+      icon: "warning",
+      buttons: "Aceptar",
+    });
+    setFillData(true);
+setIsLoading(false);
+handlerCancel()
+handlerCancel1()
+handlerCancel2()
+  }
+}
+
+
+    
   };
 
   const sendData = async (data) => {
@@ -580,7 +641,7 @@ const Gastos = () => {
       FechaComprobante: responsedata.fecha? responsedata.fecha + " 00:00:00.000" : formatDate
         ? responsedata.fecha.split("/").join("-")
         : "", //
-      ValorComprobante: responsedata.total ? parseInt(responsedata.total) : 0, //
+      ValorComprobante: responsedata.total ? responsedata.total : 0, //
       NitComprobante: responsedata.nit ? responsedata.nit : "", //
       NombreComprobante: responsedata.concepto ? responsedata.concepto : "", //
       CiudadComprobante: responsedata.municipio ? responsedata.municipio : "", //
@@ -590,10 +651,10 @@ const Gastos = () => {
       NumeroComprobante: prepayment ? prepayment.NumeroComprobante : "", //
       // CCostos: prepayment ? prepayment.IdCentroCostos.toString() : "", //
       idAnticipo: prepayment ? parseInt(prepayment.IdResponsable) : "", //
-      ipc: responsedata.ipc ? parseInt(responsedata.ipc) : 0, //
+      ipc: responsedata.ipc ? responsedata.ipc : 0, //
       Sub_Total: responsedata.totalSinIva
-        ? parseInt(responsedata.totalSinIva)
-        : 0, //
+        ? responsedata.totalSinIva
+        : responsedata.total, //
       Descripcion: responsedata.Descripcion ? responsedata.Descripcion : "",
       iva: responsedata.iva ? responsedata.iva : 0,
       reteFuente: responsedata.rete ? responsedata.rete : 0,
@@ -1757,17 +1818,28 @@ const Gastos = () => {
           </div>
         </div>
         <div className=" text-center">
-          <button
+          {/* <button
             type="submit"
             className={`mt-10 w-full inline-block rounded ${
-              imageLoaded || (imageLoaded && fillData)
+              imageLoaded || (imageLoaded && fillData && !nomProyect)
                 ? "bg-naranjaCreame hover:bg-azulCreame hover:border-turquesaCreame hover:border  hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:bg-turquesaCreame focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:outline-none focus:ring-0 active:bg-info-700 active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)]"
                 : "opacity-50 bg-darkGrayCreame"
             } px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#54b4d3] transition duration-150 ease-in-out   md:w-1/2`}
-            disabled={!imageLoaded}
+            disabled={!imageLoaded && (!nomProyect || nomProyect.trim() === "")}
           >
             Enviar
-          </button>
+          </button> */}
+          <button
+  type="submit"
+  className={`mt-10 w-full inline-block rounded ${
+    imageLoaded && nomProyect.trim() !== ""
+      ? "bg-naranjaCreame hover:bg-azulCreame hover:border-turquesaCreame hover:border  hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:bg-turquesaCreame focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:outline-none focus:ring-0 active:bg-info-700 active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)]"
+      : "opacity-50 bg-darkGrayCreame cursor-not-allowed"
+  } px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#54b4d3] transition duration-150 ease-in-out md:w-1/2`}
+  disabled={!imageLoaded || nomProyect.trim() === ""}
+>
+  Enviar
+</button>
         </div>
       </form>
       {isLoading ? (

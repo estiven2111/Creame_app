@@ -213,7 +213,6 @@ var datas = {
           </div>
          
           <div className="inputCont  m-5">
-            {console.log(infoFecha)}
             <label className="label">Horas Disp :</label>
             <input className="input border-2 solid rounded-lg bg-blue-300/50 m-2" value={!isNaN(infoFecha.hdisp) ? infoFecha.hdisp: data.hDisp} onChange={(e) => handleOnChange(e.target.value, "hDisp")} placeholder="Horas" type="number"/>
             <label className="label">Horas Cumplidas :</label>
