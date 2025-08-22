@@ -1832,7 +1832,7 @@ handlerCancel2()
           <button
   type="submit"
   className={`mt-10 w-full inline-block rounded ${
-    imageLoaded && nomProyect.trim() !== ""
+    imageLoaded && nomProyect.trim() == ""
       ? "bg-naranjaCreame hover:bg-azulCreame hover:border-turquesaCreame hover:border  hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:bg-turquesaCreame focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:outline-none focus:ring-0 active:bg-info-700 active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)]"
       : "opacity-50 bg-darkGrayCreame cursor-not-allowed"
   } px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#54b4d3] transition duration-150 ease-in-out md:w-1/2`}
