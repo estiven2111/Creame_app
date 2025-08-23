@@ -835,7 +835,7 @@ handlerCancel2()
       
       <div className="bg-azulCreame peer block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none mb-5">
         <div className="w-full flex flex-row">
-          <div className="w-full flex flex-row justify-between">
+          <div className="w-full flex flex-row justify-center items-center">
             {/* <div className="inputIntLeftDrop">
               {justSelected ? (
                 <div className="block text-white">
@@ -881,24 +881,24 @@ handlerCancel2()
                     />
                   </svg>
 
-                  <span>{renderSelectedOptions()}</span>
+                  <span className="text-2xl">{renderSelectedOptions()}</span>
                 </button>
               </div>
 
               {/* Opciones desplegadas */}
               {isOpen && (
-                <div className="options bg-grayCreame absolute rounded z-10 shadow-md mt-1 max-h-60 overflow-y-auto">
+                <div className="options bg-grayCreame absolute rounded z-10 shadow-md mt-1 max-h-60 overflow-y-auto text-2xl">
                   {renderOptions()}
                 </div>
               )}
             </div>
 
-            <input
+            {/* <input
               className="w-3/6"
               placeholder="$000.000.00"
               value={prepayment ? prepayment.Valor.toString() : ""}
               onChange={handlerAnticipo}
-            />
+            /> */}
           </div>
         </div>
       </div>
@@ -1832,7 +1832,7 @@ handlerCancel2()
           <button
   type="submit"
   className={`mt-10 w-full inline-block rounded ${
-    imageLoaded && nomProyect.trim() == ""
+    imageLoaded && nomProyect.trim() !== ""
       ? "bg-naranjaCreame hover:bg-azulCreame hover:border-turquesaCreame hover:border  hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:bg-turquesaCreame focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:outline-none focus:ring-0 active:bg-info-700 active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)]"
       : "opacity-50 bg-darkGrayCreame cursor-not-allowed"
   } px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#54b4d3] transition duration-150 ease-in-out md:w-1/2`}
