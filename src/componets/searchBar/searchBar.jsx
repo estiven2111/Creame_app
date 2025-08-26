@@ -140,10 +140,13 @@ const SearchBar = () => {
 
   const wrapperRef = useRef(null);
   const [filteredOptions, setFilteredOptions] = useState([]);
-
+    
 
     useEffect(() => {
     const constulta = async () => {
+       const docEmpleado = localStorage.getItem('doc_empleado');
+       const anticipo = await axios.post(`/proyect/anticipo`, {  doc: docEmpleado });
+       todosAnticipos(anticipo.data);
       if (!proyectos.length) {
         if (localStorage.getItem("email")) {
           const nomproyecto = await axios.get(
@@ -220,6 +223,7 @@ const SearchBar = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        
         if (inputValue !== '') {
           const docEmpleado = localStorage.getItem('doc_empleado');
           const email = localStorage.getItem('email');
@@ -231,7 +235,7 @@ const SearchBar = () => {
           //   sku: response?.data[0]?.skuP,
           //   doc: docEmpleado,
           // });
-          const anticipo = await axios.post(`/proyect/anticipo`, { sku: response?.data[0]?.skuP, doc: docEmpleado });
+         const anticipo = await axios.post(`/proyect/anticipo`, { sku: response?.data[0]?.skuP, doc: docEmpleado });
           const indicadores = await axios.get(`/indicadores/fechas?docId=${docEmpleado}`);
 
           setindexProject(false);
