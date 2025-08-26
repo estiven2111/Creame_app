@@ -27,7 +27,7 @@ let latitude = 0;
 let longitude = 0;
 let hasLogicExecuted = false;
 const Gastos = () => {
-  const { infoProject, anticipos, inputValue, topSecret,searchText } =
+  const { infoProject, anticipos, inputValue, topSecret, searchText } =
     useContext(ThemeContext);
   const [prepayment, setPrepayment] = useState("");
   const [justSelected, SetJustSelected] = useState(false);
@@ -38,7 +38,7 @@ const Gastos = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
- const [nomProyect,setNomproyect ]= useState() 
+  const [nomProyect, setNomproyect] = useState();
   const location = useLocation();
   localStorage.setItem("ruta", location.pathname);
 
@@ -55,8 +55,8 @@ const Gastos = () => {
     const ActulizarOptions = () => {
       if (anticipos) {
         setTotalAnt(anticipos);
-        
-        setNomproyect(searchText)
+
+        setNomproyect(searchText);
       }
     };
     ActulizarOptions();
@@ -114,7 +114,6 @@ const Gastos = () => {
 
     if (!selectedOptions.includes(value)) {
       setSelectedOptions([value]);
-
     } else {
       setSelectedOptions([]);
     }
@@ -161,34 +160,30 @@ const Gastos = () => {
             </button>
           );
         })} */}
-        
-       {
-  totalAnt.map((option, index) => {
-    const nonp = nomProyect; // <-- asegúrate que esto tiene valor
-    const label = ` ${option.Observaciones}`;
-    // const label = `${totalAnt[0].IdCentroCostos}-${option.sku} ${option.DetalleConcepto} ${nonp} ${option.NumeroComprobante}`;
 
-    
+        {totalAnt.map((option, index) => {
+          const nonp = nomProyect; // <-- asegúrate que esto tiene valor
+          const label = ` ${option.Observaciones}`;
+          // const label = `${totalAnt[0].IdCentroCostos}-${option.sku} ${option.DetalleConcepto} ${nonp} ${option.NumeroComprobante}`;
 
-    return (
-      <button
-        className="flex m-1 px-1 cursor-pointer bg-white rounded hover:bg-gray-100"
-        key={index}
-        onClick={() => handleOptionSelect(option)}
-      >
-        <span
-          style={{
-            overflow: "hidden",
-            whiteSpace: "nowrap",
-            textOverflow: "ellipsis",
-          }}
-        >
-          {label}
-        </span>
-      </button>
-    );
-  })
-}
+          return (
+            <button
+              className="flex m-1 px-1 cursor-pointer bg-white rounded hover:bg-gray-100"
+              key={index}
+              onClick={() => handleOptionSelect(option)}
+            >
+              <span
+                style={{
+                  overflow: "hidden",
+                  whiteSpace: "nowrap",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                {label}
+              </span>
+            </button>
+          );
+        })}
       </>
     );
   };
@@ -469,142 +464,132 @@ const Gastos = () => {
   };
 
   const peticionOcr = async () => {
-
-try {
- 
-   setIsLoading(true);
+    try {
+      setIsLoading(true);
       const user_name = localStorage.getItem("name");
       const formData = new FormData();
       formData.append("imagen", imagen);
 
       formData.append("latitud", latitude);
       formData.append("longitud", longitude);
-     
+
       const response = await axios.post(`/proyect/ocr`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
-      }
-    );
-
-  if (response.status === 200) {
-   
-      let municipio = "";
-      let codepostal = "";
-      if (
-        response.data.codepostal === undefined ||
-        response.data.codepostal === undefined
-      ) {
-        codepostal = "";
-      } else {
-        codepostal = response.data.codepostal;
-      }
-      if (
-        response.data.municipio === undefined ||
-        response.data.municipio === undefined
-      ) {
-        municipio = "";
-      } else {
-        municipio = response.data.municipio;
-      }
-      const iva =
-        !responsedata.ivaPorc || !responsedata.totalSinIva
-          ? ""
-          : `${(responsedata.totalSinIva * responsedata.ivaPorc) / 100}`;
-      const rete =
-        !responsedata.retePorc || !responsedata.totalSinIva
-          ? ""
-          : `${(responsedata.totalSinIva * responsedata.retePorc) / 100}`;
-      setResponsedata({
-        ...responsedata,
-        retePorc: response.data.porcentaje_rete,
-        ivaPorc: response.data.porcentaje_iva,
-        nit: response.data.nit,
-        numFact: response.data.numFact,
-        doc: response.data.doc,
-        total: response.data.total,
-        totalSinIva: response.data.totalSinIva,
-        nombre: user_name.normalize("NFD").replace(/[\u0300-\u036f]/g, ""),
-        razon_social: response.data.razon_social, //todo revisar y poner en razon social
-        iva: response.data.iva,
-        rete: response.data.rete,
-        fecha: response.data.fecha,
-        Tipo_Documento: response.data.Tipo_Documento,
-        ipc: response.data.ipc,
-        municipio,
-        codepostal,
-        // Descripcion,
-        ica: response.data.ica,
-        NumFactura: response.data.NumFactura,
-        Direccion: response.data.Direccion,
-        OrdenCompra: response.data.OrdenCompra,
-        icui: response.data.icui,
-        concepto: response.data.concepto,
       });
-      // console.log(responsedata);
-      setFillData(true);
-      setIsLoading(false);
 
-  }
+      if (response.status === 200) {
+        let municipio = "";
+        let codepostal = "";
+        if (
+          response.data.codepostal === undefined ||
+          response.data.codepostal === undefined
+        ) {
+          codepostal = "";
+        } else {
+          codepostal = response.data.codepostal;
+        }
+        if (
+          response.data.municipio === undefined ||
+          response.data.municipio === undefined
+        ) {
+          municipio = "";
+        } else {
+          municipio = response.data.municipio;
+        }
+        const iva =
+          !responsedata.ivaPorc || !responsedata.totalSinIva
+            ? ""
+            : `${(responsedata.totalSinIva * responsedata.ivaPorc) / 100}`;
+        const rete =
+          !responsedata.retePorc || !responsedata.totalSinIva
+            ? ""
+            : `${(responsedata.totalSinIva * responsedata.retePorc) / 100}`;
+        setResponsedata({
+          ...responsedata,
+          retePorc: response.data.porcentaje_rete,
+          ivaPorc: response.data.porcentaje_iva,
+          nit: response.data.nit,
+          numFact: response.data.numFact,
+          doc: response.data.doc,
+          total: response.data.total,
+          totalSinIva: response.data.totalSinIva,
+          nombre: user_name.normalize("NFD").replace(/[\u0300-\u036f]/g, ""),
+          razon_social: response.data.razon_social, //todo revisar y poner en razon social
+          iva: response.data.iva,
+          rete: response.data.rete,
+          fecha: response.data.fecha,
+          Tipo_Documento: response.data.Tipo_Documento,
+          ipc: response.data.ipc,
+          municipio,
+          codepostal,
+          // Descripcion,
+          ica: response.data.ica,
+          NumFactura: response.data.NumFactura,
+          Direccion: response.data.Direccion,
+          OrdenCompra: response.data.OrdenCompra,
+          icui: response.data.icui,
+          concepto: response.data.concepto,
+        });
+        // console.log(responsedata);
+        setFillData(true);
+        setIsLoading(false);
+      }
 
-  if (response.data === "Error al procesar con IA") {
-    Swal({
-      title: "NO SE PUDO ANALIZAR LA INFORMACIÓN",
-      text: "Por favor, vuelva a escanear el documento.",
-      icon: "warning",
-      buttons: "Aceptar",
-    }).then((confirmed) => {
-      if (confirmed) {
-        setFillData(false);
+      if (response.data === "Error al procesar con IA") {
+        Swal({
+          title: "NO SE PUDO ANALIZAR LA INFORMACIÓN",
+          text: "Por favor, vuelva a escanear el documento.",
+          icon: "warning",
+          buttons: "Aceptar",
+        }).then((confirmed) => {
+          if (confirmed) {
+            setFillData(false);
+            setIsLoading(false);
+            handlerCancel();
+            handlerCancel1();
+            handlerCancel2();
+          }
+        });
+      }
+    } catch (error) {
+      // console.error(error); // imprime el error completo para depuración
+
+      // puedes leer el status con seguridad así:
+      const status = error.response?.status;
+
+      if (status === 500) {
+        Swal({
+          title: "NO SE PUDO ANALIZAR LA INFORMACIÓN",
+          text: "Porfavor, vuelva a escanear el documento.",
+          icon: "warning",
+          buttons: "Aceptar",
+        });
+        setFillData(true);
         setIsLoading(false);
         handlerCancel();
         handlerCancel1();
         handlerCancel2();
-      }})
-    
+      } else {
+        Swal({
+          title: "NO SE PUDO ANALIZAR LA INFORMACIÓN",
+          text: "Por favor, vuelva a escanear el documento.",
+          icon: "warning",
+          buttons: "Aceptar",
+        });
+        setFillData(true);
+        setIsLoading(false);
+        handlerCancel();
+        handlerCancel1();
+        handlerCancel2();
+      }
     }
-
-} catch (error) {
-  // console.error(error); // imprime el error completo para depuración
-
-  // puedes leer el status con seguridad así:
-  const status = error.response?.status;
-
-  if (status === 500) {
-    Swal({
-      title: "NO SE PUDO ANALIZAR LA INFORMACIÓN",
-      text: "Porfavor, vuelva a escanear el documento.",
-      icon: "warning",
-      buttons: "Aceptar",
-    });
-    setFillData(true);
-setIsLoading(false);
-handlerCancel()
-handlerCancel1()
-handlerCancel2()
-  } else {
-    Swal({
-      title: "NO SE PUDO ANALIZAR LA INFORMACIÓN",
-      text: "Por favor, vuelva a escanear el documento.",
-      icon: "warning",
-      buttons: "Aceptar",
-    });
-    setFillData(true);
-setIsLoading(false);
-handlerCancel()
-handlerCancel1()
-handlerCancel2()
-  }
-}
-
-
-    
   };
 
   const sendData = async (data) => {
     setIsLoading(true);
-   
-    
+
     const formData = new FormData();
 
     const user_name = localStorage.getItem("name");
@@ -638,7 +623,9 @@ handlerCancel2()
         .replace(/[\u0300-\u036f]/g, ""),
 
       Fecha: formatDate, //
-      FechaComprobante: responsedata.fecha? responsedata.fecha + " 00:00:00.000" : formatDate
+      FechaComprobante: responsedata.fecha
+        ? responsedata.fecha + " 00:00:00.000"
+        : formatDate
         ? responsedata.fecha.split("/").join("-")
         : "", //
       ValorComprobante: responsedata.total ? responsedata.total : 0, //
@@ -773,7 +760,22 @@ handlerCancel2()
 
   const handlerSend = (e) => {
     e.preventDefault();
-    conetionMicrosoft();
+    if (nomProyect.trim() === "" ){
+    Swal({
+          title: `CONFIRMACION DE ENVIO DE PROYECTO`,
+          text: `Por favor, confirme que desea enviar el documento sin proyecto relacionado.`,
+          icon: "info",
+          buttons: ["SI", "NO"],
+        }).then(async (res) => {
+          if (!res) {
+             conetionMicrosoft();
+          }else{
+            return;
+          }
+        })}else{
+          conetionMicrosoft();
+        }
+  
   };
 
   const validaEnter = (e) => {
@@ -832,10 +834,9 @@ handlerCancel2()
   };
   return (
     <div className="mx-auto md:px-24 p-2 xl:px-40 w-full ">
-      
       <div className="bg-azulCreame peer block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none mb-5">
         <div className="w-full flex flex-row">
-          <div className="w-full flex flex-row justify-center items-center">
+          <div className="w-full flex flex-row justify-between items-between">
             {/* <div className="inputIntLeftDrop">
               {justSelected ? (
                 <div className="block text-white">
@@ -893,12 +894,12 @@ handlerCancel2()
               )}
             </div>
 
-            {/* <input
+            <input
               className="w-3/6"
               placeholder="$000.000.00"
               value={prepayment ? prepayment.Valor.toString() : ""}
               onChange={handlerAnticipo}
-            /> */}
+            />
           </div>
         </div>
       </div>
@@ -1829,17 +1830,18 @@ handlerCancel2()
           >
             Enviar
           </button> */}
+
           <button
-  type="submit"
-  className={`mt-10 w-full inline-block rounded ${
-    imageLoaded && nomProyect.trim() !== ""
-      ? "bg-naranjaCreame hover:bg-azulCreame hover:border-turquesaCreame hover:border  hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:bg-turquesaCreame focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:outline-none focus:ring-0 active:bg-info-700 active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)]"
-      : "opacity-50 bg-darkGrayCreame cursor-not-allowed"
-  } px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#54b4d3] transition duration-150 ease-in-out md:w-1/2`}
-  disabled={!imageLoaded || nomProyect.trim() === ""}
->
-  Enviar
-</button>
+            type="submit"
+            className={`mt-10 w-full inline-block rounded ${
+              imageLoaded 
+                ? "bg-naranjaCreame hover:bg-azulCreame hover:border-turquesaCreame hover:border  hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:bg-turquesaCreame focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:outline-none focus:ring-0 active:bg-info-700 active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)]"
+                : "opacity-50 bg-darkGrayCreame cursor-not-allowed"
+            } px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#54b4d3] transition duration-150 ease-in-out md:w-1/2`}
+            disabled={!imageLoaded}
+          >
+            Enviar
+          </button>
         </div>
       </form>
       {isLoading ? (
