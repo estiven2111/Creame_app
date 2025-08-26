@@ -1041,7 +1041,7 @@ handlerCancel2()
                       </div>
                     </div>
                   ) : (
-                    <div className="flex justify-center items-center w-full ">
+                    <div className="flex justify-center items-center w-full">
                       <div
                         className="flex flex-col items-center justify-center border-2 border-gray-300 rounded-lg lg:m-0 w-full h-[20vh] lg:h-[30vh] md:h-[20vh] sm:h-[50vh]"
                         onDragOver={(e) => e.preventDefault()}
