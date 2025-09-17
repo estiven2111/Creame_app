@@ -637,6 +637,7 @@ const Gastos = () => {
         : "", //
       NumeroComprobante: prepayment ? prepayment.NumeroComprobante : "", //
       // CCostos: prepayment ? prepayment.IdCentroCostos.toString() : "", //
+      tarjeta: prepayment ? prepayment.tarjeta : "", //
       idAnticipo: prepayment ? parseInt(prepayment.IdResponsable) : "", //
       ipc: responsedata.ipc ? responsedata.ipc : 0, //
       Sub_Total: responsedata.totalSinIva
