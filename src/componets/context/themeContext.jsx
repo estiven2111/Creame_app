@@ -44,6 +44,11 @@ export const ThemeProvider = ({children}) => {
         setAnticipos(input)
     }
 
+    const [tipoTransaccionState, setTipoTransaccionState] = useState([]);
+    const tipoTransaccion = (input) => {
+        setTipoTransaccionState(input)
+    }
+
     const [fechasIndicadores, setFechasIndicadores] = useState([])
     const todasLasFechas = (input) => {
         setFechasIndicadores(input)
@@ -81,7 +86,7 @@ export const ThemeProvider = ({children}) => {
 
 
     return(
-        <ThemeContext.Provider value={{finalValue, inputValue, startTime, persistStartTime, endTime, persistEndTime, resetInputValue, infoProject, setProjectData, searchText, globalSearch, showOptions, globalOptions, anticipos, todosAnticipos, fechasIndicadores, todasLasFechas, finishedUpdate, finishedHandler, indice, setindexProject, response, setNewResponse, doc, setDocument, proyectos, setAllProjects, isAuthenticated, setAuthenticated }}>
+        <ThemeContext.Provider value={{finalValue, inputValue, startTime, persistStartTime, endTime, persistEndTime, resetInputValue, infoProject, setProjectData, searchText, globalSearch, showOptions, globalOptions, anticipos, todosAnticipos,tipoTransaccionState,tipoTransaccion, fechasIndicadores, todasLasFechas, finishedUpdate, finishedHandler, indice, setindexProject, response, setNewResponse, doc, setDocument, proyectos, setAllProjects, isAuthenticated, setAuthenticated }}>
             {children}
         </ThemeContext.Provider>
     )

@@ -27,7 +27,7 @@ let latitude = 0;
 let longitude = 0;
 let hasLogicExecuted = false;
 const Gastos = () => {
-  const { infoProject, anticipos, inputValue, topSecret, searchText } =
+  const { infoProject, anticipos, inputValue, topSecret,tipoTransaccionState, searchText } =
     useContext(ThemeContext);
   const [prepayment, setPrepayment] = useState("");
   const [justSelected, SetJustSelected] = useState(false);
@@ -629,7 +629,7 @@ const Gastos = () => {
         ? responsedata.fecha.split("/").join("-")
         : "", //
       ValorComprobante: responsedata.total ? responsedata.total : 0, //
-      NitComprobante: responsedata.nit ? responsedata.nit : "", //
+      NitComprobante: responsedata.nit ? responsedata.nit.split("-")[0] : "", //
       NombreComprobante: responsedata.concepto ? responsedata.concepto : "", //
       CiudadComprobante: responsedata.municipio ? responsedata.municipio : "", //
       DireccionComprobante: responsedata.Direccion
@@ -637,8 +637,8 @@ const Gastos = () => {
         : "", //
       NumeroComprobante: prepayment ? prepayment.NumeroComprobante : "", //
       // CCostos: prepayment ? prepayment.IdCentroCostos.toString() : "", //
-      tarjeta: prepayment ? prepayment.tarjeta : "", //
-      idAnticipo: prepayment ? parseInt(prepayment.IdResponsable) : "", //
+      tarjeta: prepayment.tarjeta ? prepayment.tarjeta : "", //
+      idAnticipo: prepayment.IdResponsable ? parseInt(prepayment.IdResponsable) : "", //
       ipc: responsedata.ipc ? responsedata.ipc : 0, //
       Sub_Total: responsedata.totalSinIva
         ? responsedata.totalSinIva

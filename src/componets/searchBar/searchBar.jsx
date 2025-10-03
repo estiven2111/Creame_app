@@ -128,6 +128,7 @@ const SearchBar = () => {
     showOptions,
     globalOptions,
     todosAnticipos,
+    tipoTransaccion,
     todasLasFechas,
     setProjectData,
     response,
@@ -146,6 +147,8 @@ const SearchBar = () => {
     const constulta = async () => {
        const docEmpleado = localStorage.getItem('doc_empleado');
        const anticipo = await axios.post(`/proyect/anticipo`, {  doc: docEmpleado });
+      //  const tipoTransac = await axios.get(`/proyect/tipoTransaccion`);
+      //  tipoTransaccion(tipoTransac.data);
        todosAnticipos(anticipo.data);
       if (!proyectos.length) {
         if (localStorage.getItem("email")) {
