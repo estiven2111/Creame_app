@@ -27,13 +27,24 @@ let latitude = 0;
 let longitude = 0;
 let hasLogicExecuted = false;
 const Gastos = () => {
-  const { infoProject, anticipos, inputValue, topSecret,tipoTransaccionState, searchText } =
-    useContext(ThemeContext);
+  const {
+    infoProject,
+    anticipos,
+    inputValue,
+    topSecret,
+    tipoTransaccionState,
+    searchText,
+  } = useContext(ThemeContext);
   const [prepayment, setPrepayment] = useState("");
+  const [prepaymentTipo, setPrepaymentTipo] = useState("");
   const [justSelected, SetJustSelected] = useState(false);
+  const [justSelectedTipo, SetJustSelectedTipo] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpenTipo, setIsOpenTipo] = useState(false);
   const [totalAnt, setTotalAnt] = useState([]);
+  const [tipotransaccion, setTipotransaccion] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
+  const [selectedOptionsTipo, setSelectedOptionsTipo] = useState([]);
   const spinValue = useRef(0);
   const [isLoading, setIsLoading] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -62,46 +73,15 @@ const Gastos = () => {
     ActulizarOptions();
   }, [anticipos]);
 
-  // const toggleDropdown = () => {
-  //   SetJustSelected(false);
-  //   setIsOpen(!isOpen);
-  // };
-  // const handleOptionSelect = (option) => {
-  //   if (!selectedOptions.includes(option)) {
-  //     setSelectedOptions([option]);
-  //   }
-  //   setIsOpen(false);
-  //   SetJustSelected(true);
-  // };
 
-  // const renderOptions = () => {
-  //   return totalAnt.map((option, index) => (
-  //     <button
-  //       className="flex m-1 px-1 cursor-pointer bg-white rounded"
-  //       key={index}
-  //       onClick={() => {
-  //         handleOptionSelect(
-  //           option.sku + option.DetalleConcepto + option.NumeroComprobante
-  //         );
-  //         setPrepayment(option);
-  //       }}
-  //     >
-  //       <span
-  //         style={{
-  //           overflow: "hidden",
-  //           whiteSpace: "nowrap",
-  //           textOverflow: "ellipsis",
-  //         }}
-  //       >
-  //         {option.sku +
-  //           " " +
-  //           option.DetalleConcepto +
-  //           " " +
-  //           option.NumeroComprobante}
-  //       </span>
-  //     </button>
-  //   ));
-  // };
+  useEffect(() => {
+    const ActulizarOptionstipo = () => {
+      if (tipoTransaccionState) {
+        setTipotransaccion(tipoTransaccionState);
+      }
+    };
+    ActulizarOptionstipo();
+  }, [tipoTransaccionState]);
 
   const toggleDropdown = () => {
     SetJustSelected(false);
@@ -138,29 +118,6 @@ const Gastos = () => {
         >
           <span className="truncate">Seleccionar opciones</span>
         </button>
-
-        {/* Opciones reales */}
-        {/* {totalAnt.map((option, index) => {
-          const label = `${option.sku} ${option.DetalleConcepto} ${searchText} ${option.NumeroComprobante}`;
-          return (
-            <button
-              className="flex m-1 px-1 cursor-pointer bg-white rounded hover:bg-gray-100"
-              key={index}
-              onClick={() => handleOptionSelect(option)}
-            >
-              <span
-                style={{
-                  overflow: "hidden",
-                  whiteSpace: "nowrap",
-                  textOverflow: "ellipsis",
-                }}
-              >
-               
-              </span>
-            </button>
-          );
-        })} */}
-
         {totalAnt.map((option, index) => {
           const nonp = nomProyect; // <-- asegúrate que esto tiene valor
           const label = ` ${option.Observaciones}`;
@@ -194,15 +151,74 @@ const Gastos = () => {
       : "Seleccionar opciones";
   };
 
-  // const renderSelectedOptions = () => {
-  //   return (
-  //     <div>
-  //       {selectedOptions.map((option, index) => {
-  //         return <p key={index}>{option}</p>;
-  //       })}
-  //     </div>
-  //   );
-  // };
+  const renderOptionsTipoTransaccion = () => {
+    return (
+      <>
+        {/* Opción de limpiar selección */}
+        
+        <button
+          className="flex m-1 px-1 cursor-pointer bg-white rounded hover:bg-gray-100"
+          onClick={() => {
+            setSelectedOptionsTipo([]);
+            setPrepaymentTipo(null);
+            SetJustSelectedTipo(false);
+            setIsOpenTipo(false);
+          }}
+        >
+          <span className="truncate">Tipo de transaccion</span>
+        </button>
+        {tipotransaccion.transacciones.map((option, index) => {
+          // const nonp = nomProyect; // <-- asegúrate que esto tiene valor
+          const label = ` ${option.tipo}`;
+          // const label = `${totalAnt[0].IdCentroCostos}-${option.sku} ${option.DetalleConcepto} ${nonp} ${option.NumeroComprobante}`;
+
+          return (
+            <button
+              className="flex m-1 px-1 cursor-pointer bg-white rounded hover:bg-gray-100"
+              key={index}
+              onClick={() => handleOptionSelectTipo(option)}
+            >
+              <span
+                style={{
+                  overflow: "hidden",
+                  whiteSpace: "nowrap",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                {label}
+              </span>
+            </button>
+          );
+        })}
+      </>
+    );
+  };
+
+  const handleOptionSelectTipo = (option) => {
+    const value = ` ${option.tipo}`;
+    // const value = `${totalAnt[0].IdCentroCostos}-${optionObj.sku} ${optionObj.DetalleConcepto} ${nomProyect} ${optionObj.NumeroComprobante}`;
+
+    if (!selectedOptionsTipo.includes(value)) {
+      setSelectedOptionsTipo([value]);
+    } else {
+      setSelectedOptionsTipo([]);
+    }
+
+    setPrepaymentTipo(option);
+    setIsOpenTipo(false);
+    SetJustSelectedTipo(true);
+  };
+
+  const toggleDropdownTipo = () => {
+    SetJustSelectedTipo(false);
+    setIsOpenTipo((prev) => !prev);
+  };
+
+  const renderSelectedOptionstipo = () => {
+    return selectedOptionsTipo.length > 0
+      ? selectedOptionsTipo[0]
+      : "Tipo de transaccion";
+  };
 
   useEffect(() => {
     initTE({ Input });
@@ -249,26 +265,6 @@ const Gastos = () => {
     setImageSrcOTRO(uri);
   };
 
-  // const handleFileChange = (e) => {
-  //   e.preventDefault();
-  //   setImageLoaded(true);
-  //   const files = e.target.files;
-  //   if (files && files.length > 0) {
-  //     const file = files[0];
-  //     imagen = file;
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(file);
-  //     reader.onload = () => {
-  //       if (imagen.name.split(".")[1] === "pdf") {
-  //         setImageSrc(logoPDF);
-  //       } else {
-  //         setImageSrc(reader.result);
-  //       }
-  //     };
-  //   }
-  //   setIsLoading(false);
-  // };
-
   const handleFileChange = (e) => {
     const files = e.target.files;
     setImageLoaded(true);
@@ -288,27 +284,6 @@ const Gastos = () => {
       };
     }
   };
-
-  // const handleFileChange1 = (e) => {
-  //   e.preventDefault();
-  //   setIsLoading(true);
-  //   const files = e.target.files;
-  //   if (files && files.length > 0) {
-  //     const file = files[0];
-  //     imagenRUT = file;
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(file);
-  //     reader.onload = () => {
-  //       if (imagenRUT.name.split(".")[1] === "pdf") {
-  //         setImageSrcRUT(logoPDF);
-  //       } else {
-  //         setImageSrcRUT(reader.result);
-  //       }
-  //     };
-  //   }
-  //   setIsLoading(false);
-  // };
-
   const inputRUTRef = useRef(null); // input oculto
 
   const handleAlertAndOpenInput = () => {
@@ -343,26 +318,6 @@ const Gastos = () => {
       };
     }
   };
-
-  //   const handleFileChange2 = (e) => {
-  //   e.preventDefault();
-  //   setIsLoading(true);
-  //   const files = e.target.files;
-  //   if (files && files.length > 0) {
-  //     const file = files[0];
-  //     imagenOTRO = file;
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(file);
-  //     reader.onload = () => {
-  //       if (imagenOTRO.name.split(".")[1] === "pdf") {
-  //         setImageSrcOTRO(logoPDF);
-  //       } else {
-  //         setImageSrcOTRO(reader.result);
-  //       }
-  //     };
-  //   }
-  //   setIsLoading(false);
-  // };
 
   const handleFileChange2 = (e) => {
     const files = e.target.files;
@@ -638,7 +593,9 @@ const Gastos = () => {
       NumeroComprobante: prepayment ? prepayment.NumeroComprobante : "", //
       // CCostos: prepayment ? prepayment.IdCentroCostos.toString() : "", //
       tarjeta: prepayment.tarjeta ? prepayment.tarjeta : "", //
-      idAnticipo: prepayment.IdResponsable ? parseInt(prepayment.IdResponsable) : "", //
+      idAnticipo: prepayment.IdResponsable
+        ? parseInt(prepayment.IdResponsable)
+        : "", //
       ipc: responsedata.ipc ? responsedata.ipc : 0, //
       Sub_Total: responsedata.totalSinIva
         ? responsedata.totalSinIva
@@ -654,6 +611,7 @@ const Gastos = () => {
       OrdenCompra: responsedata.OrdenCompra ? responsedata.OrdenCompra : "",
       concepto: responsedata.concepto ? responsedata.concepto : "",
       CodigoPostal: responsedata.codepostal ? responsedata.codepostal : "",
+      tipoTransaccion: prepaymentTipo.id ? prepaymentTipo.id : "", //
     };
 
     formData.append(
@@ -748,6 +706,11 @@ const Gastos = () => {
     imagen = "";
     setFillData(false);
     setImageSrc(null);
+    setPrepayment("");
+    setPrepaymentTipo("");
+    setSelectedOptions([]);
+    setSelectedOptionsTipo([]);
+    
   };
 
   const handlerCancel1 = () => {
@@ -761,22 +724,22 @@ const Gastos = () => {
 
   const handlerSend = (e) => {
     e.preventDefault();
-    if (nomProyect.trim() === "" ){
-    Swal({
-          title: `CONFIRMACION DE ENVIO DE PROYECTO`,
-          text: `Por favor, confirme que desea enviar el documento sin proyecto relacionado.`,
-          icon: "info",
-          buttons: ["SI", "NO"],
-        }).then(async (res) => {
-          if (!res) {
-             conetionMicrosoft();
-          }else{
-            return;
-          }
-        })}else{
+    if (nomProyect.trim() === "") {
+      Swal({
+        title: `CONFIRMACION DE ENVIO DE PROYECTO`,
+        text: `Por favor, confirme que desea enviar el documento sin proyecto relacionado.`,
+        icon: "info",
+        buttons: ["SI", "NO"],
+      }).then(async (res) => {
+        if (!res) {
           conetionMicrosoft();
+        } else {
+          return;
         }
-  
+      });
+    } else {
+      conetionMicrosoft();
+    }
   };
 
   const validaEnter = (e) => {
@@ -838,26 +801,6 @@ const Gastos = () => {
       <div className="bg-azulCreame peer block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none mb-5">
         <div className="w-full flex flex-row">
           <div className="w-full flex flex-row justify-between items-between">
-            {/* <div className="inputIntLeftDrop">
-              {justSelected ? (
-                <div className="block text-white">
-                  <button onClick={toggleDropdown}>
-                    <span>{renderSelectedOptions()}</span>
-                  </button>
-                </div>
-              ) : (
-                <div className="blockNoSelected text-white">
-                  <button onClick={toggleDropdown}>
-                    <span>Seleccionar opciones</span>
-                  </button>
-                </div>
-              )}
-              {isOpen && (
-                <div className="options bg-grayCreame absolute rounded">
-                  {renderOptions()}
-                </div>
-              )}
-            </div> */}
             <div className="inputIntLeftDrop relative">
               {/* Botón principal */}
               <div
@@ -904,6 +847,53 @@ const Gastos = () => {
           </div>
         </div>
       </div>
+
+      {/* {console.log(justSelectedTipo)}
+      <div className="bg-azulCreame peer block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none mb-5">
+        <div className="w-full flex flex-row">
+          <div className="w-full flex flex-row justify-between items-between">
+            <div className="inputIntLeftDrop relative">
+
+              <div
+                className={
+                  justSelectedTipo
+                    ? "block text-white"
+                    : "blockNoSelected text-white"
+                }
+              >
+                <button
+                  onClick={toggleDropdownTipo}
+                  className="flex items-center"
+                >
+                  <svg
+                    className="w-4 h-4 mr-2 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+
+                  <span className="text-2xl">
+                    {renderSelectedOptionstipo()}
+                  </span>
+                </button>
+              </div>
+
+              {isOpenTipo && (
+                <div className="options bg-grayCreame absolute rounded z-10 shadow-md mt-1 max-h-60 overflow-y-auto text-2xl">
+                  {renderOptionsTipoTransaccion()}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div> */}
 
       <form className="" onSubmit={handlerSend}>
         {/* <form className="" onSubmit={sendData}> */}
@@ -1197,6 +1187,7 @@ const Gastos = () => {
                   : "pointer-events-none opacity-50 bg-darkGrayCreame"
               }`}
             > */}
+
             <div
               className={`grid grid-cols-2 gap-4 rounded-lg mx-auto w-full border-2 border-gray-300 p-6 bg-azulCreame   ${
                 imageLoaded
@@ -1204,8 +1195,50 @@ const Gastos = () => {
                   : "pointer-events-none opacity-50 bg-darkGrayCreame"
               }`}
             >
+              {/* Tipo Transaccion */}
+
+              <div className="relative mb-3 w-full" data-te-input-wrapper-init>
+                <input type="hidden" />
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={toggleDropdownTipo}
+                    className={`bg-white peer block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear shadow-lg flex items-center justify-between ${
+                      justSelectedTipo
+                        ? "peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100"
+                        : ""
+                    }`}
+                  >
+                    <span className="truncate">
+                      {renderSelectedOptionstipo()}
+                    </span>
+                    <svg
+                      className={`w-4 h-4 ml-2 transform transition-transform duration-200 ${
+                        isOpenTipo ? "rotate-180" : "rotate-0"
+                      }`}
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </button>
+
+                  {isOpenTipo && (
+                    <div className="absolute z-10 mt-1 w-full bg-white rounded shadow-lg max-h-60 overflow-y-auto border border-gray-300">
+                      {renderOptionsTipoTransaccion()}
+                    </div>
+                  )}
+                </div>
+              </div>
+
               {/* Tipo_Documento */}
-              <div className="col-span-1 flex items-center justify-center">
+              {/* <div className="col-span-1 flex items-center justify-center">
                 <div
                   className="relative mb-3 w-full"
                   data-te-input-wrapper-init
@@ -1237,7 +1270,7 @@ const Gastos = () => {
                     Tipo Documento
                   </label>
                 </div>
-              </div>
+              </div> */}
 
               {/* NUMERO FACTURA */}
               <div className="col-span-1 flex items-center justify-center">
@@ -1835,7 +1868,7 @@ const Gastos = () => {
           <button
             type="submit"
             className={`mt-10 w-full inline-block rounded ${
-              imageLoaded 
+              imageLoaded
                 ? "bg-naranjaCreame hover:bg-azulCreame hover:border-turquesaCreame hover:border  hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:bg-turquesaCreame focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:outline-none focus:ring-0 active:bg-info-700 active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)]"
                 : "opacity-50 bg-darkGrayCreame cursor-not-allowed"
             } px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#54b4d3] transition duration-150 ease-in-out md:w-1/2`}
