@@ -819,7 +819,9 @@ const Gastos = () => {
 
   const handlerSend = (e) => {
     e.preventDefault();
-    if (prepaymentProyecto.SKU === undefined || prepaymentProyecto.SKU === "") {
+    console.log(prepaymentProyecto)
+  
+    if (prepaymentProyecto?.SKU === undefined || prepaymentProyecto=== null) {
       Swal({
         title: `CONFIRMACION DE ENVIO DE PROYECTO`,
         text: `Por favor, confirme que desea enviar el documento sin proyecto relacionado.`,
