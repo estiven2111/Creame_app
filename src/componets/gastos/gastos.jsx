@@ -19,7 +19,7 @@ import logo from "../../assets/img/icon.png";
 import { setCanvas } from "chart/lib";
 import { useLocation } from "react-router-dom";
 import logoPDF from "../../assets/img/logoPDF.png";
-import SearchBarjs from "../searchBar/searchBarjs";
+import useLlenarListas from "../searchBar/searchBarjs";
 // <input type="file" capture="camera" />
 let imagen = null;
 let imagenRUT = null;
@@ -60,7 +60,7 @@ const Gastos = () => {
   const location = useLocation();
   localStorage.setItem("ruta", location.pathname);
 
-  SearchBarjs();
+  useLlenarListas();
   useEffect(() => {
     if (isLoading) {
       const spinAnimation = setInterval(() => {
