@@ -1,95 +1,134 @@
-import React, {createContext, useState} from "react";
+import React, { createContext, useState } from "react";
 
-export const ThemeContext = createContext({})
+export const ThemeContext = createContext({});
 
-export const ThemeProvider = ({children}) => {
+export const ThemeProvider = ({ children }) => {
+  const [inputValue, setInputValue] = useState("");
+  const finalValue = (input) => {
+    setInputValue(input);
+  };
 
-    const [inputValue, setInputValue] = useState("")
-    const finalValue = (input) => {
-        setInputValue(input)
-    }
+  const resetInputValue = () => {
+    setInputValue("");
+  };
 
-    const resetInputValue = () => {
-        setInputValue("")
-    }
-    
-    const [startTime, setStartTime] = useState("")
-    const [endTime, setEndTime] = useState("")
-    const persistStartTime = (input) => {
-        setStartTime(input)
-    }
-    const persistEndTime = (input) => {
-        setEndTime(input)
-    }
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
+  const persistStartTime = (input) => {
+    setStartTime(input);
+  };
+  const persistEndTime = (input) => {
+    setEndTime(input);
+  };
 
-    const [infoProject, setInfoProject] = useState({})
-    const setProjectData = (input) => {
-        setInfoProject({
-            ...infoProject,
-            input
-        })
-    }
+  const [infoProject, setInfoProject] = useState({});
+  const setProjectData = (input) => {
+    setInfoProject({
+      ...infoProject,
+      input,
+    });
+  };
 
-    const [searchText, setSearchText] = useState('');
-    const globalSearch = (input) => {
-        setSearchText(input)
-    }
-    const [showOptions, setShowOptions] = useState(false);
-    const globalOptions = (input) => {
-        setShowOptions(input)
-    }
+  const [searchText, setSearchText] = useState("");
+  const globalSearch = (input) => {
+    setSearchText(input);
+  };
+  const [showOptions, setShowOptions] = useState(false);
+  const globalOptions = (input) => {
+    setShowOptions(input);
+  };
 
-    const [anticipos, setAnticipos] = useState([]);
-    const todosAnticipos = (input) => {
-        setAnticipos(input)
-    }
+  const [anticipos, setAnticipos] = useState([]);
+  const todosAnticipos = (input) => {
+    setAnticipos(input);
+  };
 
-    const [tipoTransaccionState, setTipoTransaccionState] = useState([]);
-    const tipoTransaccion = (input) => {
-        setTipoTransaccionState(input)
-    }
+  const [tipoTransaccionState, setTipoTransaccionState] = useState([]);
+  const tipoTransaccion = (input) => {
+    setTipoTransaccionState(input);
+  };
 
-    const [fechasIndicadores, setFechasIndicadores] = useState([])
-    const todasLasFechas = (input) => {
-        setFechasIndicadores(input)
-    }
+  const [ProyectosGastosState, setProyectosGastosState] = useState([]);
+  const proyectosGastos = (input) => {
+    setProyectosGastosState(input);
+  };
 
-    const [finishedUpdate, setFinishedUpdate] = useState(false);
-    const finishedHandler = (input) => {
-        setFinishedUpdate(input)
-    }
+  const [fechasIndicadores, setFechasIndicadores] = useState([]);
+  const todasLasFechas = (input) => {
+    setFechasIndicadores(input);
+  };
 
-    const [indice, setIndice] = useState(false)
-    const setindexProject = (input) => {
-        setIndice(input)
-    }
+  const [finishedUpdate, setFinishedUpdate] = useState(false);
+  const finishedHandler = (input) => {
+    setFinishedUpdate(input);
+  };
 
-    const [response, setResponse] = useState([]);
-    const setNewResponse = (input) => {
-        setResponse(input)
-    }
+  const [indice, setIndice] = useState(false);
+  const setindexProject = (input) => {
+    setIndice(input);
+  };
 
-    const [doc, setDoc] = useState('');
-    const setDocument = (input) => {
-        setDoc(input)
-    }
+  const [response, setResponse] = useState([]);
+  const setNewResponse = (input) => {
+    setResponse(input);
+  };
 
-    const [proyectos, setProyectos] = useState([])
-    const setAllProjects = (input) => {
-        setProyectos(input)
-    }
+  const [doc, setDoc] = useState("");
+  const setDocument = (input) => {
+    setDoc(input);
+  };
 
-    const [isAuthenticated, setIsAuthenticated] = useState(false)
-    const setAuthenticated = (input) => {
-        setIsAuthenticated(input)
-    }
+  const [proyectos, setProyectos] = useState([]);
+  const setAllProjects = (input) => {
+    setProyectos(input);
+  };
 
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const setAuthenticated = (input) => {
+    setIsAuthenticated(input);
+  };
 
-    return(
-        <ThemeContext.Provider value={{finalValue, inputValue, startTime, persistStartTime, endTime, persistEndTime, resetInputValue, infoProject, setProjectData, searchText, globalSearch, showOptions, globalOptions, anticipos, todosAnticipos,tipoTransaccionState,tipoTransaccion, fechasIndicadores, todasLasFechas, finishedUpdate, finishedHandler, indice, setindexProject, response, setNewResponse, doc, setDocument, proyectos, setAllProjects, isAuthenticated, setAuthenticated }}>
-            {children}
-        </ThemeContext.Provider>
-    )
-}
+  return (
+    <ThemeContext.Provider
+      value={{
+        finalValue,
+        inputValue,
+        startTime,
+        persistStartTime,
+        endTime,
+        persistEndTime,
+        resetInputValue,
+        infoProject,
+        setProjectData,
+        searchText,
+        globalSearch,
+        showOptions,
+        globalOptions,
+        anticipos,
+        todosAnticipos,
+        tipoTransaccionState,
+        tipoTransaccion,
+        fechasIndicadores,
+        todasLasFechas,
+        finishedUpdate,
+        finishedHandler,
+        indice,
+        setindexProject,
+        response,
+        setNewResponse,
+        doc,
+        setDocument,
+        proyectos,
+        setAllProjects,
+        isAuthenticated,
+        setAuthenticated,
+        ProyectosGastosState,
+        proyectosGastos
+      }}
+    >
+      {children}
+    </ThemeContext.Provider>
+  );
+};
 
 // export default ThemeProvider

@@ -121,9 +121,9 @@ function NavBar() {
            
            
         </div>
-      <div className="flex justify-center">
+      {/* <div className="flex justify-center">
         <SearchBar/>
-      </div>
+      </div> */}
     </div>
   );
 }

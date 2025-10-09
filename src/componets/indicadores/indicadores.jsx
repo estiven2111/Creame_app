@@ -6,6 +6,7 @@ import { ThemeContext} from "../context/themeContext"
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
 import axios from 'axios';
+import SearchBar from '../searchBar/searchBar';
 import { useLocation } from 'react-router-dom';
 let grafica = {
   dis:35,
@@ -192,6 +193,9 @@ var datas = {
 
     return (
       <div className="md:container mx-auto md:px-10">
+       <div className="mt-10 mb-5">
+         <SearchBar/>
+       </div>
         <div className="scroll mb-10 text-center m-10">
           {/* <RangeDatePicker/> */}
           

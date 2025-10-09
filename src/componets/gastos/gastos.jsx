@@ -19,6 +19,7 @@ import logo from "../../assets/img/icon.png";
 import { setCanvas } from "chart/lib";
 import { useLocation } from "react-router-dom";
 import logoPDF from "../../assets/img/logoPDF.png";
+import SearchBarjs from "../searchBar/searchBarjs";
 // <input type="file" capture="camera" />
 let imagen = null;
 let imagenRUT = null;
@@ -33,18 +34,24 @@ const Gastos = () => {
     inputValue,
     topSecret,
     tipoTransaccionState,
+    ProyectosGastosState,
     searchText,
   } = useContext(ThemeContext);
   const [prepayment, setPrepayment] = useState("");
   const [prepaymentTipo, setPrepaymentTipo] = useState("");
+  const [prepaymentProyecto, setPrepaymentProyecto] = useState("");
   const [justSelected, SetJustSelected] = useState(false);
   const [justSelectedTipo, SetJustSelectedTipo] = useState(false);
+  const [justSelectedProyecto, SetJustSelectedProyecto] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenTipo, setIsOpenTipo] = useState(false);
+  const [isOpenProyecto, setIsOpenProyecto] = useState(false);
   const [totalAnt, setTotalAnt] = useState([]);
   const [tipotransaccion, setTipotransaccion] = useState([]);
+  const [proyectoGastos, setProyectoGastos] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [selectedOptionsTipo, setSelectedOptionsTipo] = useState([]);
+  const [selectedOptionsProyecto, setSelectedOptionsProyecto] = useState([]);
   const spinValue = useRef(0);
   const [isLoading, setIsLoading] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -53,6 +60,7 @@ const Gastos = () => {
   const location = useLocation();
   localStorage.setItem("ruta", location.pathname);
 
+  SearchBarjs();
   useEffect(() => {
     if (isLoading) {
       const spinAnimation = setInterval(() => {
@@ -62,6 +70,7 @@ const Gastos = () => {
     }
   }, [isLoading]);
 
+  //? Actualizar lista de anticipos
   useEffect(() => {
     const ActulizarOptions = () => {
       if (anticipos) {
@@ -73,7 +82,7 @@ const Gastos = () => {
     ActulizarOptions();
   }, [anticipos]);
 
-
+  //? Actualizar lista de tipo de transaccion
   useEffect(() => {
     const ActulizarOptionstipo = () => {
       if (tipoTransaccionState) {
@@ -82,6 +91,17 @@ const Gastos = () => {
     };
     ActulizarOptionstipo();
   }, [tipoTransaccionState]);
+
+  //? Actualizar lista de proyectos gastos
+  useEffect(() => {
+    const ActulizarOptionstipo = () => {
+      if (ProyectosGastosState) {
+        setProyectoGastos(ProyectosGastosState);
+      }
+    };
+    ActulizarOptionstipo();
+  }, [ProyectosGastosState]);
+  //TODO LISTA DESPLEGABLE DE ANTICIPOS
 
   const toggleDropdown = () => {
     SetJustSelected(false);
@@ -151,11 +171,13 @@ const Gastos = () => {
       : "Seleccionar opciones";
   };
 
+  //TODO LISTA DESPLEGABLE DE TIPO DE TRANSACCION
+
   const renderOptionsTipoTransaccion = () => {
     return (
       <>
         {/* Opción de limpiar selección */}
-        
+
         <button
           className="flex m-1 px-1 cursor-pointer bg-white rounded hover:bg-gray-100"
           onClick={() => {
@@ -218,6 +240,77 @@ const Gastos = () => {
     return selectedOptionsTipo.length > 0
       ? selectedOptionsTipo[0]
       : "Tipo de transaccion";
+  };
+
+  //TODO LISTA DESPLEGABLE DE PROYECTOS
+
+  const renderOptionsProyecto = () => {
+    return (
+      <>
+        {/* Opción de limpiar selección */}
+
+        <button
+          className="flex m-1 px-1 cursor-pointer bg-white rounded hover:bg-gray-100"
+          onClick={() => {
+            setSelectedOptionsProyecto([]);
+            setPrepaymentProyecto(null);
+            SetJustSelectedProyecto(false);
+            setIsOpenProyecto(false);
+          }}
+        >
+          <span className="truncate">-- SELECCIONAR PROYECTO --</span>
+        </button>
+        {proyectoGastos.ProyectosGastos.map((option, index) => {
+          // const nonp = nomProyect; // <-- asegúrate que esto tiene valor
+          const label = ` ${option.Nombre}`;
+          // const label = `${totalAnt[0].IdCentroCostos}-${option.sku} ${option.DetalleConcepto} ${nonp} ${option.NumeroComprobante}`;
+
+          return (
+            <button
+              className="flex m-1 px-1 cursor-pointer bg-white rounded hover:bg-gray-100"
+              key={index}
+              onClick={() => handleOptionSelectProyecto(option)}
+            >
+              <span
+                style={{
+                  overflow: "hidden",
+                  whiteSpace: "nowrap",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                {label}
+              </span>
+            </button>
+          );
+        })}
+      </>
+    );
+  };
+
+  const handleOptionSelectProyecto = (option) => {
+    const value = ` ${option.Nombre}`;
+    // const value = `${totalAnt[0].IdCentroCostos}-${optionObj.sku} ${optionObj.DetalleConcepto} ${nomProyect} ${optionObj.NumeroComprobante}`;
+
+    if (!selectedOptionsProyecto.includes(value)) {
+      setSelectedOptionsProyecto([value]);
+    } else {
+      setSelectedOptionsProyecto([]);
+    }
+
+    setPrepaymentProyecto(option);
+    setIsOpenProyecto(false);
+    SetJustSelectedProyecto(true);
+  };
+
+  const toggleDropdownProyecto = () => {
+    SetJustSelectedProyecto(false);
+    setIsOpenProyecto((prev) => !prev);
+  };
+
+  const renderSelectedOptionsProyecto = () => {
+    return selectedOptionsProyecto.length > 0
+      ? selectedOptionsProyecto[0]
+      : "-- SELECCIONAR PROYECTO --";
   };
 
   useEffect(() => {
@@ -487,7 +580,6 @@ const Gastos = () => {
           icui: response.data.icui,
           concepto: response.data.concepto,
         });
-        // console.log(responsedata);
         setFillData(true);
         setIsLoading(false);
       }
@@ -570,7 +662,11 @@ const Gastos = () => {
     const nom_img = `${user_name}_${day}${month}${year}_${hours}${minutes}.jpg`;
 
     const ActualizarEntregable = {
-      ...infoProject.input,
+      // ...infoProject.input,
+      SKU_Proyecto: prepaymentProyecto.SKU,
+      NitCliente: prepaymentProyecto.NitCliente,
+      idNodoProyecto: prepaymentProyecto.idNodo,
+      idProceso: prepaymentProyecto.idPadre,
       N_DocumentoEmpleado: docEmpleado,
       // Nombre_Empleado: "ESTIVEN"
       Nombre_Empleado: user_name
@@ -710,7 +806,6 @@ const Gastos = () => {
     setPrepaymentTipo("");
     setSelectedOptions([]);
     setSelectedOptionsTipo([]);
-    
   };
 
   const handlerCancel1 = () => {
@@ -724,7 +819,7 @@ const Gastos = () => {
 
   const handlerSend = (e) => {
     e.preventDefault();
-    if (nomProyect.trim() === "") {
+    if (prepaymentProyecto.SKU === undefined || prepaymentProyecto.SKU === "") {
       Swal({
         title: `CONFIRMACION DE ENVIO DE PROYECTO`,
         text: `Por favor, confirme que desea enviar el documento sin proyecto relacionado.`,
@@ -796,8 +891,50 @@ const Gastos = () => {
       setImageLoaded(false);
     }
   };
+
   return (
     <div className="mx-auto md:px-24 p-2 xl:px-40 w-full ">
+      <div className="bg-azulCreame peer block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none mb-5">
+        <div className="relative  w-full" data-te-input-wrapper-init>
+          <input type="hidden" />
+          <div className="relative">
+            <button
+              type="button"
+              onClick={toggleDropdownProyecto}
+              className={`bg-white peer block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear shadow-lg flex items-center justify-between ${
+                justSelectedProyecto
+                  ? "peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100"
+                  : ""
+              }`}
+            >
+              <span className="truncate">
+                {renderSelectedOptionsProyecto()}
+              </span>
+              <svg
+                className={`w-4 h-4 ml-2 transform transition-transform duration-200 ${
+                  isOpenProyecto ? "rotate-180" : "rotate-0"
+                }`}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </button>
+
+            {isOpenProyecto && (
+              <div className="absolute z-10 mt-1 w-full bg-white rounded shadow-lg max-h-60 overflow-y-auto border border-gray-300">
+                {renderOptionsProyecto()}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
       <div className="bg-azulCreame peer block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none mb-5">
         <div className="w-full flex flex-row">
           <div className="w-full flex flex-row justify-between items-between">
@@ -847,54 +984,6 @@ const Gastos = () => {
           </div>
         </div>
       </div>
-
-      {/* {console.log(justSelectedTipo)}
-      <div className="bg-azulCreame peer block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none mb-5">
-        <div className="w-full flex flex-row">
-          <div className="w-full flex flex-row justify-between items-between">
-            <div className="inputIntLeftDrop relative">
-
-              <div
-                className={
-                  justSelectedTipo
-                    ? "block text-white"
-                    : "blockNoSelected text-white"
-                }
-              >
-                <button
-                  onClick={toggleDropdownTipo}
-                  className="flex items-center"
-                >
-                  <svg
-                    className="w-4 h-4 mr-2 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
-
-                  <span className="text-2xl">
-                    {renderSelectedOptionstipo()}
-                  </span>
-                </button>
-              </div>
-
-              {isOpenTipo && (
-                <div className="options bg-grayCreame absolute rounded z-10 shadow-md mt-1 max-h-60 overflow-y-auto text-2xl">
-                  {renderOptionsTipoTransaccion()}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </div> */}
-
       <form className="" onSubmit={handlerSend}>
         {/* <form className="" onSubmit={sendData}> */}
         <div>
@@ -1103,21 +1192,6 @@ const Gastos = () => {
                           <p className="text-xs sm:text-sm">Cancelar</p>
                         </button>
                       </div>
-
-                      {/* Botón Escanear */}
-                      {/* {!isChecked && (
-                        <div className="hover:bg-slate-300 w-32 h-14 flex items-center justify-center border-2 rounded-full border-gray-300 bg-gray-50 shadow-lg transition">
-                          <button
-                            className="flex flex-col items-center justify-center w-full h-full"
-                            type="button"
-                            onClick={handlerScan}
-                          >
-                            <BiScan size={24} />
-                            <p className="text-xs sm:text-sm">Escanear</p>
-                          </button>
-                        </div>
-                      )} */}
-
                       <div className="hover:bg-slate-300 w-32 h-14 flex items-center justify-center border-2 rounded-full border-gray-300 bg-gray-50 shadow-lg transition">
                         <button
                           className="flex flex-col items-center justify-center w-full h-full"
@@ -1179,15 +1253,6 @@ const Gastos = () => {
                 </div>
               </div>
             )}
-
-            {/* <div
-              className={`grid grid-cols-2 gap-4 rounded-lg mx-auto w-full border-2 border-gray-300 p-6 bg-azulCreame   ${
-                imageLoaded && !isChecked
-                  ? null
-                  : "pointer-events-none opacity-50 bg-darkGrayCreame"
-              }`}
-            > */}
-
             <div
               className={`grid grid-cols-2 gap-4 rounded-lg mx-auto w-full border-2 border-gray-300 p-6 bg-azulCreame   ${
                 imageLoaded
@@ -1236,41 +1301,6 @@ const Gastos = () => {
                   )}
                 </div>
               </div>
-
-              {/* Tipo_Documento */}
-              {/* <div className="col-span-1 flex items-center justify-center">
-                <div
-                  className="relative mb-3 w-full"
-                  data-te-input-wrapper-init
-                >
-                  <input
-                    value={responsedata.Tipo_Documento}
-                    name="Tipo_Documento"
-                    onChange={handleOnChange}
-                    onKeyDown={(e) => {
-                      validaEnter(e);
-                    }}
-                    type="text"
-                    className={`bg-white peer  block min-h-[auto] w-full text-neutral-950 rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none shadow-lg
-                    ${
-                      responsedata.Tipo_Documento
-                        ? "peer peer-focus:z-10 data-[te-input-state-active]:placeholder:opacity-100 focus:placeholder:opacity-100 "
-                        : ""
-                    }`}
-                  />
-                  <label
-                    htmlFor="Tipo_Documento"
-                    className={`pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6]  transition-all duration-200 ease-out 
-                    ${
-                      responsedata.Tipo_Documento
-                        ? "-translate-y-6 scale-75  text-white"
-                        : "text-neutral-950"
-                    }`}
-                  >
-                    Tipo Documento
-                  </label>
-                </div>
-              </div> */}
 
               {/* NUMERO FACTURA */}
               <div className="col-span-1 flex items-center justify-center">
@@ -1853,18 +1883,6 @@ const Gastos = () => {
           </div>
         </div>
         <div className=" text-center">
-          {/* <button
-            type="submit"
-            className={`mt-10 w-full inline-block rounded ${
-              imageLoaded || (imageLoaded && fillData && !nomProyect)
-                ? "bg-naranjaCreame hover:bg-azulCreame hover:border-turquesaCreame hover:border  hover:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:bg-turquesaCreame focus:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)] focus:outline-none focus:ring-0 active:bg-info-700 active:shadow-[0_8px_9px_-4px_rgba(84,180,211,0.3),0_4px_18px_0_rgba(84,180,211,0.2)]"
-                : "opacity-50 bg-darkGrayCreame"
-            } px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#54b4d3] transition duration-150 ease-in-out   md:w-1/2`}
-            disabled={!imageLoaded && (!nomProyect || nomProyect.trim() === "")}
-          >
-            Enviar
-          </button> */}
-
           <button
             type="submit"
             className={`mt-10 w-full inline-block rounded ${
@@ -1879,9 +1897,6 @@ const Gastos = () => {
         </div>
       </form>
       {isLoading ? (
-        // <div className="absolute inset-0 flex justify-center items-center bg-white bg-opacity-50">
-        //   <div className="loader"></div>
-        // </div>
         <div className="fixed inset-0 z-50 flex justify-center items-center bg-white bg-opacity-50">
           <div className="loader"></div>
         </div>
