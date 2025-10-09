@@ -19,7 +19,7 @@ import logo from "../../assets/img/icon.png";
 import { setCanvas } from "chart/lib";
 import { useLocation } from "react-router-dom";
 import logoPDF from "../../assets/img/logoPDF.png";
-import useLlenarListas from "../searchBar/searchBarjs";
+import useLlenarListas from "../searchBar/useLlenarListas.js";
 // <input type="file" capture="camera" />
 let imagen = null;
 let imagenRUT = null;
