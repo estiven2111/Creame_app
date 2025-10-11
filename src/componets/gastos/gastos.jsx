@@ -369,7 +369,14 @@ const Gastos = () => {
       reader.readAsDataURL(file);
 
       reader.onload = () => {
-        if (imagen.name.split(".")[1] === "pdf") {
+        // if (imagen.name.split(".")[1] === "pdf") {
+        //   setImageSrc(logoPDF);
+        // } else {
+        //   setImageSrc(reader.result);
+        // }
+        const extension = imagen.name.split(".").pop().toLowerCase();
+
+        if (extension === "pdf") {
           setImageSrc(logoPDF);
         } else {
           setImageSrc(reader.result);
@@ -403,7 +410,14 @@ const Gastos = () => {
       reader.readAsDataURL(file);
 
       reader.onload = () => {
-        if (imagenRUT.name.split(".")[1] === "pdf") {
+        // if (imagenRUT.name.split(".")[1] === "pdf") {
+        //   setImageSrcRUT(logoPDF);
+        // } else {
+        //   setImageSrcRUT(reader.result);
+        // }
+        const extension = imagenRUT.name.split(".").pop().toLowerCase();
+
+        if (extension === "pdf") {
           setImageSrcRUT(logoPDF);
         } else {
           setImageSrcRUT(reader.result);
@@ -423,11 +437,19 @@ const Gastos = () => {
       reader.readAsDataURL(file);
 
       reader.onload = () => {
-        if (imagenOTRO.name.split(".")[1] === "pdf") {
+
+        const extension = imagenOTRO.name.split(".").pop().toLowerCase();
+
+        if (extension === "pdf") {
           setImageSrcOTRO(logoPDF);
         } else {
           setImageSrcOTRO(reader.result);
         }
+        // if (imagenOTRO.name.split(".")[1] === "pdf") {
+        //   setImageSrcOTRO(logoPDF);
+        // } else {
+        //   setImageSrcOTRO(reader.result);
+        // }
       };
     }
   };
@@ -819,9 +841,8 @@ const Gastos = () => {
 
   const handlerSend = (e) => {
     e.preventDefault();
-    console.log(prepaymentProyecto)
-  
-    if (prepaymentProyecto?.SKU === undefined || prepaymentProyecto=== null) {
+
+    if (prepaymentProyecto?.SKU === undefined || prepaymentProyecto === null) {
       Swal({
         title: `CONFIRMACION DE ENVIO DE PROYECTO`,
         text: `Por favor, confirme que desea enviar el documento sin proyecto relacionado.`,
