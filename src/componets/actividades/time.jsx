@@ -120,7 +120,7 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
     const solicitud = async () => {
       try {
         const response = await axios.get(
-          `/proyect/hours?idNodoActividad=${postInfo.idNodoActividad}&idNodoProyecto=${postInfo.idNodoProyecto}`
+          `/proyect/hours?idNodoActividad=${postInfo.idNodoActividad}&idNodoProyecto=${postInfo.idNodoProyecto}&DocumentoEmpleado=${postInfo.DocumentoEmpleado}`
         );
         setTotalTime(response.data);
         isTime(response.data);

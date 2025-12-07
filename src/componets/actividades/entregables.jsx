@@ -55,28 +55,27 @@ const Entregables = (props) => {
     setUpdates(!updates);
   };
 
-
   function normalizeString(str) {
     // Reemplaza las tildes
     const map = {
-        'á': 'a',
-        'é': 'e',
-        'í': 'i',
-        'ó': 'o',
-        'ú': 'u',
-        'Á': 'A',
-        'É': 'E',
-        'Í': 'I',
-        'Ó': 'O',
-        'Ú': 'U',
-        'ñ': 'n',
-        'Ñ': 'N'
+      á: "a",
+      é: "e",
+      í: "i",
+      ó: "o",
+      ú: "u",
+      Á: "A",
+      É: "E",
+      Í: "I",
+      Ó: "O",
+      Ú: "U",
+      ñ: "n",
+      Ñ: "N",
     };
-    const normalizedStr = str.replace(/[áéíóúÁÉÍÓÚñÑ]/g, match => map[match]);
+    const normalizedStr = str.replace(/[áéíóúÁÉÍÓÚñÑ]/g, (match) => map[match]);
 
     // Elimina caracteres especiales (manteniendo guiones y subrayados si es necesario)
-    return normalizedStr.replace(/[^a-zA-Z0-9-_.]/g, '');
-}
+    return normalizedStr.replace(/[^a-zA-Z0-9-_.]/g, "");
+  }
 
   const sendData = async (data) => {
     setIsLoading(true);
@@ -121,8 +120,6 @@ const Entregables = (props) => {
       const nombre_img = `${value.Numero}-${name}`;
       let nombreLimpio = normalizeString(nombre_img);
 
-
-
       // formData.append(key, value.uri, nombre_img);
       formData.append(key, value.uri, nombreLimpio);
       // console.log(nombreLimpio,"nombre")
@@ -136,7 +133,8 @@ const Entregables = (props) => {
     setInfo({});
     setModalVisible(false);
     setIsLoading(false);
-    
+    setIsLoading(false);
+
     if (response.data === "archivos enviados correctamente") {
       Swal({
         title: "ENVIO CORRECTO",
@@ -145,6 +143,7 @@ const Entregables = (props) => {
         buttons: "Aceptar",
       });
     }
+    setIsLoading(false);
   };
   const sendInfoToBack = async () => {
     try {
@@ -152,12 +151,15 @@ const Entregables = (props) => {
         .then((data) => {
           if (data) {
             sendData(data);
+            setIsLoading(false);
           }
         })
         .catch((error) => {
           console.error("Error:", error);
+          setIsLoading(false);
         });
     } catch (error) {
+      setIsLoading(false);
       console.error("Error al enviar el objeto:", error);
     }
   };
@@ -166,7 +168,6 @@ const Entregables = (props) => {
     try {
       const formattedList = await Promise.all(
         props.lista.map(async (entregable) => {
-
           //! corregir la ruta
           const response = await axios.get(
             `/proyect/entregables?SKU_Proyecto=${props.SKU_Proyecto}&NitCliente=${props.nitCliente}&idNodoProyecto=${props.idNodoProyecto}&NumeroEntregable=${entregable.Numero}&idProceso=${entregable.id_proceso}`
