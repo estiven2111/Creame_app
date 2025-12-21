@@ -83,8 +83,19 @@ const Entregables = (props) => {
     const user_name = localStorage.getItem("name");
     const email = localStorage.getItem("email");
 
-    const formatDate = new Date().toISOString().split("T");
-    const finalDate = `${formatDate[0]} ${formatDate[1].split(".")[0]}`;
+    // const formatDate = new Date().toISOString().split("T");
+    // const finalDate = `${formatDate[0]} ${formatDate[1].split(".")[0]}`;
+
+    const now = new Date();
+
+const finalDate = now.getFullYear() + '-' +
+  String(now.getMonth() + 1).padStart(2, '0') + '-' +
+  String(now.getDate()).padStart(2, '0') + ' ' +
+  String(now.getHours()).padStart(2, '0') + ':' +
+  String(now.getMinutes()).padStart(2, '0') + ':' +
+  String(now.getSeconds()).padStart(2, '0');
+
+
 
     const ActualizarEntregable = {
       SKU_Proyecto: props.SKU_Proyecto,
@@ -170,12 +181,12 @@ const Entregables = (props) => {
         props.lista.map(async (entregable) => {
           //! corregir la ruta
           const response = await axios.get(
-            `/proyect/entregables?SKU_Proyecto=${props.SKU_Proyecto}&NitCliente=${props.nitCliente}&idNodoProyecto=${props.idNodoProyecto}&NumeroEntregable=${entregable.Numero}&idProceso=${entregable.id_proceso}`
+            `/proyect/entregables?SKU_Proyecto=${props.SKU_Proyecto}&NitCliente=${props.nitCliente}&idNodoProyecto=${props.idNodoProyecto}&NumeroEntregable=${entregable.Numero}&idProceso=${entregable.id_proceso}&DocumentoEmpleado=${props.DocumentoEmpleado}`
           );
           return { ...entregable, subido: response.data };
         })
       );
-
+       console.log(formattedList)
       const isComplete = formattedList.some((entregable) => !entregable.subido);
       setNewList(formattedList);
 
