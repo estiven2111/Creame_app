@@ -62,7 +62,7 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
   };
 
   const closeModal = () => {
-    setFechaSeleccionada(new Date().toISOString().split("T")[0])
+    setFechaSeleccionada(new Date().toISOString().split("T")[0]);
     if (startTime.length === 0 && endTime.length === 0) {
       if (editedTime) {
         sendInfoDB();
@@ -85,14 +85,13 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
   };
 
   const cancelModal = () => {
-    setFechaSeleccionada(new Date().toISOString().split("T")[0])
+    setFechaSeleccionada(new Date().toISOString().split("T")[0]);
     setStartTime("");
     setEndTime("");
     setModalVisible(false);
   };
   const [fechaSeleccionada, setFechaSeleccionada] = useState(
     new Date().toISOString().split("T")[0]
-    
   );
   const [date, setDate] = useState("");
   const [normalDate, setNormalDate] = useState("");
@@ -137,8 +136,12 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
       const response = await axios.post("/proyect/hours", {
         ...postInfo,
         FechaRegistro: date,
-        FechaInicio: `${fechaSeleccionada} ${startTime ? startTime + ":00" : "00:00:00"}`,
-        FechaFinal: `${fechaSeleccionada} ${startTime ? endTime + ":00" : "00:00:00"}`,
+        FechaInicio: `${fechaSeleccionada} ${
+          startTime ? startTime + ":00" : "00:00:00"
+        }`,
+        FechaFinal: `${fechaSeleccionada} ${
+          startTime ? endTime + ":00" : "00:00:00"
+        }`,
         DuracionHoras: editedTime
           ? newDuration.split(":").join(".")
           : getDuration().split(":").join("."),
@@ -151,250 +154,349 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
     }
   };
 
-
-
   // Función para manejar el cambio en la fecha seleccionada
   const handleChange = (event) => {
     setFechaSeleccionada(event.target.value);
   };
 
-  
+  //   return (
+  //   <div className="flex items-center justify-center bg-naranjaCreame rounded p-1 font-Horatio ">
+  //   <button
+  //     className={`btn btn-blue text-2xl md:text-2xl ${entrega ? "" : "btn-disabled"}`}
+  //     onClick={openModal}
+  //   >
+  //     {!isNaN(totalTime) ? totalTime : "00:00"}
+  //   </button>
+  //   {modalVisible && (
+  //     <div className="fixed inset-0 bg-white bg-opacity-50 backdrop-blur-sm flex justify-center items-center top-40">
+  //       <div className="bg-azulCreame rounded-xl p-4 shadow-turquesaCreame shadow-sm w-9/12 max-w-lg lg:max-w-3xl overflow-auto max-h-screen">
+  //         <div className="flex justify-center flex-col items-center text-2xl sm:text-3xl md:text-2xl">
+  //           <div className="text-black w-full text-center mb-2 sm:mb-4">
+  //             <input
+  //               type="date"
+  //               value={fechaSeleccionada}
+  //               onChange={handleChange}
+  //               className="input input-bordered w-full sm:w-4/5 p-2 sm:p-4 text-2xl sm:text-3xl rounded"
+  //             />
+  //           </div>
+  //           <div className="flex flex-col sm:flex-row items-center justify-between w-full sm:w-9/12 my-2 sm:my-4">
+  //             <label className="text-white w-full sm:w-1/2 text-2xl sm:text-3xl mb-2 sm:mb-0">Hora inicio:</label>
+  //             <input
+  //               type="time"
+  //               className="input input-bordered w-full sm:w-96 p-2 sm:p-4 text-darkGrayCreame font-bold text-2xl sm:text-3xl rounded"
+  //               value={startTime}
+  //               onChange={(e) => setStartTime(e.target.value)}
+  //               placeholder="00:00"
+  //             />
+  //           </div>
+  //           <div className="flex flex-col sm:flex-row items-center justify-between w-full sm:w-9/12 my-2 sm:my-4">
+  //             <label className="text-white w-full sm:w-1/2 text-2xl sm:text-3xl mb-2 sm:mb-0">Hora final:</label>
+  //             <input
+  //               type="time"
+  //               className="input input-bordered w-full sm:w-96 p-2 sm:p-4 text-darkGrayCreame font-bold text-2xl sm:text-3xl rounded"
+  //               value={endTime}
+  //               onChange={(e) => setEndTime(e.target.value)}
+  //             />
+  //           </div>
+  //           {manualDuration ? (
+  //             <div className="flex flex-col sm:flex-row items-center w-full sm:w-60 my-2 sm:my-4">
+  //               <label className="text-white w-full sm:w-1/2 text-2xl sm:text-3xl mb-2 sm:mb-0">Duración:</label>
+  //               <input
+  //                 type="text"
+  //                 className="input input-bordered w-full sm:w-24 p-2 sm:p-4 text-2xl sm:text-3xl rounded"
+  //                 maxLength="5"
+  //                 placeholder="00:00"
+  //                 value={newDuration}
+  //                 onChange={(e) => handleNewDuration(e.target.value)}
+  //               />
+  //               <button
+  //                 className="btn btn-primary btn-sm mx-2 text-2xl sm:text-3xl p-2 sm:p-4"
+  //                 onClick={() => {
+  //                   setEditedTime(true);
+  //                   setManualDuration(false);
+  //                 }}
+  //               >
+  //                 <i className="fas fa-check"></i>
+  //               </button>
+  //             </div>
+  //           ) : (
+  //             <div className="flex items-center my-2 sm:my-4">
+  //               <label className="text-white w-1/2 text-2xl sm:text-3xl">Duración:</label>
+  //               {editedTime ? (
+  //                 <p className="text-white text-2xl sm:text-3xl ml-2">{newDuration}</p>
+  //               ) : (
+  //                 <p className="text-white text-2xl sm:text-3xl ml-2">
+  //                   {getDuration() !== "" ? getDuration() : "00:00"}
+  //                 </p>
+  //               )}
+  //               <button
+  //                 className="btn btn-primary btn-sm mx-2 text-2xl sm:text-3xl p-2 sm:p-4"
+  //                 onClick={() => setManualDuration(true)}
+  //               >
+  //                 <i className="fas fa-pencil-alt"></i>
+  //               </button>
+  //             </div>
+  //           )}
+  //           <p className="text-white text-2xl sm:text-3xl">
+  //             Tiempo Total: {!isNaN(totalTime) ? totalTime : "00:00"}
+  //           </p>
+  //           <div className="flex justify-center mt-2 sm:mt-4">
+  //             <button
+  //               className={`btn btn-primary bg-naranjaCreame py-1 sm:py-2 px-6 sm:px-12 rounded-lg shadow-lg mx-1 sm:mx-2 text-2xl sm:text-3xl ${
+  //                 manualDuration ? "btn-disabled" : ""
+  //               }`}
+  //               onClick={closeModal}
+  //             >
+  //               Aceptar
+  //             </button>
+  //             <button
+  //               className="btn btn-primary bg-naranjaCreame py-1 sm:py-2 px-6 sm:px-12 rounded-lg shadow-lg mx-1 sm:mx-2 text-2xl sm:text-3xl"
+  //               onClick={cancelModal}
+  //             >
+  //               Cancelar
+  //             </button>
+  //           </div>
+  //           <div className={`modal ${errorModal ? "block" : "hidden"}`}>
+  //             <div className="modal-content">
+  //               <p className="text-white text-center font-bold text-2xl sm:text-3xl">
+  //                 Formato no válido
+  //               </p>
+  //             </div>
+  //           </div>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   )}
+  // </div>
 
-//   return (
-//   <div className="flex items-center justify-center bg-naranjaCreame rounded p-1 font-Horatio ">
-//   <button
-//     className={`btn btn-blue text-2xl md:text-2xl ${entrega ? "" : "btn-disabled"}`}
-//     onClick={openModal}
-//   >
-//     {!isNaN(totalTime) ? totalTime : "00:00"}
-//   </button>
-//   {modalVisible && (
-//     <div className="fixed inset-0 bg-white bg-opacity-50 backdrop-blur-sm flex justify-center items-center top-40">
-//       <div className="bg-azulCreame rounded-xl p-4 shadow-turquesaCreame shadow-sm w-9/12 max-w-lg lg:max-w-3xl overflow-auto max-h-screen">
-//         <div className="flex justify-center flex-col items-center text-2xl sm:text-3xl md:text-2xl">
-//           <div className="text-black w-full text-center mb-2 sm:mb-4">
-//             <input
-//               type="date"
-//               value={fechaSeleccionada}
-//               onChange={handleChange}
-//               className="input input-bordered w-full sm:w-4/5 p-2 sm:p-4 text-2xl sm:text-3xl rounded"
-//             />
-//           </div>
-//           <div className="flex flex-col sm:flex-row items-center justify-between w-full sm:w-9/12 my-2 sm:my-4">
-//             <label className="text-white w-full sm:w-1/2 text-2xl sm:text-3xl mb-2 sm:mb-0">Hora inicio:</label>
-//             <input
-//               type="time"
-//               className="input input-bordered w-full sm:w-96 p-2 sm:p-4 text-darkGrayCreame font-bold text-2xl sm:text-3xl rounded"
-//               value={startTime}
-//               onChange={(e) => setStartTime(e.target.value)}
-//               placeholder="00:00"
-//             />
-//           </div>
-//           <div className="flex flex-col sm:flex-row items-center justify-between w-full sm:w-9/12 my-2 sm:my-4">
-//             <label className="text-white w-full sm:w-1/2 text-2xl sm:text-3xl mb-2 sm:mb-0">Hora final:</label>
-//             <input
-//               type="time"
-//               className="input input-bordered w-full sm:w-96 p-2 sm:p-4 text-darkGrayCreame font-bold text-2xl sm:text-3xl rounded"
-//               value={endTime}
-//               onChange={(e) => setEndTime(e.target.value)}
-//             />
-//           </div>
-//           {manualDuration ? (
-//             <div className="flex flex-col sm:flex-row items-center w-full sm:w-60 my-2 sm:my-4">
-//               <label className="text-white w-full sm:w-1/2 text-2xl sm:text-3xl mb-2 sm:mb-0">Duración:</label>
-//               <input
-//                 type="text"
-//                 className="input input-bordered w-full sm:w-24 p-2 sm:p-4 text-2xl sm:text-3xl rounded"
-//                 maxLength="5"
-//                 placeholder="00:00"
-//                 value={newDuration}
-//                 onChange={(e) => handleNewDuration(e.target.value)}
-//               />
-//               <button
-//                 className="btn btn-primary btn-sm mx-2 text-2xl sm:text-3xl p-2 sm:p-4"
-//                 onClick={() => {
-//                   setEditedTime(true);
-//                   setManualDuration(false);
-//                 }}
-//               >
-//                 <i className="fas fa-check"></i>
-//               </button>
-//             </div>
-//           ) : (
-//             <div className="flex items-center my-2 sm:my-4">
-//               <label className="text-white w-1/2 text-2xl sm:text-3xl">Duración:</label>
-//               {editedTime ? (
-//                 <p className="text-white text-2xl sm:text-3xl ml-2">{newDuration}</p>
-//               ) : (
-//                 <p className="text-white text-2xl sm:text-3xl ml-2">
-//                   {getDuration() !== "" ? getDuration() : "00:00"}
-//                 </p>
-//               )}
-//               <button
-//                 className="btn btn-primary btn-sm mx-2 text-2xl sm:text-3xl p-2 sm:p-4"
-//                 onClick={() => setManualDuration(true)}
-//               >
-//                 <i className="fas fa-pencil-alt"></i>
-//               </button>
-//             </div>
-//           )}
-//           <p className="text-white text-2xl sm:text-3xl">
-//             Tiempo Total: {!isNaN(totalTime) ? totalTime : "00:00"}
-//           </p>
-//           <div className="flex justify-center mt-2 sm:mt-4">
-//             <button
-//               className={`btn btn-primary bg-naranjaCreame py-1 sm:py-2 px-6 sm:px-12 rounded-lg shadow-lg mx-1 sm:mx-2 text-2xl sm:text-3xl ${
-//                 manualDuration ? "btn-disabled" : ""
-//               }`}
-//               onClick={closeModal}
-//             >
-//               Aceptar
-//             </button>
-//             <button
-//               className="btn btn-primary bg-naranjaCreame py-1 sm:py-2 px-6 sm:px-12 rounded-lg shadow-lg mx-1 sm:mx-2 text-2xl sm:text-3xl"
-//               onClick={cancelModal}
-//             >
-//               Cancelar
-//             </button>
-//           </div>
-//           <div className={`modal ${errorModal ? "block" : "hidden"}`}>
-//             <div className="modal-content">
-//               <p className="text-white text-center font-bold text-2xl sm:text-3xl">
-//                 Formato no válido
-//               </p>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   )}
-// </div>
+  //   );
+  // };
 
-  
+  // export default Time;
 
-//   );
-// };
-
-// export default Time;
-
-return (
-  <div className="flex items-center justify-center bg-naranjaCreame rounded p-1 font-Horatio">
-    <button
-      className={`btn btn-blue text-2xl md:text-2xl ${entrega ? "" : "btn-disabled"}`}
-      onClick={openModal}
-    >
-      {!isNaN(totalTime) ? totalTime : "00:00"}
-    </button>
-    {modalVisible && (
-      <div className="fixed inset-0 bg-white bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50 overflow-auto">
-        <div className="bg-azulCreame rounded-xl p-4 shadow-turquesaCreame shadow-sm w-11/12 max-w-lg lg:max-w-3xl mx-auto overflow-y-auto max-h-[90vh]">
-          {/* Modal Header */}
-          <div className="flex justify-center flex-col items-center text-2xl sm:text-3xl md:text-2xl">
-            {/* Fecha */}
-            <div className="text-black w-full text-center mb-2 sm:mb-4">
-              <input
-                type="date"
-                value={fechaSeleccionada}
-                onChange={handleChange}
-                className="input input-bordered w-full sm:w-4/5 p-2 sm:p-4 text-2xl sm:text-3xl rounded"
-              />
-            </div>
-            {/* Hora Inicio */}
-            <div className="flex flex-col sm:flex-row items-center justify-between w-full sm:w-9/12 my-2 sm:my-4">
-              <label className="text-white w-full sm:w-1/2 text-2xl sm:text-3xl mb-2 sm:mb-0">Hora inicio:</label>
-              <input
-                type="time"
-                className="input input-bordered w-full sm:w-96 p-2 sm:p-4 text-darkGrayCreame font-bold text-2xl sm:text-3xl rounded"
-                value={startTime}
-                onChange={(e) => setStartTime(e.target.value)}
-                placeholder="00:00"
-              />
-            </div>
-            {/* Hora Final */}
-            <div className="flex flex-col sm:flex-row items-center justify-between w-full sm:w-9/12 my-2 sm:my-4">
-              <label className="text-white w-full sm:w-1/2 text-2xl sm:text-3xl mb-2 sm:mb-0">Hora final:</label>
-              <input
-                type="time"
-                className="input input-bordered w-full sm:w-96 p-2 sm:p-4 text-darkGrayCreame font-bold text-2xl sm:text-3xl rounded"
-                value={endTime}
-                onChange={(e) => setEndTime(e.target.value)}
-              />
-            </div>
-            {/* Duración */}
-            {manualDuration ? (
-              <div className="flex flex-col sm:flex-row items-center w-full sm:w-60 my-2 sm:my-4">
-                <label className="text-white w-full sm:w-1/2 text-2xl sm:text-3xl mb-2 sm:mb-0">Duración:</label>
+  return (
+    <div className="flex items-center justify-center bg-naranjaCreame rounded p-1 font-Horatio">
+      <button
+        className={`btn btn-blue text-2xl md:text-2xl ${
+          entrega ? "" : "btn-disabled"
+        }`}
+        onClick={openModal}
+      >
+        {!isNaN(totalTime) ? totalTime : "00:00"}
+      </button>
+      {modalVisible && (
+        <div className="fixed inset-0 bg-white bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50 overflow-auto">
+          <div className="bg-azulCreame rounded-xl p-4 shadow-turquesaCreame shadow-sm w-11/12 max-w-lg lg:max-w-3xl mx-auto overflow-y-auto max-h-[90vh]">
+            {/* Modal Header */}
+            <div className="flex justify-center flex-col items-center text-2xl sm:text-3xl md:text-2xl">
+              {/* Fecha */}
+              <div className="text-black w-full text-center mb-2 sm:mb-4">
                 <input
-                  type="text"
-                  className="input input-bordered w-full sm:w-24 p-2 sm:p-4 text-2xl sm:text-3xl rounded"
-                  maxLength="5"
-                  placeholder="00:00"
-                  value={newDuration}
-                  onChange={(e) => handleNewDuration(e.target.value)}
+                  type="date"
+                  value={fechaSeleccionada}
+                  onChange={handleChange}
+                  className="input input-bordered w-full sm:w-4/5 p-2 sm:p-4 text-2xl sm:text-3xl rounded"
                 />
+              </div>
+              {/* Hora Inicio */}
+           {/* HORA INICIO */}
+<div className="flex flex-col sm:flex-row items-center justify-between w-full sm:w-9/12 my-4">
+  <label className="text-white w-full sm:w-1/2 text-2xl sm:text-3xl text-center sm:text-left mb-3 sm:mb-0">
+    Hora inicio:
+  </label>
+
+  <div className="flex items-center justify-center gap-4 w-full sm:w-1/2">
+    {/* HORAS */}
+    <div className="flex flex-col items-center">
+      <span className="text-white text-sm mb-1">HH</span>
+      <select
+        size="4"
+        value={startTime?.split(":")[0] || "00"}
+        onChange={(e) =>
+          setStartTime(`${e.target.value}:${startTime?.split(":")[1] || "00"}`)
+        }
+        className="
+          w-24 h-[9.5rem]
+          text-2xl sm:text-3xl
+          font-bold text-center
+          bg-white text-black
+          rounded-2xl shadow-md
+          focus:outline-none
+        "
+      >
+        {[...Array(24)].map((_, i) => (
+          <option key={i}>{String(i).padStart(2, "0")}</option>
+        ))}
+      </select>
+    </div>
+
+    <span className="text-white text-3xl font-bold mt-6">:</span>
+
+    {/* MINUTOS */}
+    <div className="flex flex-col items-center">
+      <span className="text-white text-sm mb-1">MM</span>
+      <select
+        size="4"
+        value={startTime?.split(":")[1] || "00"}
+        onChange={(e) =>
+          setStartTime(`${startTime?.split(":")[0] || "00"}:${e.target.value}`)
+        }
+        className="
+          w-24 h-[9.5rem]
+          text-2xl sm:text-3xl
+          font-bold text-center
+          bg-white text-black
+          rounded-2xl shadow-md
+          focus:outline-none
+        "
+      >
+        {[...Array(60)].map((_, i) => (
+          <option key={i}>{String(i).padStart(2, "0")}</option>
+        ))}
+      </select>
+    </div>
+  </div>
+</div>
+
+{/* HORA FINAL */}
+<div className="flex flex-col sm:flex-row items-center justify-between w-full sm:w-9/12 my-4">
+  <label className="text-white w-full sm:w-1/2 text-2xl sm:text-3xl text-center sm:text-left mb-3 sm:mb-0">
+    Hora final:
+  </label>
+
+  <div className="flex items-center justify-center gap-4 w-full sm:w-1/2">
+    {/* HORAS */}
+    <div className="flex flex-col items-center">
+      <span className="text-white text-sm mb-1">HH</span>
+      <select
+        size="4"
+        value={endTime?.split(":")[0] || "00"}
+        onChange={(e) =>
+          setEndTime(`${e.target.value}:${endTime?.split(":")[1] || "00"}`)
+        }
+        className="
+          w-24 h-[9.5rem]
+          text-2xl sm:text-3xl
+          font-bold text-center
+          bg-white text-black
+          rounded-2xl shadow-md
+          focus:outline-none
+        "
+      >
+        {[...Array(24)].map((_, i) => (
+          <option key={i}>{String(i).padStart(2, "0")}</option>
+        ))}
+      </select>
+    </div>
+
+    <span className="text-white text-3xl font-bold mt-6">:</span>
+
+    {/* MINUTOS */}
+    <div className="flex flex-col items-center">
+      <span className="text-white text-sm mb-1">MM</span>
+      <select
+        size="4"
+        value={endTime?.split(":")[1] || "00"}
+        onChange={(e) =>
+          setEndTime(`${endTime?.split(":")[0] || "00"}:${e.target.value}`)
+        }
+        className="
+          w-24 h-[9.5rem]
+          text-2xl sm:text-3xl
+          font-bold text-center
+          bg-white text-black
+          rounded-2xl shadow-md
+          focus:outline-none
+        "
+      >
+        {[...Array(60)].map((_, i) => (
+          <option key={i}>{String(i).padStart(2, "0")}</option>
+        ))}
+      </select>
+    </div>
+  </div>
+</div>
+
+              {/* Duración */}
+              {manualDuration ? (
+                <div className="flex flex-col sm:flex-row items-center w-full sm:w-60 my-2 sm:my-4">
+                  <label className="text-white w-full sm:w-1/2 text-2xl sm:text-3xl mb-2 sm:mb-0">
+                    Duración:
+                  </label>
+                  <input
+                    type="text"
+                    className="input input-bordered w-full sm:w-24 p-2 sm:p-4 text-2xl sm:text-3xl rounded"
+                    maxLength="5"
+                    placeholder="00:00"
+                    value={newDuration}
+                    onChange={(e) => handleNewDuration(e.target.value)}
+                  />
+                  <button
+                    className="btn btn-primary btn-sm mx-2 text-2xl sm:text-3xl p-2 sm:p-4"
+                    onClick={() => {
+                      setEditedTime(true);
+                      setManualDuration(false);
+                    }}
+                  >
+                    <i className="fas fa-check"></i>
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center my-2 sm:my-4">
+                  <label className="text-white w-1/2 text-2xl sm:text-3xl">
+                    Duración:
+                  </label>
+                  {editedTime ? (
+                    <p className="text-white text-2xl sm:text-3xl ml-2">
+                      {newDuration}
+                    </p>
+                  ) : (
+                    <p className="text-white text-2xl sm:text-3xl ml-2">
+                      {getDuration() !== "" ? getDuration() : "00:00"}
+                    </p>
+                  )}
+                  <button
+                    className="btn btn-primary btn-sm mx-2 text-2xl sm:text-3xl p-2 sm:p-4"
+                    onClick={() => setManualDuration(true)}
+                  >
+                    <i className="fas fa-pencil-alt"></i>
+                  </button>
+                </div>
+              )}
+              {/* Tiempo Total */}
+              <p className="text-white text-2xl sm:text-3xl">
+                Tiempo Total: {!isNaN(totalTime) ? totalTime : "00:00"}
+              </p>
+              {/* Botones de Acción */}
+              <div className="flex justify-center mt-2 sm:mt-4">
                 <button
-                  className="btn btn-primary btn-sm mx-2 text-2xl sm:text-3xl p-2 sm:p-4"
-                  onClick={() => {
-                    setEditedTime(true);
-                    setManualDuration(false);
-                  }}
+                  className={`btn btn-primary bg-naranjaCreame py-1 sm:py-2 px-6 sm:px-12 rounded-lg shadow-lg mx-1 sm:mx-2 text-2xl sm:text-3xl ${
+                    manualDuration ? "btn-disabled" : ""
+                  }`}
+                  onClick={closeModal}
                 >
-                  <i className="fas fa-check"></i>
+                  Aceptar
+                </button>
+                <button
+                  className="btn btn-primary bg-naranjaCreame py-1 sm:py-2 px-6 sm:px-12 rounded-lg shadow-lg mx-1 sm:mx-2 text-2xl sm:text-3xl"
+                  onClick={cancelModal}
+                >
+                  Cancelar
                 </button>
               </div>
-            ) : (
-              <div className="flex items-center my-2 sm:my-4">
-                <label className="text-white w-1/2 text-2xl sm:text-3xl">Duración:</label>
-                {editedTime ? (
-                  <p className="text-white text-2xl sm:text-3xl ml-2">{newDuration}</p>
-                ) : (
-                  <p className="text-white text-2xl sm:text-3xl ml-2">
-                    {getDuration() !== "" ? getDuration() : "00:00"}
+              {/* Error Modal */}
+              <div className={`modal ${errorModal ? "block" : "hidden"}`}>
+                <div className="modal-content">
+                  <p className="text-white text-center font-bold text-2xl sm:text-3xl">
+                    Formato no válido
                   </p>
-                )}
-                <button
-                  className="btn btn-primary btn-sm mx-2 text-2xl sm:text-3xl p-2 sm:p-4"
-                  onClick={() => setManualDuration(true)}
-                >
-                  <i className="fas fa-pencil-alt"></i>
-                </button>
-              </div>
-            )}
-            {/* Tiempo Total */}
-            <p className="text-white text-2xl sm:text-3xl">
-              Tiempo Total: {!isNaN(totalTime) ? totalTime : "00:00"}
-            </p>
-            {/* Botones de Acción */}
-            <div className="flex justify-center mt-2 sm:mt-4">
-              <button
-                className={`btn btn-primary bg-naranjaCreame py-1 sm:py-2 px-6 sm:px-12 rounded-lg shadow-lg mx-1 sm:mx-2 text-2xl sm:text-3xl ${
-                  manualDuration ? "btn-disabled" : ""
-                }`}
-                onClick={closeModal}
-              >
-                Aceptar
-              </button>
-              <button
-                className="btn btn-primary bg-naranjaCreame py-1 sm:py-2 px-6 sm:px-12 rounded-lg shadow-lg mx-1 sm:mx-2 text-2xl sm:text-3xl"
-                onClick={cancelModal}
-              >
-                Cancelar
-              </button>
-            </div>
-            {/* Error Modal */}
-            <div className={`modal ${errorModal ? "block" : "hidden"}`}>
-              <div className="modal-content">
-                <p className="text-white text-center font-bold text-2xl sm:text-3xl">
-                  Formato no válido
-                </p>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    )}
-  </div>
-);
-
-}
+      )}
+    </div>
+  );
+};
 export default Time;
