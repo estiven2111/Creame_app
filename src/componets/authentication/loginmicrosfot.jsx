@@ -68,37 +68,80 @@ import { ThemeContext } from "../context/themeContext";
 // export default LoginMicrosoft;
 
 
+// const LoginMicrosoft = () => {
+//   return new Promise((resolve, reject) => {
+
+//     const URLS = "https://appincentivos.creame.com.co/user/api/validation";
+
+//     const popup = window.open(
+//       URLS,
+//       "_blank",
+//       "width=620,height=700"
+//     );
+
+//     const messageHandler = (event) => {
+
+//       //  Validar origen
+//       if (event.origin !== "https://appincentivos.creame.com.co") return;
+
+//       //  Validar que venga del popup
+//       if (event.source !== popup) return;
+
+//       // Validar estructura del mensaje
+//       if (!event.data || !event.data.token) return;
+
+//       window.removeEventListener("message", messageHandler);
+//       popup.close();
+
+//       resolve(event.data);
+//     };
+
+//     window.addEventListener("message", messageHandler);
+
+//     //  Manejar cierre manual del popup
+//     const timer = setInterval(() => {
+//       if (popup.closed) {
+//         clearInterval(timer);
+//         window.removeEventListener("message", messageHandler);
+//         reject(new Error("Login cancelado"));
+//       }
+//     }, 500);
+//   });
+// };
+
+// export default LoginMicrosoft;
+
+
 const LoginMicrosoft = () => {
   return new Promise((resolve, reject) => {
-
     const URLS = "https://appincentivos.creame.com.co/user/api/validation";
 
-    const popup = window.open(
-      URLS,
-      "_blank",
-      "width=620,height=700"
-    );
+    // Evitar múltiples popups
+    if (LoginMicrosoft.popup && !LoginMicrosoft.popup.closed) {
+      LoginMicrosoft.popup.focus();
+      return;
+    }
+
+    const popup = window.open(URLS, "_blank", "width=620,height=700");
+    LoginMicrosoft.popup = popup;
+
+    if (!popup) {
+      reject(new Error("Popup bloqueado por el navegador"));
+      return;
+    }
 
     const messageHandler = (event) => {
-
-      //  Validar origen
       if (event.origin !== "https://appincentivos.creame.com.co") return;
-
-      //  Validar que venga del popup
       if (event.source !== popup) return;
-
-      // Validar estructura del mensaje
       if (!event.data || !event.data.token) return;
 
       window.removeEventListener("message", messageHandler);
       popup.close();
-
       resolve(event.data);
     };
 
     window.addEventListener("message", messageHandler);
 
-    //  Manejar cierre manual del popup
     const timer = setInterval(() => {
       if (popup.closed) {
         clearInterval(timer);
@@ -110,5 +153,3 @@ const LoginMicrosoft = () => {
 };
 
 export default LoginMicrosoft;
-
-
