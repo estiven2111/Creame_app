@@ -88,14 +88,18 @@ const Entregables = (props) => {
 
     const now = new Date();
 
-const finalDate = now.getFullYear() + '-' +
-  String(now.getMonth() + 1).padStart(2, '0') + '-' +
-  String(now.getDate()).padStart(2, '0') + ' ' +
-  String(now.getHours()).padStart(2, '0') + ':' +
-  String(now.getMinutes()).padStart(2, '0') + ':' +
-  String(now.getSeconds()).padStart(2, '0');
-
-
+    const finalDate =
+      now.getFullYear() +
+      "-" +
+      String(now.getMonth() + 1).padStart(2, "0") +
+      "-" +
+      String(now.getDate()).padStart(2, "0") +
+      " " +
+      String(now.getHours()).padStart(2, "0") +
+      ":" +
+      String(now.getMinutes()).padStart(2, "0") +
+      ":" +
+      String(now.getSeconds()).padStart(2, "0");
 
     const ActualizarEntregable = {
       SKU_Proyecto: props.SKU_Proyecto,
@@ -112,7 +116,7 @@ const finalDate = now.getFullYear() + '-' +
     formData.append("user", user_name);
     formData.append(
       "ActualizarEntregable",
-      JSON.stringify({ ...ActualizarEntregable })
+      JSON.stringify({ ...ActualizarEntregable }),
     );
     Object.entries(info).forEach(([key, value]) => {
       const extension = value.uri.name.split(".").pop().toLowerCase();
@@ -181,12 +185,12 @@ const finalDate = now.getFullYear() + '-' +
         props.lista.map(async (entregable) => {
           //! corregir la ruta
           const response = await axios.get(
-            `/proyect/entregables?SKU_Proyecto=${props.SKU_Proyecto}&NitCliente=${props.nitCliente}&idNodoProyecto=${props.idNodoProyecto}&NumeroEntregable=${entregable.Numero}&idProceso=${entregable.id_proceso}&DocumentoEmpleado=${props.DocumentoEmpleado}`
+            `/proyect/entregables?SKU_Proyecto=${props.SKU_Proyecto}&NitCliente=${props.nitCliente}&idNodoProyecto=${props.idNodoProyecto}&NumeroEntregable=${entregable.Numero}&idProceso=${entregable.id_proceso}&DocumentoEmpleado=${props.DocumentoEmpleado}`,
           );
           return { ...entregable, subido: response.data };
-        })
+        }),
       );
-       console.log(formattedList)
+
       const isComplete = formattedList.some((entregable) => !entregable.subido);
       setNewList(formattedList);
 
@@ -212,16 +216,27 @@ const finalDate = now.getFullYear() + '-' +
     props.idNodoProyecto,
     modalVisible,
   ]);
-
+  const allUploaded = newList.every((item) => item.subido === true);
   return (
     <div>
-      <button
+      {/* <button
         className={`${
-          props.entrega ? "bg-naranjaCreame" : "bg-grayCreame"
+          props.entrega || newList.subido == false ? "bg-naranjaCreame" : "bg-grayCreame"
         } p-2 rounded ${
           props.entrega ? "cursor-pointer" : "cursor-not-allowed"
         }`}
         disabled={!props.entrega}
+        onClick={openModal}
+      > */}
+      <button
+        className={`${
+          props.entrega && !allUploaded ? "bg-naranjaCreame" : "bg-grayCreame"
+        } p-2 rounded ${
+          props.entrega && !allUploaded
+            ? "cursor-pointer"
+            : "cursor-not-allowed"
+        }`}
+        disabled={!props.entrega || allUploaded}
         onClick={openModal}
       >
         ...
@@ -269,18 +284,6 @@ const finalDate = now.getFullYear() + '-' +
                 Cancelar
               </button>
             </div>
-            {/* {isLoading && (
-              <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75">
-                <img
-                  src={logo}
-                  alt="loading-logo"
-                  className="w-24 h-24 transform rotate-"
-                  style={{
-                    transform: `rotate(${spinValue.current}deg)`,
-                  }}
-                />
-              </div>
-            )} */}
             {isLoading ? (
               <div className="absolute inset-0 flex justify-center items-center bg-white bg-opacity-50">
                 <div className="loader"></div>

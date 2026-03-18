@@ -15,7 +15,7 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
       formattedValue = numericValue.replace(/(\d{2})(\d{0,2})/, "$1:$2");
     }
     const isValidTime = /^([0-1][0-9]|2[0-3])(?::([0-5][0-9]?){0,2})?$/.test(
-      formattedValue
+      formattedValue,
     );
     if (formattedValue.length > 2) {
       setNewDuration(isValidTime ? formattedValue : null);
@@ -91,7 +91,7 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
     setModalVisible(false);
   };
   const [fechaSeleccionada, setFechaSeleccionada] = useState(
-    new Date().toISOString().split("T")[0]
+    new Date().toISOString().split("T")[0],
   );
   const [date, setDate] = useState("");
   const [normalDate, setNormalDate] = useState("");
@@ -119,7 +119,7 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
     const solicitud = async () => {
       try {
         const response = await axios.get(
-          `/proyect/hours?idNodoActividad=${postInfo.idNodoActividad}&idNodoProyecto=${postInfo.idNodoProyecto}&DocumentoEmpleado=${postInfo.DocumentoEmpleado}`
+          `/proyect/hours?idNodoActividad=${postInfo.idNodoActividad}&idNodoProyecto=${postInfo.idNodoProyecto}&DocumentoEmpleado=${postInfo.DocumentoEmpleado}`,
         );
         setTotalTime(response.data);
         isTime(response.data);
@@ -130,6 +130,11 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
     };
     solicitud();
   }, [postInfo.idNodoActividad, postInfo.idNodoProyecto]);
+
+  const convertToDecimal = (time) => {
+    const [hours, minutes] = time.split(":").map(Number);
+    return (hours + minutes / 60).toFixed(2); // 5.50
+  };
 
   const sendInfoDB = async () => {
     try {
@@ -143,8 +148,9 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
           startTime ? endTime + ":00" : "00:00:00"
         }`,
         DuracionHoras: editedTime
-          ? newDuration.split(":").join(".")
-          : getDuration().split(":").join("."),
+          ? convertToDecimal(newDuration)
+          : convertToDecimal(getDuration()),
+
         finished: false,
       });
       isTime(response.data.horaTotal);
@@ -158,121 +164,6 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
   const handleChange = (event) => {
     setFechaSeleccionada(event.target.value);
   };
-
-  //   return (
-  //   <div className="flex items-center justify-center bg-naranjaCreame rounded p-1 font-Horatio ">
-  //   <button
-  //     className={`btn btn-blue text-2xl md:text-2xl ${entrega ? "" : "btn-disabled"}`}
-  //     onClick={openModal}
-  //   >
-  //     {!isNaN(totalTime) ? totalTime : "00:00"}
-  //   </button>
-  //   {modalVisible && (
-  //     <div className="fixed inset-0 bg-white bg-opacity-50 backdrop-blur-sm flex justify-center items-center top-40">
-  //       <div className="bg-azulCreame rounded-xl p-4 shadow-turquesaCreame shadow-sm w-9/12 max-w-lg lg:max-w-3xl overflow-auto max-h-screen">
-  //         <div className="flex justify-center flex-col items-center text-2xl sm:text-3xl md:text-2xl">
-  //           <div className="text-black w-full text-center mb-2 sm:mb-4">
-  //             <input
-  //               type="date"
-  //               value={fechaSeleccionada}
-  //               onChange={handleChange}
-  //               className="input input-bordered w-full sm:w-4/5 p-2 sm:p-4 text-2xl sm:text-3xl rounded"
-  //             />
-  //           </div>
-  //           <div className="flex flex-col sm:flex-row items-center justify-between w-full sm:w-9/12 my-2 sm:my-4">
-  //             <label className="text-white w-full sm:w-1/2 text-2xl sm:text-3xl mb-2 sm:mb-0">Hora inicio:</label>
-  //             <input
-  //               type="time"
-  //               className="input input-bordered w-full sm:w-96 p-2 sm:p-4 text-darkGrayCreame font-bold text-2xl sm:text-3xl rounded"
-  //               value={startTime}
-  //               onChange={(e) => setStartTime(e.target.value)}
-  //               placeholder="00:00"
-  //             />
-  //           </div>
-  //           <div className="flex flex-col sm:flex-row items-center justify-between w-full sm:w-9/12 my-2 sm:my-4">
-  //             <label className="text-white w-full sm:w-1/2 text-2xl sm:text-3xl mb-2 sm:mb-0">Hora final:</label>
-  //             <input
-  //               type="time"
-  //               className="input input-bordered w-full sm:w-96 p-2 sm:p-4 text-darkGrayCreame font-bold text-2xl sm:text-3xl rounded"
-  //               value={endTime}
-  //               onChange={(e) => setEndTime(e.target.value)}
-  //             />
-  //           </div>
-  //           {manualDuration ? (
-  //             <div className="flex flex-col sm:flex-row items-center w-full sm:w-60 my-2 sm:my-4">
-  //               <label className="text-white w-full sm:w-1/2 text-2xl sm:text-3xl mb-2 sm:mb-0">Duración:</label>
-  //               <input
-  //                 type="text"
-  //                 className="input input-bordered w-full sm:w-24 p-2 sm:p-4 text-2xl sm:text-3xl rounded"
-  //                 maxLength="5"
-  //                 placeholder="00:00"
-  //                 value={newDuration}
-  //                 onChange={(e) => handleNewDuration(e.target.value)}
-  //               />
-  //               <button
-  //                 className="btn btn-primary btn-sm mx-2 text-2xl sm:text-3xl p-2 sm:p-4"
-  //                 onClick={() => {
-  //                   setEditedTime(true);
-  //                   setManualDuration(false);
-  //                 }}
-  //               >
-  //                 <i className="fas fa-check"></i>
-  //               </button>
-  //             </div>
-  //           ) : (
-  //             <div className="flex items-center my-2 sm:my-4">
-  //               <label className="text-white w-1/2 text-2xl sm:text-3xl">Duración:</label>
-  //               {editedTime ? (
-  //                 <p className="text-white text-2xl sm:text-3xl ml-2">{newDuration}</p>
-  //               ) : (
-  //                 <p className="text-white text-2xl sm:text-3xl ml-2">
-  //                   {getDuration() !== "" ? getDuration() : "00:00"}
-  //                 </p>
-  //               )}
-  //               <button
-  //                 className="btn btn-primary btn-sm mx-2 text-2xl sm:text-3xl p-2 sm:p-4"
-  //                 onClick={() => setManualDuration(true)}
-  //               >
-  //                 <i className="fas fa-pencil-alt"></i>
-  //               </button>
-  //             </div>
-  //           )}
-  //           <p className="text-white text-2xl sm:text-3xl">
-  //             Tiempo Total: {!isNaN(totalTime) ? totalTime : "00:00"}
-  //           </p>
-  //           <div className="flex justify-center mt-2 sm:mt-4">
-  //             <button
-  //               className={`btn btn-primary bg-naranjaCreame py-1 sm:py-2 px-6 sm:px-12 rounded-lg shadow-lg mx-1 sm:mx-2 text-2xl sm:text-3xl ${
-  //                 manualDuration ? "btn-disabled" : ""
-  //               }`}
-  //               onClick={closeModal}
-  //             >
-  //               Aceptar
-  //             </button>
-  //             <button
-  //               className="btn btn-primary bg-naranjaCreame py-1 sm:py-2 px-6 sm:px-12 rounded-lg shadow-lg mx-1 sm:mx-2 text-2xl sm:text-3xl"
-  //               onClick={cancelModal}
-  //             >
-  //               Cancelar
-  //             </button>
-  //           </div>
-  //           <div className={`modal ${errorModal ? "block" : "hidden"}`}>
-  //             <div className="modal-content">
-  //               <p className="text-white text-center font-bold text-2xl sm:text-3xl">
-  //                 Formato no válido
-  //               </p>
-  //             </div>
-  //           </div>
-  //         </div>
-  //       </div>
-  //     </div>
-  //   )}
-  // </div>
-
-  //   );
-  // };
-
-  // export default Time;
 
   return (
     <div className="flex items-center justify-center bg-naranjaCreame rounded p-1 font-Horatio">
@@ -299,23 +190,25 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
                 />
               </div>
               {/* Hora Inicio */}
-           {/* HORA INICIO */}
-<div className="flex flex-col sm:flex-row items-center justify-between w-full sm:w-9/12 my-4">
-  <label className="text-white w-full sm:w-1/2 text-2xl sm:text-3xl text-center sm:text-left mb-3 sm:mb-0">
-    Hora inicio:
-  </label>
+              {/* HORA INICIO */}
+              <div className="flex flex-col sm:flex-row items-center justify-between w-full sm:w-9/12 my-4">
+                <label className="text-white w-full sm:w-1/2 text-2xl sm:text-3xl text-center sm:text-left mb-3 sm:mb-0">
+                  Hora inicio:
+                </label>
 
-  <div className="flex items-center justify-center gap-4 w-full sm:w-1/2">
-    {/* HORAS */}
-    <div className="flex flex-col items-center">
-      <span className="text-white text-sm mb-1">HH</span>
-      <select
-        size="4"
-        value={startTime?.split(":")[0] || "00"}
-        onChange={(e) =>
-          setStartTime(`${e.target.value}:${startTime?.split(":")[1] || "00"}`)
-        }
-        className="
+                <div className="flex items-center justify-center gap-4 w-full sm:w-1/2">
+                  {/* HORAS */}
+                  <div className="flex flex-col items-center">
+                    <span className="text-white text-sm mb-1">HH</span>
+                    <select
+                      size="4"
+                      value={startTime?.split(":")[0] || "00"}
+                      onChange={(e) =>
+                        setStartTime(
+                          `${e.target.value}:${startTime?.split(":")[1] || "00"}`,
+                        )
+                      }
+                      className="
           w-24 h-[9.5rem]
           text-2xl sm:text-3xl
           font-bold text-center
@@ -323,25 +216,27 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
           rounded-2xl shadow-md
           focus:outline-none
         "
-      >
-        {[...Array(24)].map((_, i) => (
-          <option key={i}>{String(i).padStart(2, "0")}</option>
-        ))}
-      </select>
-    </div>
+                    >
+                      {[...Array(24)].map((_, i) => (
+                        <option key={i}>{String(i).padStart(2, "0")}</option>
+                      ))}
+                    </select>
+                  </div>
 
-    <span className="text-white text-3xl font-bold mt-6">:</span>
+                  <span className="text-white text-3xl font-bold mt-6">:</span>
 
-    {/* MINUTOS */}
-    <div className="flex flex-col items-center">
-      <span className="text-white text-sm mb-1">MM</span>
-      <select
-        size="4"
-        value={startTime?.split(":")[1] || "00"}
-        onChange={(e) =>
-          setStartTime(`${startTime?.split(":")[0] || "00"}:${e.target.value}`)
-        }
-        className="
+                  {/* MINUTOS */}
+                  <div className="flex flex-col items-center">
+                    <span className="text-white text-sm mb-1">MM</span>
+                    <select
+                      size="4"
+                      value={startTime?.split(":")[1] || "00"}
+                      onChange={(e) =>
+                        setStartTime(
+                          `${startTime?.split(":")[0] || "00"}:${e.target.value}`,
+                        )
+                      }
+                      className="
           w-24 h-[9.5rem]
           text-2xl sm:text-3xl
           font-bold text-center
@@ -349,32 +244,34 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
           rounded-2xl shadow-md
           focus:outline-none
         "
-      >
-        {[...Array(60)].map((_, i) => (
-          <option key={i}>{String(i).padStart(2, "0")}</option>
-        ))}
-      </select>
-    </div>
-  </div>
-</div>
+                    >
+                      {[...Array(60)].map((_, i) => (
+                        <option key={i}>{String(i).padStart(2, "0")}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              </div>
 
-{/* HORA FINAL */}
-<div className="flex flex-col sm:flex-row items-center justify-between w-full sm:w-9/12 my-4">
-  <label className="text-white w-full sm:w-1/2 text-2xl sm:text-3xl text-center sm:text-left mb-3 sm:mb-0">
-    Hora final:
-  </label>
+              {/* HORA FINAL */}
+              <div className="flex flex-col sm:flex-row items-center justify-between w-full sm:w-9/12 my-4">
+                <label className="text-white w-full sm:w-1/2 text-2xl sm:text-3xl text-center sm:text-left mb-3 sm:mb-0">
+                  Hora final:
+                </label>
 
-  <div className="flex items-center justify-center gap-4 w-full sm:w-1/2">
-    {/* HORAS */}
-    <div className="flex flex-col items-center">
-      <span className="text-white text-sm mb-1">HH</span>
-      <select
-        size="4"
-        value={endTime?.split(":")[0] || "00"}
-        onChange={(e) =>
-          setEndTime(`${e.target.value}:${endTime?.split(":")[1] || "00"}`)
-        }
-        className="
+                <div className="flex items-center justify-center gap-4 w-full sm:w-1/2">
+                  {/* HORAS */}
+                  <div className="flex flex-col items-center">
+                    <span className="text-white text-sm mb-1">HH</span>
+                    <select
+                      size="4"
+                      value={endTime?.split(":")[0] || "00"}
+                      onChange={(e) =>
+                        setEndTime(
+                          `${e.target.value}:${endTime?.split(":")[1] || "00"}`,
+                        )
+                      }
+                      className="
           w-24 h-[9.5rem]
           text-2xl sm:text-3xl
           font-bold text-center
@@ -382,25 +279,27 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
           rounded-2xl shadow-md
           focus:outline-none
         "
-      >
-        {[...Array(24)].map((_, i) => (
-          <option key={i}>{String(i).padStart(2, "0")}</option>
-        ))}
-      </select>
-    </div>
+                    >
+                      {[...Array(24)].map((_, i) => (
+                        <option key={i}>{String(i).padStart(2, "0")}</option>
+                      ))}
+                    </select>
+                  </div>
 
-    <span className="text-white text-3xl font-bold mt-6">:</span>
+                  <span className="text-white text-3xl font-bold mt-6">:</span>
 
-    {/* MINUTOS */}
-    <div className="flex flex-col items-center">
-      <span className="text-white text-sm mb-1">MM</span>
-      <select
-        size="4"
-        value={endTime?.split(":")[1] || "00"}
-        onChange={(e) =>
-          setEndTime(`${endTime?.split(":")[0] || "00"}:${e.target.value}`)
-        }
-        className="
+                  {/* MINUTOS */}
+                  <div className="flex flex-col items-center">
+                    <span className="text-white text-sm mb-1">MM</span>
+                    <select
+                      size="4"
+                      value={endTime?.split(":")[1] || "00"}
+                      onChange={(e) =>
+                        setEndTime(
+                          `${endTime?.split(":")[0] || "00"}:${e.target.value}`,
+                        )
+                      }
+                      className="
           w-24 h-[9.5rem]
           text-2xl sm:text-3xl
           font-bold text-center
@@ -408,14 +307,14 @@ const Time = ({ entrega, postInfo, isTime, setChecked }) => {
           rounded-2xl shadow-md
           focus:outline-none
         "
-      >
-        {[...Array(60)].map((_, i) => (
-          <option key={i}>{String(i).padStart(2, "0")}</option>
-        ))}
-      </select>
-    </div>
-  </div>
-</div>
+                    >
+                      {[...Array(60)].map((_, i) => (
+                        <option key={i}>{String(i).padStart(2, "0")}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              </div>
 
               {/* Duración */}
               {manualDuration ? (

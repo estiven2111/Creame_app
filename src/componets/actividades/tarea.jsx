@@ -38,6 +38,7 @@ const Tarea = (props) => {
             await axios.put('/proyect/update', {
               idNodoProyecto: props.idNodoActividad,
               SKU_Proyecto: props.skuP,
+              N_Documento: props.documentoEmpleado,
               finished: 1,
             });
             const response = await axios.put('/proyect/updateProyect', {
