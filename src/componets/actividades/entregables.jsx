@@ -213,7 +213,7 @@ const Entregables = (props) => {
     props.lista,
     props.SKU_Proyecto,
     props.nitCliente,
-    props.idNodoActividad,
+    props.idNodoProyecto,
     modalVisible,
   ]);
   const allUploaded = newList.every((item) => item.subido === true);
