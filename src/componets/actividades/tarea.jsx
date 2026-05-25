@@ -113,7 +113,7 @@ const Tarea = (props) => {
           setUri={setUri}
           SKU_Proyecto={props.skuP}
           nitCliente={props.nitCliente}
-          idNodoProyecto={props.idNodoProyecto}
+          idNodoActividad={props.idNodoActividad}
           DocumentoEmpleado={props.documentoEmpleado}
           Codi_parteA={props.Cod_Parte}
           finishedUpdate={props.finishedUpdate}
