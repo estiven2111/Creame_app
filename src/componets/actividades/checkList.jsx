@@ -138,14 +138,14 @@ const Checklist = () => {
                     ) ? (
                       <div className="mb-5 bg-azulCreame rounded-lg text-white border-turquesaCreame border-2 shadow-lg">
                         <div className="flex items-center m-2">
-                          <p className="mr-3 text-xs sm:text-base break-normal min-w-fit font-Horatio pl-5">
+                          <p className="mr-3 text-xs sm:text-base break-normal min-w-fit font-Horatio ">
                            Inicio: {compo.FechaInicio} - Fin: {compo.FechaFinal}
                           </p>
                           <p
                             onClick={handlePress}
                             className={`text-white ${
                               numberOfLines ? "truncate" : ""
-                            } cursor-pointer text-xs sm:text-base no-underline font-Horatio pl-20`}
+                            } cursor-pointer text-xs sm:text-base no-underline font-Horatio`}
                           >
                             {compo.componente}
                           </p>
