@@ -1283,50 +1283,76 @@ const Indicadores = () => {
         </div>
 
         {/* TABLA */}
-        <div className="bg-white rounded shadow p-6 overflow-x-auto">
-          <table className="w-full text-center text-2xl">
-            <thead className="bg-gray-200">
+
+        <div className="w-full overflow-x-auto bg-white rounded-xl shadow-lg p-4 sm:p-6">
+          <table className="min-w-[700px] w-full text-center text-sm sm:text-base md:text-lg lg:text-2xl">
+            {/* HEADER */}
+            <thead className="bg-gray-200 text-gray-700">
               <tr>
-                <th>Indicador</th>
-                <th>Acumulado</th>
-                <th>Mes</th>
+                <th className="py-3 px-2">Indicador</th>
+                <th className="py-3 px-2">Acumulado</th>
+                <th className="py-3 px-2">Mes</th>
               </tr>
             </thead>
 
-            <tbody>
-              <tr>
-                <td>Días Programados</td>
-                <td>{diasA}</td>
-                <td>{diasM}</td>
-              </tr>
-              <tr>
-                <td>Horas Disponibles</td>
-                <td>{dispA}</td>
-                <td>{dispM}</td>
+            {/* BODY */}
+            <tbody className="divide-y divide-gray-100">
+              <tr className="hover:bg-gray-50">
+                <td className="py-3 px-2 font-medium">Días Programados</td>
+                <td className="py-3 px-2">{diasA}</td>
+                <td className="py-3 px-2">{diasM}</td>
               </tr>
 
-              <tr className="text-yellow-600 font-bold">
-                <td>Horas Programadas</td>
-                <td>{progA.toFixed(1)}</td>
-                <td>{progM.toFixed(1)}</td>
+              <tr className="hover:bg-gray-50">
+                <td className="py-3 px-2 font-medium">Horas Disponibles</td>
+                <td className="py-3 px-2 text-blue-600 font-semibold">
+                  {dispA}
+                </td>
+                <td className="py-3 px-2 text-blue-600 font-semibold">
+                  {dispM}
+                </td>
               </tr>
 
-              <tr className="text-green-600 font-bold">
-                <td>Horas Cumplidas</td>
-                <td>{cumpA.toFixed(1)}</td>
-                <td>{cumpM.toFixed(1)}</td>
+              <tr className="hover:bg-gray-50">
+                <td className="py-3 px-2 font-medium text-yellow-600">
+                  Horas Programadas
+                </td>
+                <td className="py-3 px-2 text-yellow-600 font-bold">
+                  {progA.toFixed(1)}
+                </td>
+                <td className="py-3 px-2 text-yellow-600 font-bold">
+                  {progM.toFixed(1)}
+                </td>
               </tr>
 
-              <tr className="text-red-600 font-bold">
-                <td>Horas Pendientes</td>
-                <td>{pendA.toFixed(1)}</td>
-                <td>0</td>
+              <tr className="hover:bg-gray-50">
+                <td className="py-3 px-2 font-medium text-green-600">
+                  Horas Cumplidas
+                </td>
+                <td className="py-3 px-2 text-green-600 font-bold">
+                  {cumpA.toFixed(1)}
+                </td>
+                <td className="py-3 px-2 text-green-600 font-bold">
+                  {cumpM.toFixed(1)}
+                </td>
               </tr>
 
-              <tr className="text-purple-600 font-bold">
-                <td>Frecuencia</td>
-                <td>{freqA}</td>
-                <td>{freqM}</td>
+              <tr className="hover:bg-gray-50">
+                <td className="py-3 px-2 font-medium text-red-600">
+                  Horas Pendientes
+                </td>
+                <td className="py-3 px-2 text-red-600 font-bold">
+                  {pendA.toFixed(1)}
+                </td>
+                <td className="py-3 px-2 text-red-600 font-bold">0</td>
+              </tr>
+
+              <tr className="hover:bg-gray-50">
+                <td className="py-3 px-2 font-medium text-purple-600">
+                  Frecuencia
+                </td>
+                <td className="py-3 px-2 text-purple-600 font-bold">{freqA}</td>
+                <td className="py-3 px-2 text-purple-600 font-bold">{freqM}</td>
               </tr>
             </tbody>
           </table>
@@ -1355,9 +1381,9 @@ const Indicadores = () => {
         </div>
 
         {/* GRAFICA 2 (CORREGIDA) */}
-        <div className="bg-white mt-6 p-6 rounded shadow h-[420px]">
+        {/* <div className="bg-white mt-6 p-6 rounded shadow h-[420px]">
           <Bar data={chartCompare} options={optionsBar} />
-        </div>
+        </div> */}
       </div>
     </div>
   );
