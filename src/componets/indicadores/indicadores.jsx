@@ -1370,7 +1370,7 @@ const Indicadores = () => {
           <div className="bg-white p-5 rounded shadow text-center">
             <p>Productividad</p>
             <h2 className="text-green-600 font-bold text-xl">
-              {productividad.toFixed(2)}
+              {productividad.toFixed(2)}%
             </h2>
           </div>
         </div>
