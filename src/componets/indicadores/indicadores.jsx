@@ -1,255 +1,262 @@
-import React, { useEffect, useState, useContext } from 'react';
-// import PieComp from './pie';
-// import RangeDatePicker from './datePicker';
-import LogoSync from "../../assets/img/icon.png";
-import { ThemeContext} from "../context/themeContext"
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import { Pie } from 'react-chartjs-2';
-import axios from 'axios';
-import SearchBar from '../searchBar/searchBar';
-import { useLocation } from 'react-router-dom';
-let grafica = {
-  dis:35,
-  pro:35,
-  cump:30
-}
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Doughnut } from "react-chartjs-2";
+
+ChartJS.register(ArcElement, Tooltip, Legend);
+
+const meses = [
+  "Enero","Febrero","Marzo","Abril","Mayo","Junio",
+  "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"
+];
+
 const Indicadores = () => {
-  const [justSelected, SetJustSelected] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const [totalFechas, setTotlaFechas] = useState([]);
-  const [selectedOptions, setSelectedOptions] = useState([]);
-  const [infoFecha, setInfoFecha] = useState({});
-  const [horasDisp, setHorasDisp] = useState({});
 
-  const location = useLocation()
-  localStorage.setItem("ruta", location.pathname)
+  const docId = localStorage.getItem("doc_empleado");
 
-  ChartJS.register(ArcElement, Tooltip, Legend);
+  const [anio, setAnio] = useState(2026);
+  const [mes, setMes] = useState(1);
 
-var options = {
-    responsive : true,
-    maintainAspectRatio: false,
-};
+  const [dataApi, setDataApi] = useState({});
+  const [loading, setLoading] = useState(false);
 
-var datas = {
-    labels: ['A tiempo', 'Con retraso', 'Por frecuencia'],
-    datasets: [
-        {
-            label: 'Nivel Actividad',
-            data: [grafica.dis,grafica.cump , grafica.pro],
-            backgroundColor: [
-                '#1148D6',
-                '#9755CF',
-                '#7A3E03',
-            ],
-            borderColor: [
-                '#86A5F7',
-                '#D7AEFA',
-                '#F2B274',
-            ],
-            borderWidth: 1,
-        },
+  useEffect(() => {
+    if (!docId) return;
+
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+
+        const res = await axios.get("/indicadores/fechas", {
+          params: { docId, anio, mes }
+        });
+
+        setDataApi(res.data.indicadores || {});
+
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [anio, mes]);
+
+  // =========================
+  // DATOS
+  // =========================
+  const diasA = dataApi.DiasProgramados_Acumulado || 0;
+  const diasM = dataApi.DiasProgramados_Mes || 0;
+
+  const dispA = dataApi.HorasDisponibles_Acumulado || 0;
+  const dispM = dataApi.HorasDisponibles_Mes || 0;
+
+  const progA = dataApi.HorasProgramadas_Acumulado || 0;
+  const progM = dataApi.HorasProgramadas_Mes || 0;
+
+  const cumpA = dataApi.HorasCumplidas_Acumulado || 0;
+  const cumpM = dataApi.HorasCumplidas_Mes || 0;
+
+  const pendA = dataApi.HorasPendientes_Acumulado || 0;
+
+  const freqA = dataApi.HorasFrecuencia_Acumulado || 0;
+  const freqM = dataApi.HorasFrecuencia_Mes || 0;
+
+  // =========================
+  // KPIs
+  // =========================
+  const atraso =
+    progA > 0 ? (pendA / progA) * 100 : 0;
+
+  const productividad =
+    (progA + progM) > 0
+      ? (cumpA + cumpM) / (progA + progM)
+      : 0;
+
+  // =========================
+  // CHART
+  // =========================
+  const chartData = {
+    labels: [
+      "Días Programados",
+      "Horas Disponibles",
+      "Horas Programadas",
+      "Horas Cumplidas",
+      "Horas Pendientes",
+      "Frecuencia"
     ],
-};
-
-
-
-  const [name, setName] = useState("");
-  const { fechasIndicadores, inputValue, todasLasFechas } = useContext(ThemeContext);
-  const docId =  localStorage.getItem("doc_empleado")
-  useEffect(() => {
-    const getName = async () => {
-      const fullname = localStorage.getItem("name")
-      setName(fullname)
-    };
-    getName();
-  },[])
-  const [showGraph, setShowGraph,] = useState(false);
-
-  const showGraphHandler = ()=> {
-    setShowGraph(true)
-  }
-
-  const [data, setData] = useState({
-    hDisp : "",
-    hProg : "",
-    hCump : "",
-    hFrec : "",
-  })
-
-  const handleOnChange = (text, name) => {
-    setData({
-    ...data,
-    [name]: text
-    });
-    if (name === "hDisp") {
-         grafica.dis   = text
-    }
-    if (name === "hCump") {
-      grafica.cump = text
-    }
-    if (name === "hProg") {
-      grafica.pro = text
-    }
-  };
-  
-
-
-  const aTiempo = ((infoFecha.CumplidasPeriodo/infoFecha.HoraProgramada)*100).toFixed(1)
-  const cRetraso = ((infoFecha.atrazo/infoFecha.HoraProgramada)*100).toFixed(1)
-  const pFrec = ((infoFecha.HorasFrecuencia/infoFecha.HoraProgramada)*100).toFixed(1)
-
-  const calculoActividad = () => {
-
-    ((parseInt(data.hCump) + parseInt(data.hFrec)) / parseInt(data.hProg) * 100).toFixed(1)
-  }
-  
-  useEffect(() => {
-    const fechasSinProyectos = async() => {
-      const indicadores = await axios.get(`/indicadores/fechas?docId=${docId}`);
-      todasLasFechas(indicadores.data)
-    }
-    fechasSinProyectos()
-  }, [])
-  // useEffect(() => {
-  //   setIsOpen(false);
-  //   SetJustSelected(false)
-  //   setInfoFecha({})
-  //   setHorasDisp({})
-  // },[inputValue])
-
-  useEffect(() => {
-    const ActulizarOptions = () => {
-      if (fechasIndicadores){
-      setTotlaFechas(fechasIndicadores.fechas)
-      setHorasDisp(fechasIndicadores.HDisponibles)
+    datasets: [
+      {
+        data: [
+          diasA + diasM,
+          dispA + dispM,
+          progA + progM,
+          cumpA + cumpM,
+          pendA,
+          freqA + freqM
+        ],
+        backgroundColor: [
+          "#1E3A8A",
+          "#2563EB",
+          "#10B981",
+          "#22C55E",
+          "#F59E0B",
+          "#EF4444"
+        ],
+        borderWidth: 3,
+        borderColor: "#fff",
+        hoverOffset: 10
       }
-    }
-    ActulizarOptions()
-    },[fechasIndicadores])
-
-  const toggleDropdown = () => {
-    SetJustSelected(false)
-    setIsOpen(!isOpen);
+    ]
   };
 
-  const handleOptionSelect = async(option) => {
-    const infoFechas = await axios.get(`/indicadores/horas?docId=${docId}&id=${option[0].id}`)
-    if (!selectedOptions.includes(option)) {
-      setSelectedOptions(option);
-      setInfoFecha(infoFechas.data)
-      if (!isNaN(infoFecha.hdisp)) {
-        grafica.dis = infoFecha.hdisp
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    cutout: "40%",
+    plugins: {
+      legend: {
+        position: "bottom",
+        labels: {
+          font: {
+            size: 20
+          }
+        }
       }
-      if (!isNaN(infoFecha.hdisp)) {
-        grafica.dis = infoFecha.hdisp
-      }
-      if (!isNaN(infoFecha.hdisp)) {
-        grafica.dis = infoFecha.hdisp
-      }
-
-      setData({
-        hDisp : infoFechas.data,
-        hProg : infoFechas.data,
-        hCump : infoFechas.data,
-        hFrec : infoFechas.data,
-      })
-      }
-    setIsOpen(false);
-    SetJustSelected(true)
+    }
   };
 
-  const renderOptions = () => {
-    if (totalFechas) {
-      return totalFechas.map((option, index) => (
-        <div
-          className="mb-2 cursor-pointer"
-          // style={{ backgroundColor: "blue" }}
-          key={index}
-          onClick={() => {
-            handleOptionSelect([option]);
-            // setCurrentID(option.id)
-          }}
-        >
-          <p className={`truncate ${numberOfLines ? 'truncate-1' : 'truncate-2'}`}>{option.Fecha}</p>
+  return (
+    <div className="w-full min-h-screen bg-gray-100 flex justify-center px-2 sm:px-4 md:px-6 lg:px-10 py-6">
+
+      <div className="w-full max-w-6xl">
+
+        {/* LOADING */}
+        {loading && (
+          <div className="text-center mb-4 text-gray-600 font-semibold text-base sm:text-lg">
+            Cargando indicadores...
+          </div>
+        )}
+
+        {/* FILTROS */}
+        <div className="flex flex-col sm:flex-row gap-3 justify-center items-center mb-6">
+
+          <select
+            className="w-full sm:w-auto p-2 border rounded-md shadow-sm text-sm sm:text-base"
+            value={anio}
+            onChange={(e) => setAnio(Number(e.target.value))}
+          >
+            {[2024, 2025, 2026].map(a => (
+              <option key={a} value={a}>{a}</option>
+            ))}
+          </select>
+
+          <select
+            className="w-full sm:w-auto p-2 border rounded-md shadow-sm text-sm sm:text-base"
+            value={mes}
+            onChange={(e) => setMes(Number(e.target.value))}
+          >
+            {meses.map((m, i) => (
+              <option key={i} value={i + 1}>{m}</option>
+            ))}
+          </select>
+
         </div>
-      ));
-    }
-  };
-  
 
-  const renderSelectedOptions = () => {
-    return selectedOptions.map((option, index) => (
-      <p key={index} className="text-blue-500 font-semibold">
-        {option.Fecha}
-      </p>
-    ));
-  };
-  
-  const [numberOfLines, setNumberOfLines] = useState(true);
-    const handlePress = () => {
-        setNumberOfLines(!numberOfLines);
-    };
+        {/* TABLA */}
+        <div className="bg-white shadow-lg rounded-xl p-4 sm:p-6 overflow-x-auto">
 
-    return (
-      <div className="md:container mx-auto md:px-10">
-       <div className="mt-10 mb-5">
-         <SearchBar/>
-       </div>
-        <div className="scroll mb-10 text-center m-10">
-          {/* <RangeDatePicker/> */}
-          
-          <div className="singleInput  m-10 flex items-center justify-center">
-            <div className="inputContOptions">
-              <div className="inputIntLeftDrop">
-                {justSelected ? (
-                  <div className="block">
-                    <button onClick={toggleDropdown}>{renderSelectedOptions()}</button>
-                  </div>
-                ) : (
-                  <div className="blockNoSelected">
-                    <button onClick={toggleDropdown}>Seleccionar opciones</button>
-                  </div>
-                )}
-              </div>
-              {isOpen && <div className="options absolute bg-slate-500 ">{renderOptions()}</div>}
-            </div>
-          </div>
-         
-          <div className="inputCont  m-5">
-            <label className="label">Horas Disp :</label>
-            <input className="input border-2 solid rounded-lg bg-blue-300/50 m-2" value={!isNaN(infoFecha.hdisp) ? infoFecha.hdisp: data.hDisp} onChange={(e) => handleOnChange(e.target.value, "hDisp")} placeholder="Horas" type="number"/>
-            <label className="label">Horas Cumplidas :</label>
-            <input className="input border-2 solid rounded-lg bg-blue-300/50 m-2" value={!isNaN(infoFecha.CumplidasPeriodo) && !isNaN(infoFecha.atrazo) ? (infoFecha.CumplidasPeriodo + infoFecha.atrazo).toString() : data.hCump} onChange={(e) => handleOnChange(e.target.value, "hCump")} placeholder="Horas" type="number"/>
-          </div>
-          <div className="inputCont  m-5">
-            <label className="label">Horas Prog :</label>
-            <input className="input border-2 solid rounded-lg bg-blue-300/50 m-2" value={!isNaN(infoFecha.HoraProgramada) ? infoFecha.HoraProgramada.toString() : data.hProg} onChange={(e) => handleOnChange(e.target.value, "hProg")} placeholder="Horas" type="number"/>
-            <label className="label">Horas Frecuencia :</label>
-            <input className="input border-2 solid rounded-lg bg-blue-300/50 m-2" value={!isNaN(infoFecha.HorasFrecuencia) ? infoFecha.HorasFrecuencia.toString() : data.hFrec} onChange={(e) => handleOnChange(e.target.value, "hFrec")} placeholder="Horas" type="number"/>
-          </div>
-          <div className="inputCont  m-5">
-            <label className="label2">NIVEL DE ACTIVIDAD(%):</label>
-            <input className="input border-2 solid rounded-lg bg-blue-300/50 m-2" value={infoFecha.nivActividad ? infoFecha.nivActividad.toString() : ""} onChange={(e) => handleOnChange(e.target.value, "activity")} placeholder="%" type="number"/>
-          </div>
+          <table className="w-full min-w-[600px] text-center text-xs sm:text-sm md:text-base">
 
+            <thead className="bg-gray-200">
+              <tr>
+                <th className="p-2">Indicador</th>
+                <th>Acumulado</th>
+                <th>Mes</th>
+              </tr>
+            </thead>
 
-          {/* <div className="grafico">
-            <div>
-              {!isNaN(aTiempo) && !isNaN(cRetraso) && !isNaN(pFrec)
-              ? (<>
-              <div>
-                <span className="name">{name}</span>
-              </div>
-              <PieComp aTiempo={parseFloat(aTiempo)} cRetraso={parseFloat(cRetraso)} pFrec={parseFloat(pFrec)}/></>) 
-              : null}
-            </div>
-          </div> */}
+            <tbody>
+
+              <tr>
+                <td>Días Programados</td>
+                <td>{diasA}</td>
+                <td>{diasM}</td>
+              </tr>
+
+              <tr>
+                <td>Horas Disponibles</td>
+                <td>{dispA}</td>
+                <td>{dispM}</td>
+              </tr>
+
+              <tr>
+                <td>Horas Programadas</td>
+                <td>{progA}</td>
+                <td>{progM}</td>
+              </tr>
+
+              <tr>
+                <td>Horas Cumplidas</td>
+                <td>{cumpA}</td>
+                <td>{cumpM}</td>
+              </tr>
+
+              <tr>
+                <td>Horas Pendientes</td>
+                <td>{pendA}</td>
+                <td>0</td>
+              </tr>
+
+              <tr>
+                <td>Horas Frecuencia</td>
+                <td>{freqA}</td>
+                <td>{freqM}</td>
+              </tr>
+
+            </tbody>
+
+          </table>
         </div>
-        <div className='lg:h-96 md:h-80 h-64'><Pie data={datas} options={options}  /></div>
+
+        {/* KPIs */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+
+          <div className="bg-white p-5 rounded-xl shadow text-center">
+            <p className="text-gray-500 text-sm sm:text-base">Atraso</p>
+            <h2 className="text-red-600 font-bold text-xl sm:text-2xl">
+              {atraso.toFixed(1)}%
+            </h2>
+          </div>
+
+          <div className="bg-white p-5 rounded-xl shadow text-center">
+            <p className="text-gray-500 text-sm sm:text-base">Productividad</p>
+            <h2 className="text-green-600 font-bold text-xl sm:text-2xl">
+              {productividad.toFixed(2)}
+            </h2>
+          </div>
+
+        </div>
+
+        {/* GRAFICO */}
+        <div className="bg-white shadow-lg rounded-xl p-4 sm:p-6 mt-6">
+
+          <h2 className="text-center font-semibold text-base sm:text-lg mb-4">
+            Indicadores de Actividad
+          </h2>
+
+          {loading ? (
+            <div className="text-center py-10">Cargando gráfico...</div>
+          ) : (
+            <div className="w-full h-[400px] sm:h-[3/0px] md:h-[450px] flex justify-center">
+              <Doughnut data={chartData} options={options} />
+            </div>
+          )}
+
+        </div>
+
       </div>
-    );
-    
+    </div>
+  );
 };
 
 export default Indicadores;
