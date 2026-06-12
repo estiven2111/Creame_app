@@ -1161,7 +1161,7 @@ const Indicadores = () => {
   const atraso = progA > 0 ? (pendA / progA) * 100 : 0;
 
   const productividad =
-    progA + progM > 0 ? (cumpA + cumpM) / (progA + progM) : 0;
+    progA + progM > 0 ? (cumpA + cumpM) / (progA + progM)* 100 : 0;
 
   // =========================
   // GRAFICA 1 (ANILLO GENERAL)
