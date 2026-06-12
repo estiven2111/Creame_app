@@ -1168,9 +1168,9 @@ const Indicadores = () => {
   // =========================
   const chartMain = {
     labels: [
-      "Días Programados",
+      // "Días Disponibles", // días programados
       "Horas Disponibles",
-      "Horas Programadas",
+      "Horas Asignadas", //horas programadas
       "Horas Cumplidas",
       "Horas Pendientes",
       "Frecuencia",
@@ -1178,7 +1178,7 @@ const Indicadores = () => {
     datasets: [
       {
         data: [
-          diasA + diasM,
+          // diasA + diasM,
           dispA + dispM,
           progA + progM,
           cumpA + cumpM,
@@ -1186,7 +1186,7 @@ const Indicadores = () => {
           freqA + freqM,
         ],
         backgroundColor: [
-          "#1E3A8A",
+          // "#1E3A8A",
           "#2563EB",
           "#F59E0B",
           "#10B981",
@@ -1205,9 +1205,9 @@ const Indicadores = () => {
   // =========================
   const chartCompare = {
     labels: [
-      "Días Programados",
+      "Días Disponibles",
       "Horas Disponibles",
-      "Horas Programadas",
+      "Horas Asignadas",
       "Horas Cumplidas",
       "Horas Pendientes",
     ],
@@ -1298,7 +1298,7 @@ const Indicadores = () => {
             {/* BODY */}
             <tbody className="divide-y divide-gray-100">
               <tr className="hover:bg-gray-50">
-                <td className="py-3 px-2 font-medium">Días Programados</td>
+                <td className="py-3 px-2 font-medium">Días Disponibles</td>
                 <td className="py-3 px-2">{diasA}</td>
                 <td className="py-3 px-2">{diasM}</td>
               </tr>
@@ -1315,7 +1315,7 @@ const Indicadores = () => {
 
               <tr className="hover:bg-gray-50">
                 <td className="py-3 px-2 font-medium text-yellow-600">
-                  Horas Programadas
+                  Horas Asignadas
                 </td>
                 <td className="py-3 px-2 text-yellow-600 font-bold">
                   {progA.toFixed(1)}
