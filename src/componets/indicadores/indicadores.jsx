@@ -261,17 +261,6 @@
 
 // export default Indicadores;
 
-
-
-
-
-
-
-
-
-
-
-
 // import React, { useEffect, useState } from "react";
 // import axios from "axios";
 
@@ -517,10 +506,6 @@
 // };
 
 // export default Indicadores;
-
-
-
-
 
 // import React, { useEffect, useState } from "react";
 // import axios from "axios";
@@ -793,21 +778,6 @@
 // };
 
 // export default Indicadores;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import React, { useEffect, useState } from "react";
 // import axios from "axios";
@@ -1097,30 +1067,6 @@
 
 // export default Indicadores;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -1131,7 +1077,7 @@ import {
   Legend,
   BarElement,
   CategoryScale,
-  LinearScale
+  LinearScale,
 } from "chart.js";
 
 import { Doughnut, Bar } from "react-chartjs-2";
@@ -1142,16 +1088,25 @@ ChartJS.register(
   Legend,
   BarElement,
   CategoryScale,
-  LinearScale
+  LinearScale,
 );
 
 const meses = [
-  "Enero","Febrero","Marzo","Abril","Mayo","Junio",
-  "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"
+  "Enero",
+  "Febrero",
+  "Marzo",
+  "Abril",
+  "Mayo",
+  "Junio",
+  "Julio",
+  "Agosto",
+  "Septiembre",
+  "Octubre",
+  "Noviembre",
+  "Diciembre",
 ];
 
 const Indicadores = () => {
-
   const docId = localStorage.getItem("doc_empleado");
 
   const [anio, setAnio] = useState(2026);
@@ -1168,11 +1123,10 @@ const Indicadores = () => {
         setLoading(true);
 
         const res = await axios.get("/indicadores/fechas", {
-          params: { docId, anio, mes }
+          params: { docId, anio, mes },
         });
 
         setDataApi(res.data.indicadores || {});
-
       } finally {
         setLoading(false);
       }
@@ -1207,9 +1161,7 @@ const Indicadores = () => {
   const atraso = progA > 0 ? (pendA / progA) * 100 : 0;
 
   const productividad =
-    (progA + progM) > 0
-      ? (cumpA + cumpM) / (progA + progM)
-      : 0;
+    progA + progM > 0 ? (cumpA + cumpM) / (progA + progM) : 0;
 
   // =========================
   // GRAFICA 1 (ANILLO GENERAL)
@@ -1221,7 +1173,7 @@ const Indicadores = () => {
       "Horas Programadas",
       "Horas Cumplidas",
       "Horas Pendientes",
-      "Frecuencia"
+      "Frecuencia",
     ],
     datasets: [
       {
@@ -1231,7 +1183,7 @@ const Indicadores = () => {
           progA + progM,
           cumpA + cumpM,
           pendA,
-          freqA + freqM
+          freqA + freqM,
         ],
         backgroundColor: [
           "#1E3A8A",
@@ -1239,13 +1191,13 @@ const Indicadores = () => {
           "#F59E0B",
           "#10B981",
           "#EF4444",
-          "#8B5CF6"
+          "#8B5CF6",
         ],
-        borderWidth: 3,
+        borderWidth: 5,
         borderColor: "#fff",
-        hoverOffset: 10
-      }
-    ]
+        hoverOffset: 10,
+      },
+    ],
   };
 
   // =========================
@@ -1257,59 +1209,82 @@ const Indicadores = () => {
       "Horas Disponibles",
       "Horas Programadas",
       "Horas Cumplidas",
-      "Horas Pendientes"
+      "Horas Pendientes",
     ],
     datasets: [
       {
         label: "Acumulado",
         data: [diasA, dispA, progA, cumpA, pendA],
-        backgroundColor: "#2563EB"
+        backgroundColor: "#2563EB",
       },
       {
         label: "Mes",
         data: [diasM, dispM, progM, cumpM, 0],
-        backgroundColor: "#F59E0B"
-      }
-    ]
+        backgroundColor: "#F59E0B",
+      },
+    ],
   };
 
   const optionsMain = {
     responsive: true,
     maintainAspectRatio: false,
-    cutout: "55%",
+    cutout: "45%",
     plugins: {
-      legend: { position: "bottom" }
-    }
+      legend: {
+        position: "bottom",
+        labels: {
+          font: {
+            size: 20, // 👈 aquí aumentas el tamaño
+            weight: "bold",
+          },
+        },
+      },
+    },
   };
 
   const optionsBar = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: { position: "bottom" }
-    }
+      legend: { position: "bottom" },
+    },
   };
+  const currentYear = new Date().getFullYear();
+
+  const years = Array.from({ length: 3 }, (_, i) => currentYear - i);
 
   return (
     <div className="w-full min-h-screen bg-gray-100 flex justify-center py-8">
-
       <div className="w-full max-w-6xl px-3">
-
         {/* FILTROS */}
         <div className="flex gap-3 justify-center mb-6">
-          <select value={anio} onChange={e => setAnio(+e.target.value)} className="p-2 border rounded">
-            {[2024, 2025, 2026].map(a => <option key={a}>{a}</option>)}
+          <select
+            value={anio}
+            onChange={(e) => setAnio(Number(e.target.value))}
+          >
+            {years.map((a) => (
+              <option key={a} value={a}>
+                {a}
+              </option>
+            ))}
           </select>
 
-          <select value={mes} onChange={e => setMes(+e.target.value)} className="p-2 border rounded">
-            {meses.map((m, i) => <option key={i} value={i+1}>{m}</option>)}
+          <select
+            value={mes}
+            onChange={(e) => setMes(+e.target.value)}
+            className="p-2 border rounded"
+          >
+            {meses.map((m, i) => (
+              <option key={i} value={i + 1}>
+                {m}
+              </option>
+            ))}
           </select>
         </div>
 
         {/* TABLA */}
         <div className="bg-white rounded shadow p-6 overflow-x-auto">
-          <table className="w-full text-center text-sm">
-
+          <table className="w-full text-center text-2xl">
             <thead className="bg-gray-200">
               <tr>
                 <th>Indicador</th>
@@ -1319,26 +1294,41 @@ const Indicadores = () => {
             </thead>
 
             <tbody>
-              <tr><td>Días Programados</td><td>{diasA}</td><td>{diasM}</td></tr>
-              <tr><td>Horas Disponibles</td><td>{dispA}</td><td>{dispM}</td></tr>
+              <tr>
+                <td>Días Programados</td>
+                <td>{diasA}</td>
+                <td>{diasM}</td>
+              </tr>
+              <tr>
+                <td>Horas Disponibles</td>
+                <td>{dispA}</td>
+                <td>{dispM}</td>
+              </tr>
 
               <tr className="text-yellow-600 font-bold">
-                <td>Horas Programadas</td><td>{progA.toFixed(1)}</td><td>{progM.toFixed(1)}</td>
+                <td>Horas Programadas</td>
+                <td>{progA.toFixed(1)}</td>
+                <td>{progM.toFixed(1)}</td>
               </tr>
 
               <tr className="text-green-600 font-bold">
-                <td>Horas Cumplidas</td><td>{cumpA.toFixed(1)}</td><td>{cumpM.toFixed(1)}</td>
+                <td>Horas Cumplidas</td>
+                <td>{cumpA.toFixed(1)}</td>
+                <td>{cumpM.toFixed(1)}</td>
               </tr>
 
               <tr className="text-red-600 font-bold">
-                <td>Horas Pendientes</td><td>{pendA.toFixed(1)}</td><td>0</td>
+                <td>Horas Pendientes</td>
+                <td>{pendA.toFixed(1)}</td>
+                <td>0</td>
               </tr>
 
               <tr className="text-purple-600 font-bold">
-                <td>Frecuencia</td><td>{freqA}</td><td>{freqM}</td>
+                <td>Frecuencia</td>
+                <td>{freqA}</td>
+                <td>{freqM}</td>
               </tr>
             </tbody>
-
           </table>
         </div>
 
@@ -1346,17 +1336,21 @@ const Indicadores = () => {
         <div className="grid md:grid-cols-2 gap-4 mt-6">
           <div className="bg-white p-5 rounded shadow text-center">
             <p>Atraso</p>
-            <h2 className="text-red-600 font-bold text-xl">{atraso.toFixed(1)}%</h2>
+            <h2 className="text-red-600 font-bold text-xl">
+              {atraso.toFixed(1)}%
+            </h2>
           </div>
 
           <div className="bg-white p-5 rounded shadow text-center">
             <p>Productividad</p>
-            <h2 className="text-green-600 font-bold text-xl">{productividad.toFixed(2)}</h2>
+            <h2 className="text-green-600 font-bold text-xl">
+              {productividad.toFixed(2)}
+            </h2>
           </div>
         </div>
 
         {/* GRAFICA 1 */}
-        <div className="bg-white mt-6 p-6 rounded shadow h-[420px]">
+        <div className="bg-white mt-6 p-6 rounded shadow h-[620px]">
           <Doughnut data={chartMain} options={optionsMain} />
         </div>
 
@@ -1364,7 +1358,6 @@ const Indicadores = () => {
         <div className="bg-white mt-6 p-6 rounded shadow h-[420px]">
           <Bar data={chartCompare} options={optionsBar} />
         </div>
-
       </div>
     </div>
   );
