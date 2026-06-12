@@ -1161,7 +1161,7 @@ const Indicadores = () => {
   const atraso = progA > 0 ? (pendA / progA) * 100 : 0;
 
   const productividad =
-    progA + progM > 0 ? (cumpA + cumpM) / (progA + progM)* 100 : 0;
+    progA + progM > 0 ? ((cumpA + cumpM) / (progA + progM)) * 100 : 0;
 
   // =========================
   // GRAFICA 1 (ANILLO GENERAL)
@@ -1284,79 +1284,90 @@ const Indicadores = () => {
 
         {/* TABLA */}
 
-        <div className="w-full overflow-x-auto bg-white rounded-xl shadow-lg p-4 sm:p-6">
-          <table className="min-w-[700px] w-full text-center text-sm sm:text-base md:text-lg lg:text-2xl">
-            {/* HEADER */}
-            <thead className="bg-gray-200 text-gray-700">
-              <tr>
-                <th className="py-3 px-2">Indicador</th>
-                <th className="py-3 px-2">Acumulado</th>
-                <th className="py-3 px-2">Mes</th>
-              </tr>
-            </thead>
+        <div className="w-full overflow-x-auto bg-white rounded-xl shadow-lg p-1 sm:p-6">
+  <table className="min-w-[420px] sm:min-w-[700px] w-full text-center text-xs sm:text-base md:text-lg lg:text-2xl">
+    
+    {/* HEADER */}
+    <thead className="bg-gray-200 text-gray-700">
+      <tr>
+        <th className="py-1 px-[2px] sm:py-3 sm:px-2">Indicador</th>
+        <th className="py-1 px-[2px] sm:py-3 sm:px-2">Acumulado</th>
+        <th className="py-1 px-[2px] sm:py-3 sm:px-2">Mes</th>
+      </tr>
+    </thead>
 
-            {/* BODY */}
-            <tbody className="divide-y divide-gray-100">
-              <tr className="hover:bg-gray-50">
-                <td className="py-3 px-2 font-medium">Días Disponibles</td>
-                <td className="py-3 px-2">{diasA}</td>
-                <td className="py-3 px-2">{diasM}</td>
-              </tr>
+    {/* BODY */}
+    <tbody className="divide-y divide-gray-100">
+      <tr className="hover:bg-gray-50">
+        <td className="py-1 px-[2px] sm:py-3 sm:px-2 font-medium">
+          Días Disponibles
+        </td>
+        <td className="py-1 px-[2px] sm:py-3 sm:px-2">{diasA}</td>
+        <td className="py-1 px-[2px] sm:py-3 sm:px-2">{diasM}</td>
+      </tr>
 
-              <tr className="hover:bg-gray-50">
-                <td className="py-3 px-2 font-medium">Horas Disponibles</td>
-                <td className="py-3 px-2 text-blue-600 font-semibold">
-                  {dispA}
-                </td>
-                <td className="py-3 px-2 text-blue-600 font-semibold">
-                  {dispM}
-                </td>
-              </tr>
+      <tr className="hover:bg-gray-50">
+        <td className="py-1 px-[2px] sm:py-3 sm:px-2 font-medium text-blue-600">
+          Horas Disponibles
+        </td>
+        <td className="py-1 px-[2px] sm:py-3 sm:px-2 text-blue-600 font-semibold">
+          {dispA}
+        </td>
+        <td className="py-1 px-[2px] sm:py-3 sm:px-2 text-blue-600 font-semibold">
+          {dispM}
+        </td>
+      </tr>
 
-              <tr className="hover:bg-gray-50">
-                <td className="py-3 px-2 font-medium text-yellow-600">
-                  Horas Asignadas
-                </td>
-                <td className="py-3 px-2 text-yellow-600 font-bold">
-                  {progA.toFixed(1)}
-                </td>
-                <td className="py-3 px-2 text-yellow-600 font-bold">
-                  {progM.toFixed(1)}
-                </td>
-              </tr>
+      <tr className="hover:bg-gray-50">
+        <td className="py-1 px-[2px] sm:py-3 sm:px-2 font-medium text-yellow-600">
+          Horas Asignadas
+        </td>
+        <td className="py-1 px-[2px] sm:py-3 sm:px-2 text-yellow-600 font-bold">
+          {progA.toFixed(1)}
+        </td>
+        <td className="py-1 px-[2px] sm:py-3 sm:px-2 text-yellow-600 font-bold">
+          {progM.toFixed(1)}
+        </td>
+      </tr>
 
-              <tr className="hover:bg-gray-50">
-                <td className="py-3 px-2 font-medium text-green-600">
-                  Horas Cumplidas
-                </td>
-                <td className="py-3 px-2 text-green-600 font-bold">
-                  {cumpA.toFixed(1)}
-                </td>
-                <td className="py-3 px-2 text-green-600 font-bold">
-                  {cumpM.toFixed(1)}
-                </td>
-              </tr>
+      <tr className="hover:bg-gray-50">
+        <td className="py-1 px-[2px] sm:py-3 sm:px-2 font-medium text-green-600">
+          Horas Cumplidas
+        </td>
+        <td className="py-1 px-[2px] sm:py-3 sm:px-2 text-green-600 font-bold">
+          {cumpA.toFixed(1)}
+        </td>
+        <td className="py-1 px-[2px] sm:py-3 sm:px-2 text-green-600 font-bold">
+          {cumpM.toFixed(1)}
+        </td>
+      </tr>
 
-              <tr className="hover:bg-gray-50">
-                <td className="py-3 px-2 font-medium text-red-600">
-                  Horas Pendientes
-                </td>
-                <td className="py-3 px-2 text-red-600 font-bold">
-                  {pendA.toFixed(1)}
-                </td>
-                <td className="py-3 px-2 text-red-600 font-bold">0</td>
-              </tr>
+      <tr className="hover:bg-gray-50">
+        <td className="py-1 px-[2px] sm:py-3 sm:px-2 font-medium text-red-600">
+          Horas Pendientes
+        </td>
+        <td className="py-1 px-[2px] sm:py-3 sm:px-2 text-red-600 font-bold">
+          {pendA.toFixed(1)}
+        </td>
+        <td className="py-1 px-[2px] sm:py-3 sm:px-2 text-red-600 font-bold">
+          0
+        </td>
+      </tr>
 
-              <tr className="hover:bg-gray-50">
-                <td className="py-3 px-2 font-medium text-purple-600">
-                  Frecuencia
-                </td>
-                <td className="py-3 px-2 text-purple-600 font-bold">{freqA}</td>
-                <td className="py-3 px-2 text-purple-600 font-bold">{freqM}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <tr className="hover:bg-gray-50">
+        <td className="py-1 px-[2px] sm:py-3 sm:px-2 font-medium text-purple-600">
+          Frecuencia
+        </td>
+        <td className="py-1 px-[2px] sm:py-3 sm:px-2 text-purple-600 font-bold">
+          {freqA}
+        </td>
+        <td className="py-1 px-[2px] sm:py-3 sm:px-2 text-purple-600 font-bold">
+          {freqM}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
         {/* KPIs */}
         <div className="grid md:grid-cols-2 gap-4 mt-6">
