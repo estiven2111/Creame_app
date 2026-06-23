@@ -229,36 +229,45 @@
 
 
 
+// 1. Esta función interna abre el popup de forma puramente sincrónica
+const abrirPopupSincronico = () => {
+  // Limpieza agresiva previa
+  if (LoginMicrosoft.popup && !LoginMicrosoft.popup.closed) {
+    LoginMicrosoft.popup.focus();
+    return LoginMicrosoft.popup;
+  }
 
+  // 🍏 TRUCO DE ORO PARA SAFARI:
+  // Abrimos una ventana en blanco ("about:blank") DE INMEDIATO. 
+  // Safari ve esto como una acción humana directa y la aprueba siempre.
+  const popup = window.open(
+    "about:blank", 
+    "microsoftLogin", 
+    "width=600,height=700"
+  );
 
+  LoginMicrosoft.popup = popup;
+  return popup;
+};
+
+// 2. Tu función principal que envuelve el proceso
 const LoginMicrosoft = () => {
+  // Ejecutamos la apertura síncrona en la primera línea del hilo del click
+  const popup = abrirPopupSincronico();
+
   return new Promise((resolve, reject) => {
-    const API_URL = "https://appincentivos.creame.com.co"; 
+    const API_URL = "https://appincentivos.creame.com.co"; // ✅ URL de producción
     const LOGIN_URL = `${API_URL}/user/api/web`;
 
-    // 🍏 TRUCO PARA SAFARI: Si el popup anterior quedó en el limbo, lo limpiamos a la fuerza
-    if (LoginMicrosoft.popup) {
-      if (!LoginMicrosoft.popup.closed) {
-        LoginMicrosoft.popup.focus();
-        return;
-      }
-      // Si ya está cerrado, nos aseguramos de borrar la referencia muerta
-      LoginMicrosoft.popup = null; 
+    if (!popup) {
+      reject(new Error("Popup bloqueado por el navegador. Por favor, permite los popups."));
+      return;
     }
 
-    // Abajito del click, abrimos la ventana INMEDIATAMENTE.
-    // A Safari le encanta esto porque ve una acción humana directa.
-    const popup = window.open(
-      LOGIN_URL,
-      "microsoftLogin",
-      "width=600,height=700"
-    );
-
-    LoginMicrosoft.popup = popup;
-
-    if (!popup) {
-      reject(new Error("Popup bloqueado por el navegador. Por favor, permite los popups para este sitio."));
-      return;
+    // 🍏 AHORA LE INYECTAMOS LA URL REAL
+    // Como la ventana ya está abierta y aprobada por Safari, cambiarle la URL no la bloquea
+    if (popup.location.href === "about:blank" || popup.location.href === "") {
+      popup.location.href = LOGIN_URL;
     }
 
     const messageHandler = (event) => {
@@ -276,7 +285,7 @@ const LoginMicrosoft = () => {
       if (popup && !popup.closed) {
         popup.close();
       }
-      LoginMicrosoft.popup = null; // 🍏 Limpieza total al terminar
+      LoginMicrosoft.popup = null;
     };
 
     window.addEventListener("message", messageHandler);
