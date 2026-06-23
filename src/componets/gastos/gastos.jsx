@@ -454,25 +454,69 @@ const Gastos = () => {
     }
   };
 
+  // const handlerValidation = (event) => {
+  //   const input = event.target;
+  //   if (input.files.length > 0) {
+  //     const file = input.files[0];
+  //     const Extensions = [".jpg", ".jpeg", ".png", ".pdf"];
+  //     const fileExtension = file.name.slice(
+  //       ((file.name.lastIndexOf(".") - 1) >>> 0) + 2
+  //     );
+  //     if (!Extensions.includes("." + fileExtension.toLowerCase())) {
+  //       Swal({
+  //         title: "ARCHIVO INCORRECTO",
+  //         text: "Debe seleccionar un archivo .JPG, .JPEG o .PNG",
+  //         icon: "warning",
+  //         buttons: "Aceptar",
+  //       });
+  //       input.value = "";
+  //     }
+  //   }
+  // };
+
   const handlerValidation = (event) => {
-    const input = event.target;
-    if (input.files.length > 0) {
-      const file = input.files[0];
-      const Extensions = [".jpg", ".jpeg", ".png", ".pdf"];
-      const fileExtension = file.name.slice(
-        ((file.name.lastIndexOf(".") - 1) >>> 0) + 2
-      );
-      if (!Extensions.includes("." + fileExtension.toLowerCase())) {
-        Swal({
-          title: "ARCHIVO INCORRECTO",
-          text: "Debe seleccionar un archivo .JPG, .JPEG o .PNG",
-          icon: "warning",
-          buttons: "Aceptar",
-        });
-        input.value = "";
-      }
+  const input = event.target;
+  
+  if (input.files.length > 0) {
+    const file = input.files[0];
+    
+    // 1. VALIDACIÓN DE EXTENSIÓN
+    const Extensions = [".jpg", ".jpeg", ".png", ".pdf"];
+    const fileExtension = file.name.slice(
+      ((file.name.lastIndexOf(".") - 1) >>> 0) + 2
+    );
+
+    if (!Extensions.includes("." + fileExtension.toLowerCase())) {
+      Swal({
+        title: "ARCHIVO INCORRECTO",
+        text: "Debe seleccionar un archivo válido (.JPG, .JPEG, .PNG o .PDF)",
+        icon: "warning",
+        buttons: "Aceptar",
+      });
+      input.value = ""; // Limpia el input para que no se envíe
+      return; // Detiene la ejecución si la extensión está mal
     }
-  };
+
+    // 2. VALIDACIÓN DE TAMAÑO (5 MB = 5 * 1024 * 1024 Bytes)
+    const maxSizeInBytes = 5 * 1024 * 1024; 
+    
+    if (file.size > maxSizeInBytes) {
+      Swal({
+        title: "El archivo excede el tamaño máximo permitido de 5 MB",
+        text: "Por favor, seleccione un archivo más pequeño. El archivo seleccionado no se guardará.",
+        icon: "error", // Ícono de cruz roja (X) como en tu imagen
+        buttons: {
+          confirm: {
+            text: "Aceptar",
+            className: "btn-danger" // Opcional: estiliza el botón en rojo si usas clases temáticas
+          }
+        },
+      });
+      input.value = ""; // 🔥 Limpia el input para bloquear el envío del archivo pesado
+      return;
+    }
+  }
+};
   const locations = () => {
     try {
       setIsLoading(true);
