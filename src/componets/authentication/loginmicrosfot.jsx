@@ -257,6 +257,7 @@ const LoginMicrosoft = () => {
 
   return new Promise((resolve, reject) => {
     const API_URL = "https://appincentivos.creame.com.co"; // ✅ URL de producción
+    // const API_URL = "http://localhost:5000"; // ✅ URL de producción
     const LOGIN_URL = `${API_URL}/user/api/web`;
 
     if (!popup) {
