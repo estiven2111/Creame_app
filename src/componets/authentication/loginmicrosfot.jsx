@@ -167,7 +167,8 @@ const LoginMicrosoft = () => {
     
     // 🌐 Detecta automáticamente la URL del backend según el entorno
     // Cambiar por process.env.REACT_APP_API_URL si usas Create React App
-    const API_URL =  "http://localhost:5000"; 
+    // const API_URL =  "http://localhost:5000"; 
+    const API_URL =  "https://appincentivos.creame.com.co"; // ✅ URL de producción
     
     const LOGIN_URL = `${API_URL}/user/api/web`;
 
