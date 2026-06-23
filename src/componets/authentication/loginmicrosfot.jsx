@@ -161,23 +161,93 @@
 
 
 
+//OKKK
+// const LoginMicrosoft = () => {
+//   return new Promise((resolve, reject) => {
+    
+//     // 🌐 Detecta automáticamente la URL del backend según el entorno
+//     // Cambiar por process.env.REACT_APP_API_URL si usas Create React App
+//     // const API_URL =  "http://localhost:5000"; 
+//     const API_URL =  "https://appincentivos.creame.com.co"; // ✅ URL de producción
+    
+//     const LOGIN_URL = `${API_URL}/user/api/web`;
+
+//     // Evitar múltiples popups
+//     if (LoginMicrosoft.popup && !LoginMicrosoft.popup.closed) {
+//       LoginMicrosoft.popup.focus();
+//       return;
+//     }
+
+//     const popup = window.open(
+//       LOGIN_URL,
+//       "microsoftLogin",
+//       "width=600,height=700"
+//     );
+
+//     LoginMicrosoft.popup = popup;
+
+//     if (!popup) {
+//       reject(new Error("Popup bloqueado por el navegador"));
+//       return;
+//     }
+
+//     const messageHandler = (event) => {
+//       // ✅ VALIDACIÓN CRÍTICA: El origen del evento debe ser exactamente la URL de tu backend
+//       if (event.origin !== API_URL) return;
+
+//       // ✅ Validar que venga del popup actual
+//       if (event.source !== popup) return;
+
+//       // ✅ Validar que la estructura de la data sea la correcta
+//       if (!event.data || !event.data.token) return;
+
+//       cleanup();
+//       resolve(event.data);
+//     };
+
+//     const cleanup = () => {
+//       window.removeEventListener("message", messageHandler);
+//       clearInterval(timer);
+
+//       if (popup && !popup.closed) {
+//         popup.close();
+//       }
+//     };
+
+//     window.addEventListener("message", messageHandler);
+
+//     const timer = setInterval(() => {
+//       if (popup.closed) {
+//         cleanup();
+//         reject(new Error("Login cancelado"));
+//       }
+//     }, 500);
+//   });
+// };
+
+// export default LoginMicrosoft;
+
+
+
+
 
 const LoginMicrosoft = () => {
   return new Promise((resolve, reject) => {
-    
-    // 🌐 Detecta automáticamente la URL del backend según el entorno
-    // Cambiar por process.env.REACT_APP_API_URL si usas Create React App
-    // const API_URL =  "http://localhost:5000"; 
-    const API_URL =  "https://appincentivos.creame.com.co"; // ✅ URL de producción
-    
+    const API_URL = "https://appincentivos.creame.com.co"; 
     const LOGIN_URL = `${API_URL}/user/api/web`;
 
-    // Evitar múltiples popups
-    if (LoginMicrosoft.popup && !LoginMicrosoft.popup.closed) {
-      LoginMicrosoft.popup.focus();
-      return;
+    // 🍏 TRUCO PARA SAFARI: Si el popup anterior quedó en el limbo, lo limpiamos a la fuerza
+    if (LoginMicrosoft.popup) {
+      if (!LoginMicrosoft.popup.closed) {
+        LoginMicrosoft.popup.focus();
+        return;
+      }
+      // Si ya está cerrado, nos aseguramos de borrar la referencia muerta
+      LoginMicrosoft.popup = null; 
     }
 
+    // Abajito del click, abrimos la ventana INMEDIATAMENTE.
+    // A Safari le encanta esto porque ve una acción humana directa.
     const popup = window.open(
       LOGIN_URL,
       "microsoftLogin",
@@ -187,18 +257,13 @@ const LoginMicrosoft = () => {
     LoginMicrosoft.popup = popup;
 
     if (!popup) {
-      reject(new Error("Popup bloqueado por el navegador"));
+      reject(new Error("Popup bloqueado por el navegador. Por favor, permite los popups para este sitio."));
       return;
     }
 
     const messageHandler = (event) => {
-      // ✅ VALIDACIÓN CRÍTICA: El origen del evento debe ser exactamente la URL de tu backend
       if (event.origin !== API_URL) return;
-
-      // ✅ Validar que venga del popup actual
       if (event.source !== popup) return;
-
-      // ✅ Validar que la estructura de la data sea la correcta
       if (!event.data || !event.data.token) return;
 
       cleanup();
@@ -208,10 +273,10 @@ const LoginMicrosoft = () => {
     const cleanup = () => {
       window.removeEventListener("message", messageHandler);
       clearInterval(timer);
-
       if (popup && !popup.closed) {
         popup.close();
       }
+      LoginMicrosoft.popup = null; // 🍏 Limpieza total al terminar
     };
 
     window.addEventListener("message", messageHandler);
