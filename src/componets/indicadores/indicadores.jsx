@@ -413,7 +413,7 @@ const Indicadores = () => {
   const freqM = dataApi.HorasFrecuencia_Mes || 0;
 
   // 🔥 NUEVO ATRASO DESDE BACK
-  const atraso = dataApi.Atraso_Mes || 0;
+  const atraso = dataApi.Atraso_Mes * 100 || 0;
 
   // =========================
   // KPIs
