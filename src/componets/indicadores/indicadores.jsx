@@ -657,7 +657,7 @@ const Indicadores = () => {
           dispA + dispM,
           progA + progM,
           cumpA + cumpM,
-          pendA,
+          pendA + pendM,
           freqA + freqM,
         ],
         backgroundColor: [
