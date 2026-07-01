@@ -7,7 +7,8 @@
 //   Tooltip,
 //   Legend,
 //   BarElement,
-//   CategoryScale,  LinearScale,
+//   CategoryScale,
+//   LinearScale,
 // } from "chart.js";
 
 // import { Doughnut, Bar } from "react-chartjs-2";
@@ -22,18 +23,8 @@
 // );
 
 // const meses = [
-//   "Enero",
-//   "Febrero",
-//   "Marzo",
-//   "Abril",
-//   "Mayo",
-//   "Junio",
-//   "Julio",
-//   "Agosto",
-//   "Septiembre",
-//   "Octubre",
-//   "Noviembre",
-//   "Diciembre",
+//   "Enero","Febrero","Marzo","Abril","Mayo","Junio",
+//   "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre",
 // ];
 
 // const Indicadores = () => {
@@ -81,26 +72,29 @@
 //   const cumpM = dataApi.HorasCumplidas_Mes || 0;
 
 //   const pendA = dataApi.HorasPendientes_Acumulado || 0;
+//   const pendM = dataApi.HorasPendientes_Mes || 0;
 
 //   const freqA = dataApi.HorasFrecuencia_Acumulado || 0;
 //   const freqM = dataApi.HorasFrecuencia_Mes || 0;
 
+//   // 🔥 NUEVO ATRASO DESDE BACK
+//   // const atraso = dataApi.Atraso_Mes * 100 || 0;
+//   const atraso = dataApi.Atraso_Mes  || 0;
+
 //   // =========================
 //   // KPIs
 //   // =========================
-//   const atraso = progA > 0 ? (pendA / progA) * 100 : 0;
-
 //   const productividad =
-//     progA + progM > 0 ? ((cumpA + cumpM) / (progA + progM)) * 100 : 0;
+//     // progA + progM > 0 ? ((cumpA + cumpM) / (progA + progM)) * 100 : 0;
+//     progA + progM > 0 ? ((cumpA + cumpM) / (progA + progM)) : 0;
 
 //   // =========================
-//   // GRAFICA 1 (ANILLO GENERAL)
+//   // GRAFICA 1
 //   // =========================
 //   const chartMain = {
 //     labels: [
-//       // "Días Disponibles", // días programados
 //       "Horas Disponibles",
-//       "Horas Asignadas", //horas programadas
+//       "Horas Asignadas",
 //       "Horas Cumplidas",
 //       "Horas Pendientes",
 //       "Frecuencia",
@@ -108,7 +102,6 @@
 //     datasets: [
 //       {
 //         data: [
-//           // diasA + diasM,
 //           dispA + dispM,
 //           progA + progM,
 //           cumpA + cumpM,
@@ -116,7 +109,6 @@
 //           freqA + freqM,
 //         ],
 //         backgroundColor: [
-//           // "#1E3A8A",
 //           "#2563EB",
 //           "#F59E0B",
 //           "#10B981",
@@ -131,7 +123,7 @@
 //   };
 
 //   // =========================
-//   // GRAFICA 2 (ACUMULADO VS MES - CORRECTA)
+//   // GRAFICA 2
 //   // =========================
 //   const chartCompare = {
 //     labels: [
@@ -149,7 +141,7 @@
 //       },
 //       {
 //         label: "Mes",
-//         data: [diasM, dispM, progM, cumpM, 0],
+//         data: [diasM, dispM, progM, cumpM, pendM],
 //         backgroundColor: "#F59E0B",
 //       },
 //     ],
@@ -164,7 +156,7 @@
 //         position: "bottom",
 //         labels: {
 //           font: {
-//             size: 20, // 👈 aquí aumentas el tamaño
+//             size: 20,
 //             weight: "bold",
 //           },
 //         },
@@ -179,23 +171,19 @@
 //       legend: { position: "bottom" },
 //     },
 //   };
-//   const currentYear = new Date().getFullYear();
 
+//   const currentYear = new Date().getFullYear();
 //   const years = Array.from({ length: 3 }, (_, i) => currentYear - i);
 
 //   return (
 //     <div className="w-full min-h-screen bg-gray-100 flex justify-center py-8">
 //       <div className="w-full max-w-6xl px-3">
+
 //         {/* FILTROS */}
 //         <div className="flex gap-3 justify-center mb-6">
-//           <select
-//             value={anio}
-//             onChange={(e) => setAnio(Number(e.target.value))}
-//           >
+//           <select value={anio} onChange={(e) => setAnio(Number(e.target.value))}>
 //             {years.map((a) => (
-//               <option key={a} value={a}>
-//                 {a}
-//               </option>
+//               <option key={a} value={a}>{a}</option>
 //             ))}
 //           </select>
 
@@ -205,132 +193,94 @@
 //             className="p-2 border rounded"
 //           >
 //             {meses.map((m, i) => (
-//               <option key={i} value={i + 1}>
-//                 {m}
-//               </option>
+//               <option key={i} value={i + 1}>{m}</option>
 //             ))}
 //           </select>
 //         </div>
 
 //         {/* TABLA */}
-
 //         <div className="w-full overflow-x-auto bg-white rounded-xl shadow-lg p-1 sm:p-6">
-//   <table className="min-w-[420px] sm:min-w-[700px] w-full text-center text-xs sm:text-base md:text-lg lg:text-2xl">
-    
-//     {/* HEADER */}
-//     <thead className="bg-gray-200 text-gray-700">
-//       <tr>
-//         <th className="py-1 px-[2px] sm:py-3 sm:px-2">Indicador</th>
-//         <th className="py-1 px-[2px] sm:py-3 sm:px-2">Acumulado</th>
-//         <th className="py-1 px-[2px] sm:py-3 sm:px-2">Mes</th>
-//       </tr>
-//     </thead>
+//           <table className="min-w-[420px] sm:min-w-[700px] w-full text-center text-xs sm:text-base md:text-lg lg:text-2xl">
+            
+//             <thead className="bg-gray-200 text-gray-700">
+//               <tr>
+//                 <th className="py-1 px-[2px] sm:py-3 sm:px-2">Indicador</th>
+//                 <th className="py-1 px-[2px] sm:py-3 sm:px-2">Acumulado</th>
+//                 <th className="py-1 px-[2px] sm:py-3 sm:px-2">Mes</th>
+//               </tr>
+//             </thead>
 
-//     {/* BODY */}
-//     <tbody className="divide-y divide-gray-100">
-//       <tr className="hover:bg-gray-50">
-//         <td className="py-1 px-[2px] sm:py-3 sm:px-2 font-medium">
-//           Días Disponibles
-//         </td>
-//         <td className="py-1 px-[2px] sm:py-3 sm:px-2">{diasA}</td>
-//         <td className="py-1 px-[2px] sm:py-3 sm:px-2">{diasM}</td>
-//       </tr>
+//             <tbody className="divide-y divide-gray-100">
+//               <tr className="hover:bg-gray-50">
+//                 <td className="py-1 px-[2px] sm:py-3 sm:px-2 font-medium">
+//                   Días Disponibles
+//                 </td>
+//                 <td>{diasA}</td>
+//                 <td>{diasM}</td>
+//               </tr>
 
-//       <tr className="hover:bg-gray-50">
-//         <td className="py-1 px-[2px] sm:py-3 sm:px-2 font-medium text-blue-600">
-//           Horas Disponibles
-//         </td>
-//         <td className="py-1 px-[2px] sm:py-3 sm:px-2 text-blue-600 font-semibold">
-//           {dispA}
-//         </td>
-//         <td className="py-1 px-[2px] sm:py-3 sm:px-2 text-blue-600 font-semibold">
-//           {dispM}
-//         </td>
-//       </tr>
+//               <tr className="hover:bg-gray-50">
+//                 <td className="font-medium text-blue-600">Horas Disponibles</td>
+//                 <td className="text-blue-600 font-semibold">{dispA}</td>
+//                 <td className="text-blue-600 font-semibold">{dispM}</td>
+//               </tr>
 
-//       <tr className="hover:bg-gray-50">
-//         <td className="py-1 px-[2px] sm:py-3 sm:px-2 font-medium text-yellow-600">
-//           Horas Asignadas
-//         </td>
-//         <td className="py-1 px-[2px] sm:py-3 sm:px-2 text-yellow-600 font-bold">
-//           {progA.toFixed(1)}
-//         </td>
-//         <td className="py-1 px-[2px] sm:py-3 sm:px-2 text-yellow-600 font-bold">
-//           {progM.toFixed(1)}
-//         </td>
-//       </tr>
+//               <tr className="hover:bg-gray-50">
+//                 <td className="font-medium text-yellow-600">Horas Asignadas</td>
+//                 <td className="text-yellow-600 font-bold">{progA.toFixed(1)}</td>
+//                 <td className="text-yellow-600 font-bold">{progM.toFixed(1)}</td>
+//               </tr>
 
-//       <tr className="hover:bg-gray-50">
-//         <td className="py-1 px-[2px] sm:py-3 sm:px-2 font-medium text-green-600">
-//           Horas Cumplidas
-//         </td>
-//         <td className="py-1 px-[2px] sm:py-3 sm:px-2 text-green-600 font-bold">
-//           {cumpA.toFixed(1)}
-//         </td>
-//         <td className="py-1 px-[2px] sm:py-3 sm:px-2 text-green-600 font-bold">
-//           {cumpM.toFixed(1)}
-//         </td>
-//       </tr>
+//               <tr className="hover:bg-gray-50">
+//                 <td className="font-medium text-green-600">Horas Cumplidas</td>
+//                 <td className="text-green-600 font-bold">{cumpA.toFixed(1)}</td>
+//                 <td className="text-green-600 font-bold">{cumpM.toFixed(1)}</td>
+//               </tr>
 
-//       <tr className="hover:bg-gray-50">
-//         <td className="py-1 px-[2px] sm:py-3 sm:px-2 font-medium text-red-600">
-//           Horas Pendientes
-//         </td>
-//         <td className="py-1 px-[2px] sm:py-3 sm:px-2 text-red-600 font-bold">
-//           {pendA.toFixed(1)}
-//         </td>
-//         <td className="py-1 px-[2px] sm:py-3 sm:px-2 text-red-600 font-bold">
-//           0
-//         </td>
-//       </tr>
+//               <tr className="hover:bg-gray-50">
+//                 <td className="font-medium text-red-600">Horas Pendientes</td>
+//                 <td className="text-red-600 font-bold">{pendA.toFixed(1)}</td>
+//                 <td className="text-red-600 font-bold">{pendM.toFixed(1)}</td>
+//               </tr>
 
-//       <tr className="hover:bg-gray-50">
-//         <td className="py-1 px-[2px] sm:py-3 sm:px-2 font-medium text-purple-600">
-//           Frecuencia
-//         </td>
-//         <td className="py-1 px-[2px] sm:py-3 sm:px-2 text-purple-600 font-bold">
-//           {freqA}
-//         </td>
-//         <td className="py-1 px-[2px] sm:py-3 sm:px-2 text-purple-600 font-bold">
-//           {freqM}
-//         </td>
-//       </tr>
-//     </tbody>
-//   </table>
-// </div>
+//               <tr className="hover:bg-gray-50">
+//                 <td className="font-medium text-purple-600">Frecuencia</td>
+//                 <td className="text-purple-600 font-bold">{freqA}</td>
+//                 <td className="text-purple-600 font-bold">{freqM}</td>
+//               </tr>
+//             </tbody>
+//           </table>
+//         </div>
 
 //         {/* KPIs */}
 //         <div className="grid md:grid-cols-2 gap-4 mt-6">
 //           <div className="bg-white p-5 rounded shadow text-center">
 //             <p>Atraso</p>
 //             <h2 className="text-red-600 font-bold text-xl">
-//               {atraso.toFixed(1)}%
+//               {atraso.toFixed(2)}%
 //             </h2>
 //           </div>
 
 //           <div className="bg-white p-5 rounded shadow text-center">
-//             <p>Productividad</p>
+//             <p>Cumplimiento</p>
 //             <h2 className="text-green-600 font-bold text-xl">
 //               {productividad.toFixed(2)}%
 //             </h2>
 //           </div>
 //         </div>
 
-//         {/* GRAFICA 1 */}
+//         {/* GRAFICA */}
 //         <div className="bg-white mt-6 p-6 rounded shadow h-[620px]">
 //           <Doughnut data={chartMain} options={optionsMain} />
 //         </div>
 
-//         {/* GRAFICA 2 (CORREGIDA) */}
-//         {/* <div className="bg-white mt-6 p-6 rounded shadow h-[420px]">
-//           <Bar data={chartCompare} options={optionsBar} />
-//         </div> */}
 //       </div>
 //     </div>
 //   );
 // };
 
 // export default Indicadores;
+
 
 
 import React, { useEffect, useState } from "react";
@@ -412,14 +362,11 @@ const Indicadores = () => {
   const freqA = dataApi.HorasFrecuencia_Acumulado || 0;
   const freqM = dataApi.HorasFrecuencia_Mes || 0;
 
-  // 🔥 NUEVO ATRASO DESDE BACK
-  const atraso = dataApi.Atraso_Mes * 100 || 0;
+  // ✅ ATRASO (viene decimal → convertir a %)
+  const atraso = (dataApi.Atraso_Mes || 0) * 100;
 
-  // =========================
-  // KPIs
-  // =========================
-  const productividad =
-    progA + progM > 0 ? ((cumpA + cumpM) / (progA + progM)) * 100 : 0;
+  // ✅ CUMPLIMIENTO REAL DESDE BACK
+  const cumplimiento = (dataApi.Completado_Mes || 0) * 100;
 
   // =========================
   // GRAFICA 1
@@ -595,9 +542,9 @@ const Indicadores = () => {
           </div>
 
           <div className="bg-white p-5 rounded shadow text-center">
-            <p>Productividad</p>
+            <p>Cumplimiento</p>
             <h2 className="text-green-600 font-bold text-xl">
-              {productividad.toFixed(2)}%
+              {cumplimiento.toFixed(2)}%
             </h2>
           </div>
         </div>
